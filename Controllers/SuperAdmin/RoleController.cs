@@ -25,11 +25,11 @@ namespace Repuestos_San_jorge.Controllers.SuperAdmin
             return Ok();
         }
 
-        // [HttpGet]
-        // public async Task<ActionResult<IEnumerable<Role>>> GetRoles()
-        // {
-        //     var roles = await _roleService.GetRolesAsync();
-        //     return Ok(roles);
-        // }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Role>>> GetRoles()
+        {
+            var roles = await _roleService.GetRolesAsync();
+            return Ok(roles);
+        }
     }
 }

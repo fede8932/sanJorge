@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Repuestos_San_jorge.Configuration;
 using Repuestos_San_jorge.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,8 @@ builder.Services.AddControllersWithViews();
 
 var connectionString = builder.Configuration.GetConnectionString("SanJorgeDB");
 builder.Services.AddDbContext<OfficeDb>(options => options.UseNpgsql(connectionString));
+
+ServiceConfiguration.Configure(builder.Services);
 
 var app = builder.Build();
 
