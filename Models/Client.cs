@@ -47,7 +47,7 @@ namespace Repuestos_San_jorge.Models
         public int currentAcountId { get; set; }
         public CurrentAcount currentAcount { get; set; }
 
-        public CustomerDiscount customerDiscount { get; set; }
+        public ICollection<CustomerDiscount> customerDiscounts { get; set; }
 
         public Client()
         {
@@ -62,7 +62,7 @@ namespace Repuestos_San_jorge.Models
             schedule = new Schedule();
             seller = new Seller();
             currentAcount = new CurrentAcount();
-            customerDiscount = new CustomerDiscount();
+            customerDiscounts = new List<CustomerDiscount>();
         }
     }
 }

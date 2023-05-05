@@ -17,6 +17,14 @@ namespace Repuestos_San_jorge.Data
         public DbSet<Representative> Representatives => Set<Representative>();
         public DbSet<CurrentAcount> CurrentAcounts => Set<CurrentAcount>();
         public DbSet<Movement> Movements => Set<Movement>();
+        public DbSet<Brand> Brands => Set<Brand>();
+        public DbSet<BrandProduct> BrandProducts => Set<BrandProduct>();
+        public DbSet<BrandSupplier> BrandSuppliers => Set<BrandSupplier>();
+        public DbSet<CustomerDiscount> CustomerDiscounts => Set<CustomerDiscount>();
+        public DbSet<Product> Products => Set<Product>();
+        public DbSet<PurchaseOrder> PurchaseOrders => Set<PurchaseOrder>();
+        public DbSet<PurchaseOrderItem> PurchaseOrderItems => Set<PurchaseOrderItem>();
+        public DbSet<Stock> Stocks => Set<Stock>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -34,7 +42,7 @@ namespace Repuestos_San_jorge.Data
                 .Entity<User>()
                 .HasOne(user => user.seller)
                 .WithOne(seller => seller.user)
-                .HasForeignKey<Client>(seller => seller.userId);
+                .HasForeignKey<Seller>(seller => seller.userId);
             modelBuilder
                 .Entity<Client>()
                 .HasOne(client => client.schedule)
@@ -60,16 +68,68 @@ namespace Repuestos_San_jorge.Data
                 .HasOne(representative => representative.supplier)
                 .WithMany(supplier => supplier.representative)
                 .HasForeignKey(representative => representative.supplierId);
-            modelBuilder //revisar porque es many to many
-                .Entity<Supplier>()
-                .HasOne(supplier => supplier.customerDiscounts)
-                .WithOne(customerDiscounts => customerDiscounts.supplier)
-                .HasForeignKey<CustomerDiscount>(customerDiscounts => customerDiscounts.supplierId);
-            modelBuilder //revisar porque es many to many
-                .Entity<Client>()
-                .HasOne(client => client.customerDiscount)
-                .WithOne(customerDiscounts => customerDiscounts.client)
-                .HasForeignKey<CustomerDiscount>(customerDiscounts => customerDiscounts.clientId);
+            modelBuilder
+                .Entity<CustomerDiscount>()
+                .HasKey(
+                    customerDiscount =>
+                        new { customerDiscount.clientId, customerDiscount.supplierId }
+                );
+            modelBuilder
+                .Entity<CustomerDiscount>()
+                .HasOne(customerDiscount => customerDiscount.client)
+                .WithMany(client => client.customerDiscounts)
+                .HasForeignKey(customerDiscount => customerDiscount.clientId);
+            modelBuilder
+                .Entity<CustomerDiscount>()
+                .HasOne(customerDiscount => customerDiscount.supplier)
+                .WithMany(supplier => supplier.customerDiscounts)
+                .HasForeignKey(customerDiscount => customerDiscount.supplierId);
+            modelBuilder
+                .Entity<BrandSupplier>()
+                .HasKey(brandSupplier => new { brandSupplier.brandId, brandSupplier.supplierId });
+            modelBuilder
+                .Entity<BrandSupplier>()
+                .HasOne(brandSupplier => brandSupplier.supplier)
+                .WithMany(supplier => supplier.brandSuppliers)
+                .HasForeignKey(brandSupplier => brandSupplier.supplierId);
+            modelBuilder
+                .Entity<BrandSupplier>()
+                .HasOne(brandSupplier => brandSupplier.brand)
+                .WithMany(brand => brand.brandSuppliers)
+                .HasForeignKey(brandSupplier => brandSupplier.brandId);
+            modelBuilder
+                .Entity<PurchaseOrderItem>()
+                .HasOne(purchaseOrderItem => purchaseOrderItem.purchaseOrder)
+                .WithMany(purchaseOrder => purchaseOrder.purchaseOrderItems)
+                .HasForeignKey(purchaseOrderItem => purchaseOrderItem.purchaseOrderId);
+            modelBuilder
+                .Entity<PurchaseOrderItem>()
+                .HasOne(purchaseOrderItem => purchaseOrderItem.product)
+                .WithMany(product => product.purchaseOrderItems)
+                .HasForeignKey(purchaseOrderItem => purchaseOrderItem.productId);
+            modelBuilder
+                .Entity<BrandProduct>()
+                .HasKey(brandProduct => new { brandProduct.brandId, brandProduct.productId });
+            modelBuilder
+                .Entity<BrandProduct>()
+                .HasOne(brandProduct => brandProduct.brand)
+                .WithMany(brand => brand.brandProducts)
+                .HasForeignKey(brandProduct => brandProduct.brandId);
+            modelBuilder
+                .Entity<BrandProduct>()
+                .HasOne(brandProduct => brandProduct.product)
+                .WithMany(product => product.brandProducts)
+                .HasForeignKey(brandProduct => brandProduct.productId);
+            modelBuilder
+                .Entity<Product>()
+                .HasOne(product => product.stock)
+                .WithOne(stock => stock.product)
+                .HasForeignKey<Stock>(stock => stock.productId);
+            modelBuilder
+                .Entity<Brand>()
+                .HasOne(brand => brand.stock)
+                .WithOne(stock => stock.brand)
+                .HasForeignKey<Stock>(stock => stock.brandId);
         }
     }
 }

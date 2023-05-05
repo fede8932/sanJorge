@@ -34,7 +34,9 @@ namespace Repuestos_San_jorge.Models
 
         public ICollection<Representative> representative { get; set; }
 
-        public CustomerDiscount customerDiscounts { get; set; }
+        public ICollection<CustomerDiscount> customerDiscounts { get; set; }
+
+        public ICollection<BrandSupplier> brandSuppliers { get; set; }
 
         public Supplier()
         {
@@ -45,7 +47,8 @@ namespace Repuestos_San_jorge.Models
             localidad = "";
             email = "";
             representative = new List<Representative>();
-            customerDiscounts = new CustomerDiscount();
+            customerDiscounts = new List<CustomerDiscount>();
+            brandSuppliers = new List<BrandSupplier>();
         }
     }
 }
