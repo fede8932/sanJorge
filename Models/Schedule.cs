@@ -4,6 +4,7 @@ namespace Repuestos_San_jorge.Models
 {
     public class Schedule
     {
+        [Key]
         public int id { get; set; }
 
         [Required]

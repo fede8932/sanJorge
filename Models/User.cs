@@ -1,9 +1,11 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Repuestos_San_jorge.Models
 {
     public class User
     {
+        [Key]
         public int id { get; set; }
 
         [Required]
@@ -19,24 +21,22 @@ namespace Repuestos_San_jorge.Models
         [Required]
         public string password { get; set; }
 
-        [Required]
-        public string salt { get; set; }
-
         public int roleId { get; set; }
-        public Role role { get; set; }
-        public Client client { get; set; }
-        public Seller seller { get; set; }
 
-        public User()
-        {
-            name = "";
-            lastName = "";
-            email = "";
-            password = "";
-            salt = "";
-            client = new Client();
-            role = new Role();
-            seller = new Seller();
-        }
+        [ForeignKey("roleId")]
+        public Role? role { get; set; }
+        public Client? client { get; set; }
+        public Seller? seller { get; set; }
+
+        // public User()
+        // {
+        //     // name = "";
+        //     // lastName = "";
+        //     // email = "";
+        //     // password = "";
+        //     role = new Role();
+        //     client = new Client();
+        //     seller = new Seller();
+        // }
     }
 }

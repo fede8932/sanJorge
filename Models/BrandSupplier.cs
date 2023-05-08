@@ -3,32 +3,26 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Repuestos_San_jorge.Models
 {
-    public class CustomerDiscount
+    public class BrandSupplier
     {
         [Key]
         public int id { get; set; }
 
         [Required]
-        public float porcentaje { get; set; }
-
-        [Required]
-        public string notas { get; set; }
-
         public int supplierId { get; set; }
 
         [ForeignKey("supplierId")]
         public Supplier supplier { get; set; }
 
-        public int clientId { get; set; }
+        public int brandId { get; set; }
 
-        [ForeignKey("clientId")]
-        public Client client { get; set; }
+        [ForeignKey("brandId")]
+        public Brand brand { get; set; }
 
-        // public CustomerDiscount()
+        // public BrandSupplier()
         // {
-        //     notas = "";
         //     supplier = new Supplier();
-        //     client = new Client();
+        //     brand = new Brand();
         // }
     }
 }

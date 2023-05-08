@@ -1,14 +1,20 @@
 using Microsoft.EntityFrameworkCore;
+using Repuestos_San_jorge.Configuration;
 using Repuestos_San_jorge.Data;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 
 var connectionString = builder.Configuration.GetConnectionString("SanJorgeDB");
 builder.Services.AddDbContext<OfficeDb>(options => options.UseNpgsql(connectionString));
+
+ServiceConfiguration.Configure(builder.Services);
 
 var app = builder.Build();
 
@@ -22,7 +28,6 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-
 
 app.MapControllerRoute(
     name: "default",
