@@ -12,8 +12,8 @@ using Repuestos_San_jorge.Data;
 namespace Repuestos_San_jorge.Migrations
 {
     [DbContext(typeof(OfficeDb))]
-    [Migration("20230505124608_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230508140340_actua")]
+    partial class actua
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -518,10 +518,6 @@ namespace Repuestos_San_jorge.Migrations
                     b.Property<int>("roleId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("salt")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("id");
 
                     b.HasIndex("roleId");
@@ -772,11 +768,9 @@ namespace Repuestos_San_jorge.Migrations
 
             modelBuilder.Entity("Repuestos_San_jorge.Models.User", b =>
                 {
-                    b.Navigation("client")
-                        .IsRequired();
+                    b.Navigation("client");
 
-                    b.Navigation("seller")
-                        .IsRequired();
+                    b.Navigation("seller");
                 });
 #pragma warning restore 612, 618
         }

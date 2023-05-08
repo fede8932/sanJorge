@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Repuestos_San_jorge.Data;
@@ -11,9 +12,11 @@ using Repuestos_San_jorge.Data;
 namespace Repuestos_San_jorge.Migrations
 {
     [DbContext(typeof(OfficeDb))]
-    partial class OfficeDbModelSnapshot : ModelSnapshot
+    [Migration("20230508114857_modifUser")]
+    partial class modifUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -765,9 +768,11 @@ namespace Repuestos_San_jorge.Migrations
 
             modelBuilder.Entity("Repuestos_San_jorge.Models.User", b =>
                 {
-                    b.Navigation("client");
+                    b.Navigation("client")
+                        .IsRequired();
 
-                    b.Navigation("seller");
+                    b.Navigation("seller")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

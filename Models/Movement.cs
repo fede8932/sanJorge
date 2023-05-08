@@ -4,6 +4,7 @@ namespace Repuestos_San_jorge.Models
 {
     public class Movement
     {
+        [Key]
         public int id { get; set; }
 
         [Required]
@@ -14,10 +15,10 @@ namespace Repuestos_San_jorge.Models
 
         public ICollection<CurrentAcount> currentAcounts { get; set; }
 
-        public Movement()
-        {
-            type = "";
-            currentAcounts = new List<CurrentAcount>();
-        }
+        // public Movement()
+        // {
+        //     type = "";
+        //     currentAcounts = new List<CurrentAcount>();
+        // }
     }
 }

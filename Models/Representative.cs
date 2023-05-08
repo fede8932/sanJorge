@@ -4,6 +4,7 @@ namespace Repuestos_San_jorge.Models
 {
     public class Representative
     {
+        [Key]
         public int id { get; set; }
 
         [Required]

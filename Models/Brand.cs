@@ -4,6 +4,7 @@ namespace Repuestos_San_jorge.Models
 {
     public class Brand
     {
+        [Key]
         public int id { get; set; }
 
         [Required]
@@ -15,12 +16,12 @@ namespace Repuestos_San_jorge.Models
 
         public Stock stock { get; set; }
 
-        public Brand()
-        {
-            name = "";
-            brandSuppliers = new List<BrandSupplier>();
-            brandProducts = new List<BrandProduct>();
-            stock = new Stock();
-        }
+        // public Brand()
+        // {
+        //     name = "";
+        //     brandSuppliers = new List<BrandSupplier>();
+        //     brandProducts = new List<BrandProduct>();
+        //     stock = new Stock();
+        // }
     }
 }

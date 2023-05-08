@@ -1,9 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Repuestos_San_jorge.Services.SuperAdmin;
 using Repuestos_San_jorge.Models;
-using Repuestos_San_jorge.Dto.SuperAdmin;
 
 namespace Repuestos_San_jorge.Controllers.SuperAdmin
 {
@@ -19,17 +16,33 @@ namespace Repuestos_San_jorge.Controllers.SuperAdmin
         }
 
         [HttpPost]
-        public async Task<ActionResult<Role>> CreateRole([FromBody] Role role)
+        public async Task<IActionResult> CreateRole([FromBody] Role role)
         {
-            await _roleService.CreateRoleAsync(role);
-            return Ok();
+            try
+            {
+                var result = await _roleService.CreateRoleAsync(role);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Role>>> GetRoles()
         {
-            var roles = await _roleService.GetRolesAsync();
-            return Ok(roles);
+            try
+            {
+                var roles = await _roleService.GetRolesAsync();
+                return Ok(roles);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
         }
     }
 }
