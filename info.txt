@@ -1,2 +1,4 @@
 dotnet ef migrations add <nombre>
 dotnet ef database update
+
+dotnet watch run (modo desarrollo)

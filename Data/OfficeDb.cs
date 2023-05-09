@@ -50,9 +50,9 @@ namespace Repuestos_San_jorge.Data
                 .HasForeignKey<Schedule>(schedule => schedule.clientId);
             modelBuilder
                 .Entity<Seller>()
-                .HasOne(seller => seller.client)
+                .HasMany(seller => seller.clients)
                 .WithOne(client => client.seller)
-                .HasForeignKey<Client>(client => client.sellerId);
+                .HasForeignKey(client => client.sellerId);
             modelBuilder
                 .Entity<CurrentAcount>()
                 .HasOne(currentAcount => currentAcount.client)

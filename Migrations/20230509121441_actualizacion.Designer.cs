@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Repuestos_San_jorge.Data;
@@ -11,9 +12,11 @@ using Repuestos_San_jorge.Data;
 namespace Repuestos_San_jorge.Migrations
 {
     [DbContext(typeof(OfficeDb))]
-    partial class OfficeDbModelSnapshot : ModelSnapshot
+    [Migration("20230509121441_actualizacion")]
+    partial class actualizacion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -374,6 +377,10 @@ namespace Repuestos_San_jorge.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
+                    b.Property<float?>("ComisionOferta")
+                        .IsRequired()
+                        .HasColumnType("real");
+
                     b.Property<int>("altura")
                         .HasColumnType("integer");
 
@@ -385,9 +392,7 @@ namespace Repuestos_San_jorge.Migrations
                         .HasColumnType("integer");
 
                     b.Property<float?>("comisionBase")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("comisionOferta")
+                        .IsRequired()
                         .HasColumnType("real");
 
                     b.Property<string>("cuil")

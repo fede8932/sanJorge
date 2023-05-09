@@ -43,7 +43,7 @@ namespace Repuestos_San_jorge.Models
         [ForeignKey("userId")]
         public User user { get; set; }
 
-        public Schedule schedule { get; set; }
+        public Schedule? schedule { get; set; }
 
         public int sellerId { get; set; }
 
@@ -53,9 +53,9 @@ namespace Repuestos_San_jorge.Models
         public int currentAcountId { get; set; }
 
         [ForeignKey("currentAcountId")]
-        public CurrentAcount currentAcount { get; set; }
+        public CurrentAcount? currentAcount { get; set; }
 
-        public ICollection<CustomerDiscount> customerDiscounts { get; set; }
+        public ICollection<CustomerDiscount>? customerDiscounts { get; set; }
 
         // public Client()
         // {
