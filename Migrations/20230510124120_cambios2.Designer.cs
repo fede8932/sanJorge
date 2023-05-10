@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Repuestos_San_jorge.Data;
@@ -11,9 +12,11 @@ using Repuestos_San_jorge.Data;
 namespace Repuestos_San_jorge.Migrations
 {
     [DbContext(typeof(OfficeDb))]
-    partial class OfficeDbModelSnapshot : ModelSnapshot
+    [Migration("20230510124120_cambios2")]
+    partial class cambios2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -152,11 +155,12 @@ namespace Repuestos_San_jorge.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
-                    b.Property<string>("acountNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("movementId")
+                        .HasColumnType("integer");
 
                     b.HasKey("id");
+
+                    b.HasIndex("movementId");
 
                     b.ToTable("CurrentAcounts");
                 });
@@ -197,19 +201,11 @@ namespace Repuestos_San_jorge.Migrations
                     b.Property<float>("amount")
                         .HasColumnType("real");
 
-                    b.Property<int>("currentAcountId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("fecha")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("type")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("id");
-
-                    b.HasIndex("currentAcountId");
 
                     b.ToTable("Movements");
                 });
@@ -598,6 +594,17 @@ namespace Repuestos_San_jorge.Migrations
                     b.Navigation("user");
                 });
 
+            modelBuilder.Entity("Repuestos_San_jorge.Models.CurrentAcount", b =>
+                {
+                    b.HasOne("Repuestos_San_jorge.Models.Movement", "movement")
+                        .WithMany("currentAcounts")
+                        .HasForeignKey("movementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("movement");
+                });
+
             modelBuilder.Entity("Repuestos_San_jorge.Models.CustomerDiscount", b =>
                 {
                     b.HasOne("Repuestos_San_jorge.Models.Client", "client")
@@ -615,17 +622,6 @@ namespace Repuestos_San_jorge.Migrations
                     b.Navigation("client");
 
                     b.Navigation("supplier");
-                });
-
-            modelBuilder.Entity("Repuestos_San_jorge.Models.Movement", b =>
-                {
-                    b.HasOne("Repuestos_San_jorge.Models.CurrentAcount", "currentAcount")
-                        .WithMany("movements")
-                        .HasForeignKey("currentAcountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("currentAcount");
                 });
 
             modelBuilder.Entity("Repuestos_San_jorge.Models.PurchaseOrderItem", b =>
@@ -729,9 +725,13 @@ namespace Repuestos_San_jorge.Migrations
 
             modelBuilder.Entity("Repuestos_San_jorge.Models.CurrentAcount", b =>
                 {
-                    b.Navigation("client");
+                    b.Navigation("client")
+                        .IsRequired();
+                });
 
-                    b.Navigation("movements");
+            modelBuilder.Entity("Repuestos_San_jorge.Models.Movement", b =>
+                {
+                    b.Navigation("currentAcounts");
                 });
 
             modelBuilder.Entity("Repuestos_San_jorge.Models.Product", b =>

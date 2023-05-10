@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Repuestos_San_jorge.Models;
 using Repuestos_San_jorge.Data;
 using BCrypt.Net;
+using Repuestos_San_jorge.Dto.Admin;
 
 namespace Repuestos_San_jorge.Services.Admin
 {
@@ -18,7 +19,7 @@ namespace Repuestos_San_jorge.Services.Admin
             _dbContext = dbContext;
         }
 
-        public async Task<string> CreateUserAsync(User user)
+        public async Task<string> CreateUserAsync(User user) // crear usuario
         {
             try
             {
@@ -40,7 +41,7 @@ namespace Repuestos_San_jorge.Services.Admin
             }
         }
 
-        public async Task<IEnumerable<User>> GetUserAsync()
+        public async Task<IEnumerable<User>> GetUsersAsync() // Listar Usuarios
         {
             try
             {
@@ -81,6 +82,7 @@ namespace Repuestos_San_jorge.Services.Admin
     public interface IUserService
     {
         Task<string> CreateUserAsync(User user);
-        Task<IEnumerable<User>> GetUserAsync();
+        Task<IEnumerable<User>> GetUsersAsync();
+        // Task<User> GetUserAsync();
     }
 }

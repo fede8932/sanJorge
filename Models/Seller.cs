@@ -25,26 +25,23 @@ namespace Repuestos_San_jorge.Models
         [Required]
         public string telefono { get; set; }
 
-        [Required]
-        [RegularExpression(@"^\d{10}$")]
-        public float comisionBase { get; set; }
+        public float? comisionBase { get; set; }
 
-        [Required]
-        public float ComisionOferta { get; set; }
+        public float? comisionOferta { get; set; }
 
         public int userId { get; set; }
-        public User user { get; set; }
+        public User? user { get; set; }
 
-        public Client client { get; set; }
+        public ICollection<Client>? clients { get; set; }
 
-        public Seller()
-        {
-            cuil = "";
-            calle = "";
-            telefono = "";
-            localidad = "";
-            user = new User();
-            client = new Client();
-        }
+        // public Seller()
+        // {
+        //     cuil = "";
+        //     calle = "";
+        //     telefono = "";
+        //     localidad = "";
+        //     user = new User();
+        //     client = new Client();
+        // }
     }
 }

@@ -33,9 +33,9 @@ namespace Repuestos_San_jorge.Controllers.Admin
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetRoles()
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            var users = await _userService.GetUserAsync();
+            var users = await _userService.GetUsersAsync();
             return Ok(users);
         }
     }
