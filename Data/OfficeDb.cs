@@ -59,10 +59,10 @@ namespace Repuestos_San_jorge.Data
                 .WithOne(client => client.currentAcount)
                 .HasForeignKey<Client>(client => client.currentAcountId);
             modelBuilder
-                .Entity<CurrentAcount>()
-                .HasOne(currentAcount => currentAcount.movement)
-                .WithMany(movement => movement.currentAcounts)
-                .HasForeignKey(currentAcount => currentAcount.movementId);
+                .Entity<Movement>()
+                .HasOne(movement => movement.currentAcount)
+                .WithMany(currentAcount => currentAcount.movements)
+                .HasForeignKey(movement => movement.currentAcountId);
             modelBuilder
                 .Entity<Representative>()
                 .HasOne(representative => representative.supplier)

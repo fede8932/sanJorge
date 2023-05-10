@@ -30,25 +30,26 @@ namespace Repuestos_San_jorge.Models
         public int codigoPostal { get; set; }
 
         [Required]
-        public float iva { get; set; }
+        public string iva { get; set; }
 
         [Required]
         [RegularExpression(@"^\d{10}$")]
         public string telefono { get; set; }
 
         [Required]
+        [StringLength(300)]
         public string comentarios { get; set; }
         public int userId { get; set; }
 
         [ForeignKey("userId")]
-        public User user { get; set; }
+        public User? user { get; set; }
 
         public Schedule? schedule { get; set; }
 
         public int sellerId { get; set; }
 
         [ForeignKey("sellerId")]
-        public Seller seller { get; set; }
+        public Seller? seller { get; set; }
 
         public int currentAcountId { get; set; }
 

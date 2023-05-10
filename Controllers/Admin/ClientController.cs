@@ -8,22 +8,22 @@ using Repuestos_San_jorge.Dto.Admin;
 namespace Repuestos_San_jorge.Controllers.Admin
 {
     [ApiController]
-    [Route("api/seller")]
-    public class SellerController : Controller
+    [Route("api/client")]
+    public class ClientController : Controller
     {
-        private readonly ISellerService _sellerService;
+        private readonly IClientService _clientService;
 
-        public SellerController(ISellerService sellerService)
+        public ClientController(IClientService clientService)
         {
-            _sellerService = sellerService;
+            _clientService = clientService;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateSeller([FromBody] Seller seller)
+        public async Task<IActionResult> CreateClient([FromBody] Client client)
         {
             try
             {
-                var result = await _sellerService.CreateSellerAsync(seller);
+                var result = await _clientService.CreateClientAsync(client);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -38,7 +38,7 @@ namespace Repuestos_San_jorge.Controllers.Admin
         {
             try
             {
-                var result = await _sellerService.GetSellersAsync();
+                var result = await _clientService.GetClientsAsync();
                 return Ok(result);
             }
             catch (Exception ex)
@@ -49,11 +49,11 @@ namespace Repuestos_San_jorge.Controllers.Admin
         }
 
         [HttpDelete("delete/{id}")]
-        public async Task<ActionResult<IEnumerable<Seller>>> DeleteSeller(int id)
+        public async Task<ActionResult<IEnumerable<Seller>>> DeleteClient(int id)
         {
             try
             {
-                var result = await _sellerService.DeleteSellerAsync(id);
+                var result = await _clientService.DeleteClientAsync(id);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -64,14 +64,14 @@ namespace Repuestos_San_jorge.Controllers.Admin
         }
 
         [HttpPut("update/{id}")]
-        public async Task<ActionResult<IEnumerable<Seller>>> UpdateSeller(
+        public async Task<ActionResult<IEnumerable<Client>>> UpdateClient(
             int id,
-            [FromBody] UpdateSellerDto data
+            [FromBody] UpdateClientDto data
         )
         {
             try
             {
-                var result = await _sellerService.UpdateSellerAsync(id, data);
+                var result = await _clientService.UpdateClientAsync(id, data);
                 return Ok(result);
             }
             catch (Exception ex)

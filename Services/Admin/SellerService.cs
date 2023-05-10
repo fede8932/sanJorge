@@ -93,7 +93,17 @@ namespace Repuestos_San_jorge.Services.Admin
                         "El vendedor no puede ser null"
                     );
                 }
-                _dbContext.Entry(vendedor).CurrentValues.SetValues(data);
+                var dataUpdate = new Dictionary<string, object>();
+                foreach (var propiedad in data.GetType().GetProperties())
+                {
+                    string nombrePropiedad = propiedad.Name;
+                    var valorPropiedad = propiedad.GetValue(data);
+                    if (valorPropiedad != null)
+                    {
+                        dataUpdate.Add(nombrePropiedad, valorPropiedad);
+                    }
+                }
+                _dbContext.Entry(vendedor).CurrentValues.SetValues(dataUpdate);
                 await _dbContext.SaveChangesAsync();
                 return "Datos de vendedor actualizados";
             }
