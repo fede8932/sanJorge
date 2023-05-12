@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Repuestos_San_jorge.Data;
@@ -11,9 +12,11 @@ using Repuestos_San_jorge.Data;
 namespace Repuestos_San_jorge.Migrations
 {
     [DbContext(typeof(OfficeDb))]
-    partial class OfficeDbModelSnapshot : ModelSnapshot
+    [Migration("20230511152819_actual5")]
+    partial class actual5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -311,9 +314,6 @@ namespace Repuestos_San_jorge.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("comentarios")
-                        .HasColumnType("text");
-
                     b.Property<string>("email")
                         .IsRequired()
                         .HasColumnType("text");
@@ -321,9 +321,6 @@ namespace Repuestos_San_jorge.Migrations
                     b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<bool?>("status")
-                        .HasColumnType("boolean");
 
                     b.Property<int>("supplierId")
                         .HasColumnType("integer");

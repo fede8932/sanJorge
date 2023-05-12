@@ -22,8 +22,12 @@ namespace Repuestos_San_jorge.Models
         [Required]
         public string localidad { get; set; }
 
+        public string? comentarios { get; set; }
+
         [Required]
         public int codigoPostal { get; set; }
+
+        public Boolean? status { get; set; }
 
         [Required]
         [RegularExpression(@"^\d{10}$")]
@@ -33,23 +37,24 @@ namespace Repuestos_San_jorge.Models
         [EmailAddress]
         public string email { get; set; }
 
-        public ICollection<Representative> representative { get; set; }
+        public ICollection<Representative>? representative { get; set; }
 
-        public ICollection<CustomerDiscount> customerDiscounts { get; set; }
+        public ICollection<CustomerDiscount>? customerDiscounts { get; set; }
 
-        public ICollection<BrandSupplier> brandSuppliers { get; set; }
+        public ICollection<BrandSupplier>? brandSuppliers { get; set; }
 
         public Supplier()
         {
-            razonSocial = "";
-            cuit = "";
-            calle = "";
-            telefono = "";
-            localidad = "";
-            email = "";
-            representative = new List<Representative>();
-            customerDiscounts = new List<CustomerDiscount>();
-            brandSuppliers = new List<BrandSupplier>();
+            status = true;
+            // razonSocial = "";
+            // cuit = "";
+            // calle = "";
+            // telefono = "";
+            // localidad = "";
+            // email = "";
+            // representative = new List<Representative>();
+            // customerDiscounts = new List<CustomerDiscount>();
+            // brandSuppliers = new List<BrandSupplier>();
         }
     }
 }
