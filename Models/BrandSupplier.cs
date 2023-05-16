@@ -9,12 +9,12 @@ namespace Repuestos_San_jorge.Models
         public int id { get; set; }
 
         [Required]
-        public int supplierId { get; set; }
+        public int? supplierId { get; set; }
 
         [ForeignKey("supplierId")]
         public Supplier supplier { get; set; }
 
-        public int brandId { get; set; }
+        public int? brandId { get; set; }
 
         [ForeignKey("brandId")]
         public Brand brand { get; set; }

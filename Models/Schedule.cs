@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Repuestos_San_jorge.Models
 {
@@ -14,11 +15,13 @@ namespace Repuestos_San_jorge.Models
         public TimeSpan cierre { get; set; }
 
         public int clientId { get; set; }
-        public Client client { get; set; }
+        
+        [ForeignKey("clientId")]
+        public Client? client { get; set; }
 
-        public Schedule()
-        {
-            client = new Client();
-        }
+        // public Schedule()
+        // {
+        //     client = new Client();
+        // }
     }
 }

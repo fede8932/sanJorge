@@ -200,11 +200,10 @@ namespace Repuestos_San_jorge.Migrations
                     b.Property<int>("currentAcountId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("fecha")
+                    b.Property<DateTime?>("fecha")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("type")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("id");
@@ -375,8 +374,7 @@ namespace Repuestos_San_jorge.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("clientId")
-                        .IsUnique();
+                    b.HasIndex("clientId");
 
                     b.ToTable("Schedules");
                 });
@@ -673,8 +671,8 @@ namespace Repuestos_San_jorge.Migrations
             modelBuilder.Entity("Repuestos_San_jorge.Models.Schedule", b =>
                 {
                     b.HasOne("Repuestos_San_jorge.Models.Client", "client")
-                        .WithOne("schedule")
-                        .HasForeignKey("Repuestos_San_jorge.Models.Schedule", "clientId")
+                        .WithMany("schedules")
+                        .HasForeignKey("clientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -736,7 +734,7 @@ namespace Repuestos_San_jorge.Migrations
                 {
                     b.Navigation("customerDiscounts");
 
-                    b.Navigation("schedule");
+                    b.Navigation("schedules");
                 });
 
             modelBuilder.Entity("Repuestos_San_jorge.Models.CurrentAcount", b =>

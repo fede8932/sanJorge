@@ -12,8 +12,8 @@ using Repuestos_San_jorge.Data;
 namespace Repuestos_San_jorge.Migrations
 {
     [DbContext(typeof(OfficeDb))]
-    [Migration("20230506210141_init_db")]
-    partial class init_db
+    [Migration("20230515150854_cambios")]
+    partial class cambios
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -98,7 +98,8 @@ namespace Repuestos_San_jorge.Migrations
 
                     b.Property<string>("comentarios")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
 
                     b.Property<string>("coordenadas")
                         .IsRequired()
@@ -111,8 +112,9 @@ namespace Repuestos_San_jorge.Migrations
                     b.Property<int>("currentAcountId")
                         .HasColumnType("integer");
 
-                    b.Property<float>("iva")
-                        .HasColumnType("real");
+                    b.Property<string>("iva")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("localidad")
                         .IsRequired()
@@ -137,8 +139,7 @@ namespace Repuestos_San_jorge.Migrations
                     b.HasIndex("currentAcountId")
                         .IsUnique();
 
-                    b.HasIndex("sellerId")
-                        .IsUnique();
+                    b.HasIndex("sellerId");
 
                     b.HasIndex("userId")
                         .IsUnique();
@@ -154,12 +155,11 @@ namespace Repuestos_San_jorge.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
-                    b.Property<int>("movementId")
-                        .HasColumnType("integer");
+                    b.Property<string>("acountNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("id");
-
-                    b.HasIndex("movementId");
 
                     b.ToTable("CurrentAcounts");
                 });
@@ -200,11 +200,18 @@ namespace Repuestos_San_jorge.Migrations
                     b.Property<float>("amount")
                         .HasColumnType("real");
 
+                    b.Property<int>("currentAcountId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("fecha")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("type")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("id");
+
+                    b.HasIndex("currentAcountId");
 
                     b.ToTable("Movements");
                 });
@@ -306,6 +313,9 @@ namespace Repuestos_San_jorge.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("comentarios")
+                        .HasColumnType("text");
+
                     b.Property<string>("email")
                         .IsRequired()
                         .HasColumnType("text");
@@ -313,6 +323,9 @@ namespace Repuestos_San_jorge.Migrations
                     b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool?>("status")
+                        .HasColumnType("boolean");
 
                     b.Property<int>("supplierId")
                         .HasColumnType("integer");
@@ -364,8 +377,7 @@ namespace Repuestos_San_jorge.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("clientId")
-                        .IsUnique();
+                    b.HasIndex("clientId");
 
                     b.ToTable("Schedules");
                 });
@@ -378,9 +390,6 @@ namespace Repuestos_San_jorge.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
-                    b.Property<float>("ComisionOferta")
-                        .HasColumnType("real");
-
                     b.Property<int>("altura")
                         .HasColumnType("integer");
 
@@ -391,7 +400,10 @@ namespace Repuestos_San_jorge.Migrations
                     b.Property<int>("codigoPostal")
                         .HasColumnType("integer");
 
-                    b.Property<float>("comisionBase")
+                    b.Property<float?>("comisionBase")
+                        .HasColumnType("real");
+
+                    b.Property<float?>("comisionOferta")
                         .HasColumnType("real");
 
                     b.Property<string>("cuil")
@@ -466,6 +478,9 @@ namespace Repuestos_San_jorge.Migrations
                     b.Property<int>("codigoPostal")
                         .HasColumnType("integer");
 
+                    b.Property<string>("comentarios")
+                        .HasColumnType("text");
+
                     b.Property<string>("cuit")
                         .IsRequired()
                         .HasColumnType("text");
@@ -481,6 +496,9 @@ namespace Repuestos_San_jorge.Migrations
                     b.Property<string>("razonSocial")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool?>("status")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("telefono")
                         .IsRequired()
@@ -518,9 +536,8 @@ namespace Repuestos_San_jorge.Migrations
                     b.Property<int>("roleId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("salt")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<bool>("status")
+                        .HasColumnType("boolean");
 
                     b.HasKey("id");
 
@@ -576,8 +593,8 @@ namespace Repuestos_San_jorge.Migrations
                         .IsRequired();
 
                     b.HasOne("Repuestos_San_jorge.Models.Seller", "seller")
-                        .WithOne("client")
-                        .HasForeignKey("Repuestos_San_jorge.Models.Client", "sellerId")
+                        .WithMany("clients")
+                        .HasForeignKey("sellerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -592,17 +609,6 @@ namespace Repuestos_San_jorge.Migrations
                     b.Navigation("seller");
 
                     b.Navigation("user");
-                });
-
-            modelBuilder.Entity("Repuestos_San_jorge.Models.CurrentAcount", b =>
-                {
-                    b.HasOne("Repuestos_San_jorge.Models.Movement", "movement")
-                        .WithMany("currentAcounts")
-                        .HasForeignKey("movementId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("movement");
                 });
 
             modelBuilder.Entity("Repuestos_San_jorge.Models.CustomerDiscount", b =>
@@ -622,6 +628,17 @@ namespace Repuestos_San_jorge.Migrations
                     b.Navigation("client");
 
                     b.Navigation("supplier");
+                });
+
+            modelBuilder.Entity("Repuestos_San_jorge.Models.Movement", b =>
+                {
+                    b.HasOne("Repuestos_San_jorge.Models.CurrentAcount", "currentAcount")
+                        .WithMany("movements")
+                        .HasForeignKey("currentAcountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("currentAcount");
                 });
 
             modelBuilder.Entity("Repuestos_San_jorge.Models.PurchaseOrderItem", b =>
@@ -657,8 +674,8 @@ namespace Repuestos_San_jorge.Migrations
             modelBuilder.Entity("Repuestos_San_jorge.Models.Schedule", b =>
                 {
                     b.HasOne("Repuestos_San_jorge.Models.Client", "client")
-                        .WithOne("schedule")
-                        .HasForeignKey("Repuestos_San_jorge.Models.Schedule", "clientId")
+                        .WithMany("schedules")
+                        .HasForeignKey("clientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -720,19 +737,14 @@ namespace Repuestos_San_jorge.Migrations
                 {
                     b.Navigation("customerDiscounts");
 
-                    b.Navigation("schedule")
-                        .IsRequired();
+                    b.Navigation("schedules");
                 });
 
             modelBuilder.Entity("Repuestos_San_jorge.Models.CurrentAcount", b =>
                 {
-                    b.Navigation("client")
-                        .IsRequired();
-                });
+                    b.Navigation("client");
 
-            modelBuilder.Entity("Repuestos_San_jorge.Models.Movement", b =>
-                {
-                    b.Navigation("currentAcounts");
+                    b.Navigation("movements");
                 });
 
             modelBuilder.Entity("Repuestos_San_jorge.Models.Product", b =>
@@ -757,8 +769,7 @@ namespace Repuestos_San_jorge.Migrations
 
             modelBuilder.Entity("Repuestos_San_jorge.Models.Seller", b =>
                 {
-                    b.Navigation("client")
-                        .IsRequired();
+                    b.Navigation("clients");
                 });
 
             modelBuilder.Entity("Repuestos_San_jorge.Models.Supplier", b =>
@@ -772,11 +783,9 @@ namespace Repuestos_San_jorge.Migrations
 
             modelBuilder.Entity("Repuestos_San_jorge.Models.User", b =>
                 {
-                    b.Navigation("client")
-                        .IsRequired();
+                    b.Navigation("client");
 
-                    b.Navigation("seller")
-                        .IsRequired();
+                    b.Navigation("seller");
                 });
 #pragma warning restore 612, 618
         }

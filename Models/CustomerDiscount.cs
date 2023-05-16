@@ -17,12 +17,12 @@ namespace Repuestos_San_jorge.Models
         public int supplierId { get; set; }
 
         [ForeignKey("supplierId")]
-        public Supplier supplier { get; set; }
+        public Supplier? supplier { get; set; }
 
         public int clientId { get; set; }
 
         [ForeignKey("clientId")]
-        public Client client { get; set; }
+        public Client? client { get; set; }
 
         // public CustomerDiscount()
         // {

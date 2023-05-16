@@ -44,7 +44,7 @@ namespace Repuestos_San_jorge.Models
         [ForeignKey("userId")]
         public User? user { get; set; }
 
-        public Schedule? schedule { get; set; }
+        public ICollection<Schedule>? schedules { get; set; }
 
         public int sellerId { get; set; }
 

@@ -14,6 +14,8 @@ namespace Repuestos_San_jorge.Configuration
             services.AddScoped<ISellerService, SellerService>();
             services.AddScoped<ISupplierService, SupplierService>();
             services.AddScoped<IRepresentativeService, RepresentativeService>();
+            services.AddScoped<IScheduleService, ScheduleService>();
+            services.AddScoped<IMovementService, MovementService>();
             // Registrar otros servicios aquí
         }
     }

@@ -130,6 +130,122 @@ namespace Repuestos_San_jorge.Services.Admin
                 throw;
             }
         }
+
+        public async Task<string> AddClientDiscountAsync(CustomerDiscount customerDiscount) // agregar descuento clientes
+        {
+            try
+            {
+                var client = await _dbContext.Clients.SingleOrDefaultAsync(
+                    client => client.id == customerDiscount.clientId
+                );
+                if (client == null)
+                {
+                    throw new ArgumentNullException(nameof(client), "El cliente no puede ser null");
+                }
+                var supplier = await _dbContext.Suppliers.SingleOrDefaultAsync(
+                    supplier => supplier.id == customerDiscount.supplierId
+                );
+                if (supplier == null)
+                {
+                    throw new ArgumentNullException(
+                        nameof(client),
+                        "El proveedor no puede ser null"
+                    );
+                }
+                customerDiscount.client = client;
+                customerDiscount.supplier = supplier;
+                _dbContext.CustomerDiscounts.Add(customerDiscount);
+                await _dbContext.SaveChangesAsync();
+                return "Descuento registrado";
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<CustomerDiscount> GetClientDiscountAsync(int clientId, int supplierId) // buscar descuento clientes/proveedor
+        {
+            try
+            {
+                var customerDiscont = await _dbContext.CustomerDiscounts.FirstOrDefaultAsync(
+                    cd => cd.clientId == clientId && cd.supplierId == supplierId
+                );
+                if (customerDiscont == null)
+                {
+                    throw new ArgumentNullException(
+                        nameof(customerDiscont),
+                        "Descuento inexistente"
+                    );
+                }
+                return customerDiscont;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<CustomerDiscount>> GetDiscountByClientAsync(int clientId) // buscar descuento clientes/proveedor
+        {
+            try
+            {
+                var customerDiscont = await _dbContext.CustomerDiscounts
+                    .Include(cd => cd.supplier)
+                    .Where(cd => cd.clientId == clientId)
+                    .ToListAsync();
+                if (customerDiscont == null)
+                {
+                    throw new ArgumentNullException(
+                        nameof(customerDiscont),
+                        "Descuento inexistente"
+                    );
+                }
+                return customerDiscont;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<string> UpdateClientDiscountAsync(
+            int clientId,
+            int supplierId,
+            UpdateCustomerDiscountDto data
+        ) // actualizar descuento clientes/proveedor
+        {
+            try
+            {
+                var customerDiscont = await _dbContext.CustomerDiscounts.FirstOrDefaultAsync(
+                    cd => cd.clientId == clientId && cd.supplierId == supplierId
+                );
+                if (customerDiscont == null)
+                {
+                    throw new ArgumentNullException(
+                        nameof(customerDiscont),
+                        "Descuento inexistente"
+                    );
+                }
+                var dataUpdate = new Dictionary<string, object>();
+                foreach (var propiedad in data.GetType().GetProperties())
+                {
+                    string nombrePropiedad = propiedad.Name;
+                    var valorPropiedad = propiedad.GetValue(data);
+                    if (valorPropiedad != null)
+                    {
+                        dataUpdate.Add(nombrePropiedad, valorPropiedad);
+                    }
+                }
+                _dbContext.Entry(customerDiscont).CurrentValues.SetValues(dataUpdate);
+                await _dbContext.SaveChangesAsync();
+                return "Modificado";
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 
     public interface IClientService
@@ -139,5 +255,13 @@ namespace Repuestos_San_jorge.Services.Admin
 
         Task<string> UpdateClientAsync(int id, UpdateClientDto data);
         Task<string> DeleteClientAsync(int id);
+        Task<string> AddClientDiscountAsync(CustomerDiscount customerDiscount);
+        Task<CustomerDiscount> GetClientDiscountAsync(int clientId, int supplierId);
+        Task<IEnumerable<CustomerDiscount>> GetDiscountByClientAsync(int clientId);
+        Task<string> UpdateClientDiscountAsync(
+            int clientId,
+            int supplierId,
+            UpdateCustomerDiscountDto data
+        );
     }
 }

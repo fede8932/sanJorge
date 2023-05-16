@@ -29,6 +29,10 @@ namespace Repuestos_San_jorge.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder
+                .Entity<Movement>()
+                .Property(Movements => Movements.type)
+                .HasConversion<string>();
+            modelBuilder
                 .Entity<User>()
                 .HasOne(user => user.role)
                 .WithMany(role => role.users)
@@ -45,9 +49,9 @@ namespace Repuestos_San_jorge.Data
                 .HasForeignKey<Seller>(seller => seller.userId);
             modelBuilder
                 .Entity<Client>()
-                .HasOne(client => client.schedule)
+                .HasMany(client => client.schedules)
                 .WithOne(schedule => schedule.client)
-                .HasForeignKey<Schedule>(schedule => schedule.clientId);
+                .HasForeignKey(schedule => schedule.clientId);
             modelBuilder
                 .Entity<Seller>()
                 .HasMany(seller => seller.clients)
@@ -84,6 +88,7 @@ namespace Repuestos_San_jorge.Data
                 .HasOne(customerDiscount => customerDiscount.supplier)
                 .WithMany(supplier => supplier.customerDiscounts)
                 .HasForeignKey(customerDiscount => customerDiscount.supplierId);
+            modelBuilder.Entity<Brand>().HasIndex(brand => brand.name).IsUnique();
             modelBuilder
                 .Entity<BrandSupplier>()
                 .HasKey(brandSupplier => new { brandSupplier.brandId, brandSupplier.supplierId });
