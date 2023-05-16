@@ -12,10 +12,12 @@ namespace Repuestos_San_jorge.Controllers.Admin
     public class ClientController : Controller
     {
         private readonly IClientService _clientService;
+        private readonly IScheduleService _scheduleService;
 
-        public ClientController(IClientService clientService)
+        public ClientController(IClientService clientService, IScheduleService scheduleService)
         {
             _clientService = clientService;
+            _scheduleService = scheduleService;
         }
 
         [HttpPost]
@@ -73,6 +75,129 @@ namespace Repuestos_San_jorge.Controllers.Admin
             {
                 var result = await _clientService.UpdateClientAsync(id, data);
                 return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
+
+        [HttpPost("schedule")]
+        public async Task<ActionResult<IEnumerable<Schedule>>> SetScheduleClient(
+            [FromBody] Schedule schedule
+        )
+        {
+            try
+            {
+                var result = await _scheduleService.CreateScheduleAsync(schedule);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
+
+        [HttpPut("schedule/{id}")]
+        public async Task<ActionResult<IEnumerable<Schedule>>> SetScheduleClient(
+            int id,
+            [FromBody] UpdateScheduleDto data
+        )
+        {
+            try
+            {
+                var result = await _scheduleService.UpdateScheduleAsync(id, data);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
+
+        [HttpPost("discount")]
+        public async Task<ActionResult> AddClientDiscount(
+            [FromBody] CustomerDiscount customerDiscount
+        )
+        {
+            try
+            {
+                var result = await _clientService.AddClientDiscountAsync(customerDiscount);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
+
+        [HttpGet("discount")]
+        public async Task<ActionResult> GetClientDiscount(
+            [FromQuery] int clientId,
+            [FromQuery] int supplierId
+        )
+        {
+            try
+            {
+                var result = await _clientService.GetClientDiscountAsync(clientId, supplierId);
+                return Ok(result);
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(200, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
+
+        [HttpGet("discount/{clientId}")]
+        public async Task<ActionResult> GetClientDiscountId([FromRoute] int clientId)
+        {
+            try
+            {
+                var result = await _clientService.GetDiscountByClientAsync(clientId);
+                return Ok(result);
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(200, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
+
+        [HttpPut("discount")]
+        public async Task<ActionResult> GetClientDiscount(
+            [FromQuery] int clientId,
+            [FromQuery] int supplierId,
+            [FromBody] UpdateCustomerDiscountDto data
+        )
+        {
+            try
+            {
+                var result = await _clientService.UpdateClientDiscountAsync(
+                    clientId,
+                    supplierId,
+                    data
+                );
+                return Ok(result);
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, ex.Message);
             }
             catch (Exception ex)
             {

@@ -12,8 +12,8 @@ using Repuestos_San_jorge.Data;
 namespace Repuestos_San_jorge.Migrations
 {
     [DbContext(typeof(OfficeDb))]
-    [Migration("20230510130818_cambio4")]
-    partial class cambio4
+    [Migration("20230515145207_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -203,7 +203,8 @@ namespace Repuestos_San_jorge.Migrations
                     b.Property<int>("currentAcountId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("fecha")
+                    b.Property<DateTime?>("fecha")
+                        .IsRequired()
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("type")
@@ -314,6 +315,9 @@ namespace Repuestos_San_jorge.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("comentarios")
+                        .HasColumnType("text");
+
                     b.Property<string>("email")
                         .IsRequired()
                         .HasColumnType("text");
@@ -321,6 +325,9 @@ namespace Repuestos_San_jorge.Migrations
                     b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool?>("status")
+                        .HasColumnType("boolean");
 
                     b.Property<int>("supplierId")
                         .HasColumnType("integer");
@@ -372,8 +379,7 @@ namespace Repuestos_San_jorge.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("clientId")
-                        .IsUnique();
+                    b.HasIndex("clientId");
 
                     b.ToTable("Schedules");
                 });
@@ -474,6 +480,9 @@ namespace Repuestos_San_jorge.Migrations
                     b.Property<int>("codigoPostal")
                         .HasColumnType("integer");
 
+                    b.Property<string>("comentarios")
+                        .HasColumnType("text");
+
                     b.Property<string>("cuit")
                         .IsRequired()
                         .HasColumnType("text");
@@ -489,6 +498,9 @@ namespace Repuestos_San_jorge.Migrations
                     b.Property<string>("razonSocial")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool?>("status")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("telefono")
                         .IsRequired()
@@ -664,8 +676,8 @@ namespace Repuestos_San_jorge.Migrations
             modelBuilder.Entity("Repuestos_San_jorge.Models.Schedule", b =>
                 {
                     b.HasOne("Repuestos_San_jorge.Models.Client", "client")
-                        .WithOne("schedule")
-                        .HasForeignKey("Repuestos_San_jorge.Models.Schedule", "clientId")
+                        .WithMany("schedules")
+                        .HasForeignKey("clientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -727,7 +739,7 @@ namespace Repuestos_San_jorge.Migrations
                 {
                     b.Navigation("customerDiscounts");
 
-                    b.Navigation("schedule");
+                    b.Navigation("schedules");
                 });
 
             modelBuilder.Entity("Repuestos_San_jorge.Models.CurrentAcount", b =>

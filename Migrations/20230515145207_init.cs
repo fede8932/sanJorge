@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Repuestos_San_jorge.Migrations
 {
     /// <inheritdoc />
-    public partial class init_db : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,17 +26,16 @@ namespace Repuestos_San_jorge.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Movements",
+                name: "CurrentAcounts",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    type = table.Column<string>(type: "text", nullable: false),
-                    amount = table.Column<float>(type: "real", nullable: false)
+                    acountNumber = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Movements", x => x.id);
+                    table.PrimaryKey("PK_CurrentAcounts", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -96,7 +95,9 @@ namespace Repuestos_San_jorge.Migrations
                     calle = table.Column<string>(type: "text", nullable: false),
                     altura = table.Column<int>(type: "integer", nullable: false),
                     localidad = table.Column<string>(type: "text", nullable: false),
+                    comentarios = table.Column<string>(type: "text", nullable: true),
                     codigoPostal = table.Column<int>(type: "integer", nullable: false),
+                    status = table.Column<bool>(type: "boolean", nullable: true),
                     telefono = table.Column<string>(type: "text", nullable: false),
                     email = table.Column<string>(type: "text", nullable: false)
                 },
@@ -106,20 +107,23 @@ namespace Repuestos_San_jorge.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CurrentAcounts",
+                name: "Movements",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    movementId = table.Column<int>(type: "integer", nullable: false)
+                    type = table.Column<string>(type: "text", nullable: false),
+                    fecha = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    amount = table.Column<float>(type: "real", nullable: false),
+                    currentAcountId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CurrentAcounts", x => x.id);
+                    table.PrimaryKey("PK_Movements", x => x.id);
                     table.ForeignKey(
-                        name: "FK_CurrentAcounts_Movements_movementId",
-                        column: x => x.movementId,
-                        principalTable: "Movements",
+                        name: "FK_Movements_CurrentAcounts_currentAcountId",
+                        column: x => x.currentAcountId,
+                        principalTable: "CurrentAcounts",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -215,7 +219,7 @@ namespace Repuestos_San_jorge.Migrations
                     lastName = table.Column<string>(type: "text", nullable: false),
                     email = table.Column<string>(type: "text", nullable: false),
                     password = table.Column<string>(type: "text", nullable: false),
-                    salt = table.Column<string>(type: "text", nullable: false),
+                    status = table.Column<bool>(type: "boolean", nullable: false),
                     roleId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -263,6 +267,8 @@ namespace Repuestos_San_jorge.Migrations
                     name = table.Column<string>(type: "text", nullable: false),
                     apellido = table.Column<string>(type: "text", nullable: false),
                     email = table.Column<string>(type: "text", nullable: false),
+                    comentarios = table.Column<string>(type: "text", nullable: true),
+                    status = table.Column<bool>(type: "boolean", nullable: true),
                     telefono = table.Column<string>(type: "text", nullable: false),
                     supplierId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -289,8 +295,8 @@ namespace Repuestos_San_jorge.Migrations
                     codigoPostal = table.Column<int>(type: "integer", nullable: false),
                     localidad = table.Column<string>(type: "text", nullable: false),
                     telefono = table.Column<string>(type: "text", nullable: false),
-                    comisionBase = table.Column<float>(type: "real", nullable: false),
-                    ComisionOferta = table.Column<float>(type: "real", nullable: false),
+                    comisionBase = table.Column<float>(type: "real", nullable: true),
+                    comisionOferta = table.Column<float>(type: "real", nullable: true),
                     userId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -317,9 +323,9 @@ namespace Repuestos_San_jorge.Migrations
                     coordenadas = table.Column<string>(type: "text", nullable: false),
                     localidad = table.Column<string>(type: "text", nullable: false),
                     codigoPostal = table.Column<int>(type: "integer", nullable: false),
-                    iva = table.Column<float>(type: "real", nullable: false),
+                    iva = table.Column<string>(type: "text", nullable: false),
                     telefono = table.Column<string>(type: "text", nullable: false),
-                    comentarios = table.Column<string>(type: "text", nullable: false),
+                    comentarios = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
                     userId = table.Column<int>(type: "integer", nullable: false),
                     sellerId = table.Column<int>(type: "integer", nullable: false),
                     currentAcountId = table.Column<int>(type: "integer", nullable: false)
@@ -414,8 +420,7 @@ namespace Repuestos_San_jorge.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Clients_sellerId",
                 table: "Clients",
-                column: "sellerId",
-                unique: true);
+                column: "sellerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Clients_userId",
@@ -424,14 +429,14 @@ namespace Repuestos_San_jorge.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_CurrentAcounts_movementId",
-                table: "CurrentAcounts",
-                column: "movementId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CustomerDiscounts_supplierId",
                 table: "CustomerDiscounts",
                 column: "supplierId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Movements_currentAcountId",
+                table: "Movements",
+                column: "currentAcountId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PurchaseOrderItems_productId",
@@ -451,8 +456,7 @@ namespace Repuestos_San_jorge.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Schedules_clientId",
                 table: "Schedules",
-                column: "clientId",
-                unique: true);
+                column: "clientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sellers_userId",
@@ -491,6 +495,9 @@ namespace Repuestos_San_jorge.Migrations
                 name: "CustomerDiscounts");
 
             migrationBuilder.DropTable(
+                name: "Movements");
+
+            migrationBuilder.DropTable(
                 name: "PurchaseOrderItems");
 
             migrationBuilder.DropTable(
@@ -522,9 +529,6 @@ namespace Repuestos_San_jorge.Migrations
 
             migrationBuilder.DropTable(
                 name: "Sellers");
-
-            migrationBuilder.DropTable(
-                name: "Movements");
 
             migrationBuilder.DropTable(
                 name: "Users");
