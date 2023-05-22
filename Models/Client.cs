@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Repuestos_San_jorge.Dto.Enums;
 
 namespace Repuestos_San_jorge.Models
 {
@@ -12,6 +13,7 @@ namespace Repuestos_San_jorge.Models
         public string razonSocial { get; set; }
 
         [Required]
+        [RegularExpression(@"^\d{2}-\d{8}-\d{1}$", ErrorMessage = "El CUIT debe tener el formato XX-XXXXXXXX-X")]
         public string cuit { get; set; }
 
         [Required]
@@ -30,7 +32,7 @@ namespace Repuestos_San_jorge.Models
         public int codigoPostal { get; set; }
 
         [Required]
-        public string iva { get; set; }
+        public IvaType iva { get; set; }
 
         [Required]
         [RegularExpression(@"^\d{10}$")]

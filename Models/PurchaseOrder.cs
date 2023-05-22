@@ -17,12 +17,12 @@ namespace Repuestos_San_jorge.Models
 
         public int supplierId { get; set; }
 
-        public ICollection<PurchaseOrderItem> purchaseOrderItems { get; set; }
+        public ICollection<PurchaseOrderItem>? purchaseOrderItems { get; set; }
 
-        public PurchaseOrder()
-        {
-            status = "";
-            purchaseOrderItems = new List <PurchaseOrderItem>();
-        }
+        // public PurchaseOrder()
+        // {
+        //     status = "";
+        //     purchaseOrderItems = new List <PurchaseOrderItem>();
+        // }
     }
 }

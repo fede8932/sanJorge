@@ -18,10 +18,5 @@ namespace Repuestos_San_jorge.Models
         
         [ForeignKey("clientId")]
         public Client? client { get; set; }
-
-        // public Schedule()
-        // {
-        //     client = new Client();
-        // }
     }
 }

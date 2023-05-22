@@ -1,4 +1,4 @@
-namespace Repuestos_San_Jorge.Utils;
+namespace Repuestos_San_Jorge.Utils{
 
 public class Utils
 {
@@ -15,4 +15,5 @@ public class Utils
 
         return numeroCuenta;
     }
+}
 }

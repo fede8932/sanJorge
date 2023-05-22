@@ -1,6 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Repuestos_San_jorge.Services.Admin;
+using Repuestos_San_jorge.Services.Sessions;
 using Repuestos_San_jorge.Services.SuperAdmin;
+using Repuestos_San_Jorge.Utils;
 
 namespace Repuestos_San_jorge.Configuration
 {
@@ -16,6 +18,12 @@ namespace Repuestos_San_jorge.Configuration
             services.AddScoped<IRepresentativeService, RepresentativeService>();
             services.AddScoped<IScheduleService, ScheduleService>();
             services.AddScoped<IMovementService, MovementService>();
+            services.AddScoped<IBrandService, BrandService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IPurchaseOrderService, PurchaseOrderService>();
+            services.AddScoped<IPurchaseOrderItemService, PurchaseOrderItemService>();
+            services.AddScoped<ILoginService, LoginService>();
+            services.AddScoped<JwtService>();
             // Registrar otros servicios aquí
         }
     }

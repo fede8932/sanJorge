@@ -22,6 +22,7 @@ namespace Repuestos_San_jorge.Models
         [Required]
         public string localidad { get; set; }
 
+        [StringLength(300)]
         public string? comentarios { get; set; }
 
         [Required]
@@ -46,15 +47,6 @@ namespace Repuestos_San_jorge.Models
         public Supplier()
         {
             status = true;
-            // razonSocial = "";
-            // cuit = "";
-            // calle = "";
-            // telefono = "";
-            // localidad = "";
-            // email = "";
-            // representative = new List<Representative>();
-            // customerDiscounts = new List<CustomerDiscount>();
-            // brandSuppliers = new List<BrandSupplier>();
         }
     }
 }

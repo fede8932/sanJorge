@@ -31,11 +31,6 @@ namespace Repuestos_San_jorge.Models
         public Representative()
         {
             status = true;
-            // name = "";
-            // apellido = "";
-            // telefono = "";
-            // email = "";
-            // supplier = new Supplier();
         }
     }
 }

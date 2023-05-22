@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace Repuestos_San_jorge.Models
 {
@@ -15,13 +16,5 @@ namespace Repuestos_San_jorge.Models
         public ICollection<BrandProduct>? brandProducts { get; set; }
 
         public Stock? stock { get; set; }
-
-        // public Brand()
-        // {
-        //     name = "";
-        //     brandSuppliers = new List<BrandSupplier>();
-        //     brandProducts = new List<BrandProduct>();
-        //     stock = new Stock();
-        // }
     }
 }
