@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Repuestos_San_jorge.Data;
@@ -11,9 +12,11 @@ using Repuestos_San_jorge.Data;
 namespace Repuestos_San_jorge.Migrations
 {
     [DbContext(typeof(OfficeDb))]
-    partial class OfficeDbModelSnapshot : ModelSnapshot
+    [Migration("20230517081050_cambios001")]
+    partial class cambios001
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -429,30 +432,6 @@ namespace Repuestos_San_jorge.Migrations
                     b.ToTable("Sellers");
                 });
 
-            modelBuilder.Entity("Repuestos_San_jorge.Models.Session", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
-
-                    b.Property<string>("refresh")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("token")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("userId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("id");
-
-                    b.ToTable("Sessions");
-                });
-
             modelBuilder.Entity("Repuestos_San_jorge.Models.Stock", b =>
                 {
                     b.Property<int>("id")
@@ -461,13 +440,13 @@ namespace Repuestos_San_jorge.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
-                    b.Property<int?>("brandId")
+                    b.Property<int>("brandId")
                         .HasColumnType("integer");
 
                     b.Property<int>("minStock")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("productId")
+                    b.Property<int>("productId")
                         .HasColumnType("integer");
 
                     b.Property<int>("stock")
@@ -721,11 +700,15 @@ namespace Repuestos_San_jorge.Migrations
                 {
                     b.HasOne("Repuestos_San_jorge.Models.Brand", "brand")
                         .WithOne("stock")
-                        .HasForeignKey("Repuestos_San_jorge.Models.Stock", "brandId");
+                        .HasForeignKey("Repuestos_San_jorge.Models.Stock", "brandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Repuestos_San_jorge.Models.Product", "product")
                         .WithOne("stock")
-                        .HasForeignKey("Repuestos_San_jorge.Models.Stock", "productId");
+                        .HasForeignKey("Repuestos_San_jorge.Models.Stock", "productId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("brand");
 
@@ -772,7 +755,8 @@ namespace Repuestos_San_jorge.Migrations
 
                     b.Navigation("purchaseOrderItems");
 
-                    b.Navigation("stock");
+                    b.Navigation("stock")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Repuestos_San_jorge.Models.PurchaseOrder", b =>

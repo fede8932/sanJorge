@@ -23,11 +23,5 @@ namespace Repuestos_San_jorge.Models
         public CurrentAcount? currentAcount { get; set; }
 
         //Agregar comprobante (la relacion con la factura/nc/pago real)
-
-        // public Movement()
-        // {
-        //     type = "";
-        //     currentAcounts = new List<CurrentAcount>();
-        // }
     }
 }

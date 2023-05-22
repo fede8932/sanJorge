@@ -51,7 +51,10 @@ namespace Repuestos_San_jorge.Services.Admin
                 );
                 if (supplier == null)
                 {
-                    throw new ArgumentNullException(nameof(supplier), "El proveedor no puede ser null");
+                    throw new ArgumentNullException(
+                        nameof(supplier),
+                        "El proveedor no puede ser null"
+                    );
                 }
                 supplier.status = false;
                 await _dbContext.SaveChangesAsync();
@@ -72,7 +75,10 @@ namespace Repuestos_San_jorge.Services.Admin
                 );
                 if (supplier == null)
                 {
-                    throw new ArgumentNullException(nameof(supplier), "El proveedor no puede ser null");
+                    throw new ArgumentNullException(
+                        nameof(supplier),
+                        "El proveedor no puede ser null"
+                    );
                 }
                 var dataUpdate = new Dictionary<string, object>();
                 foreach (var propiedad in data.GetType().GetProperties())
@@ -93,6 +99,38 @@ namespace Repuestos_San_jorge.Services.Admin
                 throw;
             }
         }
+
+        public async Task<string> AddBrandToSupplierAsync(int supplierId, int brandId) // agregar marca a proveedor
+        {
+            try
+            {
+                var brand = await _dbContext.Brands.SingleOrDefaultAsync(
+                    brand => brand.id == brandId
+                );
+                if (brand == null)
+                {
+                    throw new ArgumentNullException(
+                        nameof(brand),
+                        "No existe marca en los registros"
+                    );
+                }
+                var supplier = await _dbContext.Suppliers.SingleOrDefaultAsync(
+                    supplier => supplier.id == supplierId
+                );
+                if (supplier == null)
+                {
+                    throw new ArgumentNullException(nameof(brand), "No proveedor en los registros");
+                }
+                var brandSupplier = new BrandSupplier { brand = brand, supplier = supplier };
+                _dbContext.BrandSuppliers.Add(brandSupplier);
+                await _dbContext.SaveChangesAsync();
+                return "Marca actualizada";
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 
     public interface ISupplierService
@@ -102,5 +140,6 @@ namespace Repuestos_San_jorge.Services.Admin
 
         Task<string> UpdateSupplierAsync(int id, UpdateSupplierDto data);
         Task<string> DeleteSupplierAsync(int id);
+        Task<string> AddBrandToSupplierAsync(int supplierId, int brandId);
     }
 }

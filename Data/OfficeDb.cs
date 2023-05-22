@@ -25,13 +25,32 @@ namespace Repuestos_San_jorge.Data
         public DbSet<PurchaseOrder> PurchaseOrders => Set<PurchaseOrder>();
         public DbSet<PurchaseOrderItem> PurchaseOrderItems => Set<PurchaseOrderItem>();
         public DbSet<Stock> Stocks => Set<Stock>();
+        public DbSet<Session> Sessions => Set<Session>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Conversiones de enum
             modelBuilder
                 .Entity<Movement>()
                 .Property(Movements => Movements.type)
                 .HasConversion<string>();
+            modelBuilder
+                .Entity<Client>()
+                .Property(Client => Client.iva)
+                .HasConversion<string>();
+
+            // Restricciones
+            modelBuilder.Entity<Brand>().HasIndex(brand => brand.name).IsUnique();
+            modelBuilder.Entity<Client>().HasIndex(client => client.razonSocial).IsUnique();
+            modelBuilder.Entity<Client>().HasIndex(client => client.cuit).IsUnique();
+            modelBuilder.Entity<Product>().HasIndex(product => product.article).IsUnique();
+            modelBuilder.Entity<Role>().HasIndex(role => role.name).IsUnique();
+            modelBuilder.Entity<Seller>().HasIndex(seller => seller.cuil).IsUnique();
+            modelBuilder.Entity<Supplier>().HasIndex(supplier => supplier.razonSocial).IsUnique();
+            modelBuilder.Entity<Supplier>().HasIndex(supplier => supplier.cuit).IsUnique();
+            modelBuilder.Entity<User>().HasIndex(user => user.email).IsUnique();
+
+            // Relaciones
             modelBuilder
                 .Entity<User>()
                 .HasOne(user => user.role)

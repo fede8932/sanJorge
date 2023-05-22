@@ -8,22 +8,32 @@ using Repuestos_San_jorge.Dto.Admin;
 namespace Repuestos_San_jorge.Controllers.Admin
 {
     [ApiController]
-    [Route("api/supplier")]
-    public class SupplierController : Controller
+    [Route("api/productos")]
+    public class ProductController : Controller
     {
-        private readonly ISupplierService _supplierService;
+        private readonly IProductService _productService;
 
-        public SupplierController(ISupplierService supplierService)
+        public ProductController(IProductService productService)
         {
-            _supplierService = supplierService;
+            _productService = productService;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateSupplier([FromBody] Supplier supplier)
+        public async Task<IActionResult> CreateProduct(
+            [FromBody] Product product,
+            [FromQuery] int brandId,
+            [FromQuery] int stock,
+            [FromQuery] int stockMin
+        )
         {
             try
             {
-                var result = await _supplierService.CreateSupplierAsync(supplier);
+                var result = await _productService.CreateProductAsync(
+                    product,
+                    brandId,
+                    stock,
+                    stockMin
+                );
                 return Ok(result);
             }
             catch (Exception ex)
@@ -34,26 +44,11 @@ namespace Repuestos_San_jorge.Controllers.Admin
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Seller>>> GetSuppliers()
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
             try
             {
-                var result = await _supplierService.GetSuppliersAsync();
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                return StatusCode(500, "Ocurrió un error interno en el servidor.");
-            }
-        }
-
-        [HttpDelete("delete/{id}")]
-        public async Task<ActionResult<IEnumerable<Seller>>> DeleteSupplier(int id)
-        {
-            try
-            {
-                var result = await _supplierService.DeleteSupplierAsync(id);
+                var result = await _productService.GetProductsAsync();
                 return Ok(result);
             }
             catch (Exception ex)
@@ -64,14 +59,11 @@ namespace Repuestos_San_jorge.Controllers.Admin
         }
 
         [HttpPut("update/{id}")]
-        public async Task<ActionResult<IEnumerable<Seller>>> UpdateSupplier(
-            int id,
-            [FromBody] UpdateSupplierDto data
-        )
+        public async Task<ActionResult> UpdateProduct(int id, [FromBody] UpdateProductDto data)
         {
             try
             {
-                var result = await _supplierService.UpdateSupplierAsync(id, data);
+                var result = await _productService.UpdateProductAsync(id, data);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -82,15 +74,33 @@ namespace Repuestos_San_jorge.Controllers.Admin
         }
 
         [HttpPost("add/marca")]
-        public async Task<ActionResult> UpdateSeller(
-            int id,
-            [FromQuery] int supplierId,
+        public async Task<ActionResult> AddBrandToProduct(
+            [FromQuery] int productId,
             [FromQuery] int brandId
         )
         {
             try
             {
-                var result = await _supplierService.AddBrandToSupplierAsync(supplierId, brandId);
+                var result = await _productService.AddBrandToProductAsync(productId, brandId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
+
+        [HttpPut("update/stock")]
+        public async Task<ActionResult> AddBrandToProduct(
+            [FromQuery] int productId,
+            [FromQuery] int brandId,
+            [FromBody] UpdateProdStockDto data
+        )
+        {
+            try
+            {
+                var result = await _productService.UpdateProductStock(productId, brandId, data);
                 return Ok(result);
             }
             catch (Exception ex)

@@ -11,11 +11,5 @@ namespace Repuestos_San_jorge.Models
         public string name { get; set; }
 
         public ICollection<User>? users { get; set; }
-
-        // public Role()
-        // {
-        //     name = "";
-        //     users = new List<User>();
-        // }
     }
 }

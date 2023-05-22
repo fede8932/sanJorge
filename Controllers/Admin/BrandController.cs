@@ -81,7 +81,7 @@ namespace Repuestos_San_jorge.Controllers.Admin
             }
         }
 
-        [HttpPut("add/proveedor")]
+        [HttpPost("add/proveedor")]
         public async Task<ActionResult> AddSupplier(
             [FromQuery] int brandId,
             [FromQuery] int supplierId

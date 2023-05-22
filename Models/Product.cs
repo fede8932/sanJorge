@@ -11,6 +11,7 @@ namespace Repuestos_San_jorge.Models
         public string article { get; set; }
 
         [Required]
+        [StringLength(300)]
         public string description { get; set; }
 
         [Required]
@@ -22,19 +23,10 @@ namespace Repuestos_San_jorge.Models
         [Required]
         public float salePercentage { get; set; }
 
-        public ICollection<PurchaseOrderItem> purchaseOrderItems { get; set; }
+        public ICollection<PurchaseOrderItem>? purchaseOrderItems { get; set; }
 
-        public ICollection<BrandProduct> brandProducts { get; set; }
+        public ICollection<BrandProduct>? brandProducts { get; set; }
 
-        public Stock stock { get; set; }
-
-        // public Product()
-        // {
-        //     article = "";
-        //     description = "";
-        //     purchaseOrderItems = new List<PurchaseOrderItem>();
-        //     brandProducts = new List<BrandProduct>();
-        //     stock = new Stock();
-        // }
+        public Stock? stock { get; set; }
     }
 }

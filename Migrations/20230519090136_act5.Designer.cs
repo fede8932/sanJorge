@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Repuestos_San_jorge.Data;
@@ -11,9 +12,11 @@ using Repuestos_San_jorge.Data;
 namespace Repuestos_San_jorge.Migrations
 {
     [DbContext(typeof(OfficeDb))]
-    partial class OfficeDbModelSnapshot : ModelSnapshot
+    [Migration("20230519090136_act5")]
+    partial class act5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -427,30 +430,6 @@ namespace Repuestos_San_jorge.Migrations
                         .IsUnique();
 
                     b.ToTable("Sellers");
-                });
-
-            modelBuilder.Entity("Repuestos_San_jorge.Models.Session", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
-
-                    b.Property<string>("refresh")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("token")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("userId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("id");
-
-                    b.ToTable("Sessions");
                 });
 
             modelBuilder.Entity("Repuestos_San_jorge.Models.Stock", b =>

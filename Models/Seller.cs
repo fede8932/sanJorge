@@ -8,6 +8,7 @@ namespace Repuestos_San_jorge.Models
         public int id { get; set; }
 
         [Required]
+        [RegularExpression(@"^\d{2}-\d{8}-\d{1}$", ErrorMessage = "El CUIT debe tener el formato XX-XXXXXXXX-X")]
         public string cuil { get; set; }
 
         [Required]
@@ -23,6 +24,7 @@ namespace Repuestos_San_jorge.Models
         public string localidad { get; set; }
 
         [Required]
+        [RegularExpression(@"^\d{10}$")]
         public string telefono { get; set; }
 
         public float? comisionBase { get; set; }
@@ -33,15 +35,5 @@ namespace Repuestos_San_jorge.Models
         public User? user { get; set; }
 
         public ICollection<Client>? clients { get; set; }
-
-        // public Seller()
-        // {
-        //     cuil = "";
-        //     calle = "";
-        //     telefono = "";
-        //     localidad = "";
-        //     user = new User();
-        //     client = new Client();
-        // }
     }
 }

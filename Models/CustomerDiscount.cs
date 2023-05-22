@@ -12,6 +12,7 @@ namespace Repuestos_San_jorge.Models
         public float porcentaje { get; set; }
 
         [Required]
+        [StringLength(300)]
         public string notas { get; set; }
 
         public int supplierId { get; set; }
@@ -23,12 +24,5 @@ namespace Repuestos_San_jorge.Models
 
         [ForeignKey("clientId")]
         public Client? client { get; set; }
-
-        // public CustomerDiscount()
-        // {
-        //     notas = "";
-        //     supplier = new Supplier();
-        //     client = new Client();
-        // }
     }
 }
