@@ -10,11 +10,6 @@ namespace Repuestos_San_jorge.Models
         public string acountNumber { get; set; }
         public Client? client { get; set; }
         public ICollection<Movement>? movements { get; set; }
-
-        // public CurrentAcount()
-        // {
-        //     client = new Client();
-        //     movement = new Movement();
-        // }
+        public Supplier? supplier { get; set; }
     }
 }

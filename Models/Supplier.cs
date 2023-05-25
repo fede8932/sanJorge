@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Repuestos_San_jorge.Models
 {
@@ -38,11 +39,17 @@ namespace Repuestos_San_jorge.Models
         [EmailAddress]
         public string email { get; set; }
 
+        [Required]
+        public int? currentAcountId { get; set; }
+
         public ICollection<Representative>? representative { get; set; }
 
         public ICollection<CustomerDiscount>? customerDiscounts { get; set; }
 
         public ICollection<BrandSupplier>? brandSuppliers { get; set; }
+
+        [ForeignKey("currentAcountId")]
+        public CurrentAcount? currentAcount { get; set; }
 
         public Supplier()
         {

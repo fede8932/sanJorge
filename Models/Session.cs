@@ -13,8 +13,12 @@ namespace Repuestos_San_jorge.Models
         public int userId { get; set; }
 
         [Required]
-        public string token { get; set; }
+        public string ip { get; set; }
+
         [Required]
-        public string refresh { get; set; }
+        public DateTime? fechaHora { get; set; }
+
+        [Required]
+        public string agenteUsuario { get; set; }
     }
 }
