@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Repuestos_San_jorge.Models;
 using Repuestos_San_jorge.Data;
+using Repuestos_San_jorge.Dto.Enums;
 
 namespace Repuestos_San_jorge.Services.Admin
 {
@@ -27,14 +28,13 @@ namespace Repuestos_San_jorge.Services.Admin
                 var order = await _dbContext.PurchaseOrders.SingleOrDefaultAsync(
                     order => order.id == purchaseOrderId
                 );
-                var brandProduct = _dbContext.BrandProducts
+                var brandProduct = await _dbContext.BrandProducts
                     .Include(brandProduct => brandProduct.product)
                     .Include(brandProduct => brandProduct.brand)
-                    .FirstOrDefault(
+                    .FirstOrDefaultAsync(
                         brandProduct =>
                             brandProduct.brandId == brandId && brandProduct.productId == productId
                     );
-
                 if (order == null || brandProduct == null)
                 {
                     throw new ArgumentNullException(
@@ -42,17 +42,30 @@ namespace Repuestos_San_jorge.Services.Admin
                         "La orden o marca/producto no puede ser null"
                     );
                 }
-                var purchaseOrderItem = new PurchaseOrderItem
+                if (order.status == PurchaseOrderStatusType.Open)
                 {
-                    amount = cantidad,
-                    salePrice =
-                        brandProduct.product.listPrice * (1 - brandProduct.product.costPercentage),
-                    purchaseOrder = order,
-                    product = brandProduct.product,
-                };
-                _dbContext.PurchaseOrderItems.Add(purchaseOrderItem);
-                await _dbContext.SaveChangesAsync();
-                return "Registrado";
+                    var purchaseOrderItem = new PurchaseOrderItem
+                    {
+                        amount = cantidad,
+                        salePrice =
+                            brandProduct.product.listPrice
+                            * (1 - brandProduct.product.costPercentage),
+                        purchaseOrder = order,
+                        product = brandProduct.product,
+                    };
+                    order.total =
+                        order.total + (purchaseOrderItem.amount * purchaseOrderItem.salePrice);
+                    _dbContext.PurchaseOrderItems.Add(purchaseOrderItem);
+                    _dbContext.PurchaseOrders.Update(order);
+                    await _dbContext.SaveChangesAsync();
+                    return "Registrado";
+                }
+                else
+                {
+                    throw new Exception(
+                        "No es posible agregar items a la orden"
+                    );
+                }
             }
             catch
             {
@@ -64,12 +77,24 @@ namespace Repuestos_San_jorge.Services.Admin
         {
             try
             {
-                var orderItem = await _dbContext.PurchaseOrderItems.FindAsync(id);
+                var orderItem = await _dbContext.PurchaseOrderItems
+                    .Include(PurchaseOrderItems => PurchaseOrderItems.purchaseOrder)
+                    .FirstOrDefaultAsync(PurchaseOrderItems => PurchaseOrderItems.id == id);
                 if (orderItem == null)
                 {
                     throw new ArgumentNullException(
                         nameof(orderItem),
-                        "El item no puede ser null"
+                        "No existe el item en los registros"
+                    );
+                }
+                if (
+                    orderItem.purchaseOrder != null
+                    && orderItem.purchaseOrder.status != Dto.Enums.PurchaseOrderStatusType.Open
+                )
+                {
+                    throw new ArgumentNullException(
+                        nameof(orderItem),
+                        "El item pertenece a una orden que no esta abierta"
                     );
                 }
                 _dbContext.PurchaseOrderItems.Remove(orderItem);
@@ -82,12 +107,13 @@ namespace Repuestos_San_jorge.Services.Admin
             }
         }
 
-        public async Task<string> UpdateCantToOrderItem(int id, int cantidad) // eliminar orden
+        public async Task<string> UpdateCantToOrderItem(int id, int cantidad)
         {
             try
             {
-                var orderItem = await _dbContext.PurchaseOrderItems.SingleOrDefaultAsync(
-                    orderItem => orderItem.id == id);
+                var orderItem = await _dbContext.PurchaseOrderItems
+                    .Include(PurchaseOrderItems => PurchaseOrderItems.purchaseOrder)
+                    .FirstOrDefaultAsync(PurchaseOrderItems => PurchaseOrderItems.id == id);
                 if (orderItem == null)
                 {
                     throw new ArgumentNullException(
@@ -95,10 +121,27 @@ namespace Repuestos_San_jorge.Services.Admin
                         "No existe el item en los registros"
                     );
                 }
+                if (
+                    orderItem.purchaseOrder != null
+                    && orderItem.purchaseOrder.status != Dto.Enums.PurchaseOrderStatusType.Open
+                )
+                {
+                    throw new ArgumentNullException(
+                        nameof(orderItem),
+                        "El item pertenece a una orden que no esta abierta"
+                    );
+                }
+                if(orderItem.purchaseOrder?.status == PurchaseOrderStatusType.Open)
+                {
                 orderItem.amount = cantidad;
                 _dbContext.PurchaseOrderItems.Update(orderItem);
                 await _dbContext.SaveChangesAsync();
                 return "Cantidad actualizada";
+                }
+                else
+                {
+                    throw new Exception("No se puede actualizar una orden que no esta abierta");
+                }
             }
             catch
             {

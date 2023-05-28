@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using Repuestos_San_jorge.Dto.Enums;
 
 namespace Repuestos_San_jorge.Models
 {
@@ -11,7 +13,8 @@ namespace Repuestos_San_jorge.Models
         public DateTime date { get; set; }
 
         [Required]
-        public string status { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public PurchaseOrderStatusType status { get; set; }
 
         [Required]
         public float total { get; set; }
@@ -23,5 +26,10 @@ namespace Repuestos_San_jorge.Models
         public Voucher? Voucher { get; set; }
 
         public ControlOrder? controlOrder { get; set; }
+
+        public PurchaseOrder()
+        {
+            status = PurchaseOrderStatusType.Open;
+        }
     }
 }

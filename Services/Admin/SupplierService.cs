@@ -23,7 +23,7 @@ namespace Repuestos_San_jorge.Services.Admin
             {
                 CurrentAcount currentAcount = new CurrentAcount
                 {
-                    acountNumber = Utils.AcountNumberGen(supplier.cuit.Substring(0, 4)),
+                    acountNumber = Utils.AcountNumberGen(supplier.cuit.Substring(0, 1)+supplier.cuit.Substring(3, 4)),
                 };
                 _dbContext.CurrentAcounts.Add(currentAcount);
                 supplier.currentAcount = currentAcount;

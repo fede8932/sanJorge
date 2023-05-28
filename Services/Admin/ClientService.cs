@@ -45,7 +45,7 @@ namespace Repuestos_San_jorge.Services.Admin
                 client.seller = seller;
                 CurrentAcount currentAcount = new CurrentAcount
                 {
-                    acountNumber = Utils.AcountNumberGen(client.cuit.Substring(0, 4)),
+                    acountNumber = Utils.AcountNumberGen(client.cuit.Substring(0, 1)+client.cuit.Substring(3, 4)),
                 };
                 _dbContext.CurrentAcounts.Add(currentAcount);
                 await _dbContext.SaveChangesAsync();

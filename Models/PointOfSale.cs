@@ -24,11 +24,6 @@ namespace Repuestos_San_jorge.Models
         [Required]
         public int codigoPostal { get; set; }
 
-        [ForeignKey("productId")]
-        public Product? product { get; set; }
-
-        public int? productId { get; set; }
-
         public Stock? stock { get; set; }
 
         public ICollection<Location>? locations { get; set; }

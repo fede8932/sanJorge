@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Repuestos_San_jorge.Models;
 using Repuestos_San_jorge.Services.Admin;
 using Repuestos_San_jorge.Dto.Admin;
+using Repuestos_San_jorge.Dto.Enums;
 
 namespace Repuestos_San_jorge.Controllers.Admin
 {
@@ -109,11 +110,42 @@ namespace Repuestos_San_jorge.Controllers.Admin
         }
 
         [HttpPut("items/{purchaseOrderItemId}")]
-        public async Task<IActionResult> AddOrderItem([FromQuery] int cantidad, int purchaseOrderItemId)
+        public async Task<IActionResult> AddOrderItem(
+            [FromQuery] int cantidad,
+            int purchaseOrderItemId
+        )
         {
             try
             {
-                var result = await _purchaseOrderItemService.UpdateCantToOrderItem(purchaseOrderItemId, cantidad);
+                var result = await _purchaseOrderItemService.UpdateCantToOrderItem(
+                    purchaseOrderItemId,
+                    cantidad
+                );
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
+
+        [HttpPut("update/status/{purchaseOrderId}")]
+        public async Task<IActionResult> UpdateOrderStatus(
+            int purchaseOrderId,
+            [FromQuery] string numRemito,
+            [FromQuery] PurchaseOrderStatusType status,
+            [FromBody] Voucher voucher
+        )
+        {
+            try
+            {
+                var result = await _purchaseOrderService.UpdateStatusOrdersAsync(
+                    purchaseOrderId,
+                    status,
+                    numRemito,
+                    voucher
+                );
                 return Ok(result);
             }
             catch (Exception ex)

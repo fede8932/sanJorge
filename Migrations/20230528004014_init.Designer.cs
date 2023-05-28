@@ -12,7 +12,7 @@ using Repuestos_San_jorge.Data;
 namespace Repuestos_San_jorge.Migrations
 {
     [DbContext(typeof(OfficeDb))]
-    [Migration("20230525112608_init")]
+    [Migration("20230528004014_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -100,7 +100,6 @@ namespace Repuestos_San_jorge.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("comentarios")
-                        .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("character varying(300)");
 
@@ -112,7 +111,7 @@ namespace Repuestos_San_jorge.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("currentAcountId")
+                    b.Property<int?>("currentAcountId")
                         .HasColumnType("integer");
 
                     b.Property<string>("iva")
@@ -172,19 +171,18 @@ namespace Repuestos_San_jorge.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("resumen")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
 
-                    b.Property<string>("status")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("status")
+                        .HasColumnType("integer");
 
                     b.HasKey("id");
 
                     b.HasIndex("purchaseOrderId")
                         .IsUnique();
 
-                    b.ToTable("ControlOrder");
+                    b.ToTable("ControlOrders");
                 });
 
             modelBuilder.Entity("Repuestos_San_jorge.Models.CurrentAcount", b =>
@@ -198,6 +196,9 @@ namespace Repuestos_San_jorge.Migrations
                     b.Property<string>("acountNumber")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("status")
+                        .HasColumnType("boolean");
 
                     b.HasKey("id");
 
@@ -313,14 +314,9 @@ namespace Repuestos_San_jorge.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("productId")
-                        .HasColumnType("integer");
-
                     b.HasKey("id");
 
-                    b.HasIndex("productId");
-
-                    b.ToTable("PointOfSale");
+                    b.ToTable("PointOfSales");
                 });
 
             modelBuilder.Entity("Repuestos_San_jorge.Models.Product", b =>
@@ -638,7 +634,6 @@ namespace Repuestos_San_jorge.Migrations
                         .HasColumnType("text");
 
                     b.Property<int?>("currentAcountId")
-                        .IsRequired()
                         .HasColumnType("integer");
 
                     b.Property<string>("email")
@@ -731,6 +726,10 @@ namespace Repuestos_San_jorge.Migrations
                     b.Property<float>("iva")
                         .HasColumnType("real");
 
+                    b.Property<string>("numComprobante")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("numRemito")
                         .IsRequired()
                         .HasColumnType("text");
@@ -753,7 +752,7 @@ namespace Repuestos_San_jorge.Migrations
                     b.HasIndex("purchaseOrderId")
                         .IsUnique();
 
-                    b.ToTable("Voucher");
+                    b.ToTable("Vouchers");
                 });
 
             modelBuilder.Entity("Repuestos_San_jorge.Models.BrandProduct", b =>
@@ -798,9 +797,7 @@ namespace Repuestos_San_jorge.Migrations
                 {
                     b.HasOne("Repuestos_San_jorge.Models.CurrentAcount", "currentAcount")
                         .WithOne("client")
-                        .HasForeignKey("Repuestos_San_jorge.Models.Client", "currentAcountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Repuestos_San_jorge.Models.Client", "currentAcountId");
 
                     b.HasOne("Repuestos_San_jorge.Models.Seller", "seller")
                         .WithMany("clients")
@@ -867,15 +864,6 @@ namespace Repuestos_San_jorge.Migrations
                         .IsRequired();
 
                     b.Navigation("currentAcount");
-                });
-
-            modelBuilder.Entity("Repuestos_San_jorge.Models.PointOfSale", b =>
-                {
-                    b.HasOne("Repuestos_San_jorge.Models.Product", "product")
-                        .WithMany()
-                        .HasForeignKey("productId");
-
-                    b.Navigation("product");
                 });
 
             modelBuilder.Entity("Repuestos_San_jorge.Models.PurchaseOrderItem", b =>
@@ -955,9 +943,7 @@ namespace Repuestos_San_jorge.Migrations
                 {
                     b.HasOne("Repuestos_San_jorge.Models.CurrentAcount", "currentAcount")
                         .WithOne("supplier")
-                        .HasForeignKey("Repuestos_San_jorge.Models.Supplier", "currentAcountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Repuestos_San_jorge.Models.Supplier", "currentAcountId");
 
                     b.Navigation("currentAcount");
                 });

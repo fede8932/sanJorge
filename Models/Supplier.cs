@@ -12,6 +12,7 @@ namespace Repuestos_San_jorge.Models
         public string razonSocial { get; set; }
 
         [Required]
+        [RegularExpression(@"^\d{2}-\d{8}-\d{1}$", ErrorMessage = "El CUIT debe tener el formato XX-XXXXXXXX-X")]
         public string cuit { get; set; }
 
         [Required]
@@ -39,7 +40,6 @@ namespace Repuestos_San_jorge.Models
         [EmailAddress]
         public string email { get; set; }
 
-        [Required]
         public int? currentAcountId { get; set; }
 
         public ICollection<Representative>? representative { get; set; }

@@ -31,11 +31,29 @@ namespace Repuestos_San_jorge.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    acountNumber = table.Column<string>(type: "text", nullable: false)
+                    acountNumber = table.Column<string>(type: "text", nullable: false),
+                    status = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CurrentAcounts", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PointOfSales",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    nombre = table.Column<string>(type: "text", nullable: false),
+                    calle = table.Column<string>(type: "text", nullable: false),
+                    altura = table.Column<int>(type: "integer", nullable: false),
+                    localidad = table.Column<string>(type: "text", nullable: false),
+                    codigoPostal = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PointOfSales", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -138,7 +156,7 @@ namespace Repuestos_San_jorge.Migrations
                     status = table.Column<bool>(type: "boolean", nullable: true),
                     telefono = table.Column<string>(type: "text", nullable: false),
                     email = table.Column<string>(type: "text", nullable: false),
-                    currentAcountId = table.Column<int>(type: "integer", nullable: false)
+                    currentAcountId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -147,8 +165,28 @@ namespace Repuestos_San_jorge.Migrations
                         name: "FK_Suppliers_CurrentAcounts_currentAcountId",
                         column: x => x.currentAcountId,
                         principalTable: "CurrentAcounts",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Location",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    sector = table.Column<string>(type: "text", nullable: false),
+                    rack = table.Column<string>(type: "text", nullable: false),
+                    estante = table.Column<string>(type: "text", nullable: false),
+                    pointOfSaleId = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Location", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Location_PointOfSales_pointOfSaleId",
+                        column: x => x.pointOfSaleId,
+                        principalTable: "PointOfSales",
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -177,44 +215,53 @@ namespace Repuestos_San_jorge.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PointOfSale",
+                name: "Stocks",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    nombre = table.Column<string>(type: "text", nullable: false),
-                    calle = table.Column<string>(type: "text", nullable: false),
-                    altura = table.Column<int>(type: "integer", nullable: false),
-                    localidad = table.Column<string>(type: "text", nullable: false),
-                    codigoPostal = table.Column<int>(type: "integer", nullable: false),
-                    productId = table.Column<int>(type: "integer", nullable: true)
+                    stock = table.Column<int>(type: "integer", nullable: false),
+                    minStock = table.Column<int>(type: "integer", nullable: false),
+                    productId = table.Column<int>(type: "integer", nullable: true),
+                    brandId = table.Column<int>(type: "integer", nullable: true),
+                    pointOfSaleId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PointOfSale", x => x.id);
+                    table.PrimaryKey("PK_Stocks", x => x.id);
                     table.ForeignKey(
-                        name: "FK_PointOfSale_Products_productId",
+                        name: "FK_Stocks_Brands_brandId",
+                        column: x => x.brandId,
+                        principalTable: "Brands",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_Stocks_PointOfSales_pointOfSaleId",
+                        column: x => x.pointOfSaleId,
+                        principalTable: "PointOfSales",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_Stocks_Products_productId",
                         column: x => x.productId,
                         principalTable: "Products",
                         principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "ControlOrder",
+                name: "ControlOrders",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     numRemito = table.Column<string>(type: "text", nullable: false),
-                    status = table.Column<string>(type: "text", nullable: false),
-                    resumen = table.Column<string>(type: "text", nullable: false),
+                    status = table.Column<int>(type: "integer", nullable: false),
+                    resumen = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: true),
                     purchaseOrderId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ControlOrder", x => x.id);
+                    table.PrimaryKey("PK_ControlOrders", x => x.id);
                     table.ForeignKey(
-                        name: "FK_ControlOrder_PurchaseOrders_purchaseOrderId",
+                        name: "FK_ControlOrders_PurchaseOrders_purchaseOrderId",
                         column: x => x.purchaseOrderId,
                         principalTable: "PurchaseOrders",
                         principalColumn: "id");
@@ -249,11 +296,12 @@ namespace Repuestos_San_jorge.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Voucher",
+                name: "Vouchers",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    numComprobante = table.Column<string>(type: "text", nullable: false),
                     numRemito = table.Column<string>(type: "text", nullable: false),
                     afip = table.Column<bool>(type: "boolean", nullable: false),
                     fecha = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -265,9 +313,9 @@ namespace Repuestos_San_jorge.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Voucher", x => x.id);
+                    table.PrimaryKey("PK_Vouchers", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Voucher_PurchaseOrders_purchaseOrderId",
+                        name: "FK_Vouchers_PurchaseOrders_purchaseOrderId",
                         column: x => x.purchaseOrderId,
                         principalTable: "PurchaseOrders",
                         principalColumn: "id");
@@ -348,59 +396,6 @@ namespace Repuestos_San_jorge.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Location",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    sector = table.Column<string>(type: "text", nullable: false),
-                    rack = table.Column<string>(type: "text", nullable: false),
-                    estante = table.Column<string>(type: "text", nullable: false),
-                    pointOfSaleId = table.Column<int>(type: "integer", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Location", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_Location_PointOfSale_pointOfSaleId",
-                        column: x => x.pointOfSaleId,
-                        principalTable: "PointOfSale",
-                        principalColumn: "id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Stocks",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    stock = table.Column<int>(type: "integer", nullable: false),
-                    minStock = table.Column<int>(type: "integer", nullable: false),
-                    productId = table.Column<int>(type: "integer", nullable: true),
-                    brandId = table.Column<int>(type: "integer", nullable: true),
-                    pointOfSaleId = table.Column<int>(type: "integer", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Stocks", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_Stocks_Brands_brandId",
-                        column: x => x.brandId,
-                        principalTable: "Brands",
-                        principalColumn: "id");
-                    table.ForeignKey(
-                        name: "FK_Stocks_PointOfSale_pointOfSaleId",
-                        column: x => x.pointOfSaleId,
-                        principalTable: "PointOfSale",
-                        principalColumn: "id");
-                    table.ForeignKey(
-                        name: "FK_Stocks_Products_productId",
-                        column: x => x.productId,
-                        principalTable: "Products",
-                        principalColumn: "id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Sellers",
                 columns: table => new
                 {
@@ -442,10 +437,10 @@ namespace Repuestos_San_jorge.Migrations
                     codigoPostal = table.Column<int>(type: "integer", nullable: false),
                     iva = table.Column<string>(type: "text", nullable: false),
                     telefono = table.Column<string>(type: "text", nullable: false),
-                    comentarios = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
+                    comentarios = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: true),
                     userId = table.Column<int>(type: "integer", nullable: false),
                     sellerId = table.Column<int>(type: "integer", nullable: false),
-                    currentAcountId = table.Column<int>(type: "integer", nullable: false)
+                    currentAcountId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -454,8 +449,7 @@ namespace Repuestos_San_jorge.Migrations
                         name: "FK_Clients_CurrentAcounts_currentAcountId",
                         column: x => x.currentAcountId,
                         principalTable: "CurrentAcounts",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_Clients_Sellers_sellerId",
                         column: x => x.sellerId,
@@ -564,8 +558,8 @@ namespace Repuestos_San_jorge.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ControlOrder_purchaseOrderId",
-                table: "ControlOrder",
+                name: "IX_ControlOrders_purchaseOrderId",
+                table: "ControlOrders",
                 column: "purchaseOrderId",
                 unique: true);
 
@@ -583,11 +577,6 @@ namespace Repuestos_San_jorge.Migrations
                 name: "IX_Movements_currentAcountId",
                 table: "Movements",
                 column: "currentAcountId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PointOfSale_productId",
-                table: "PointOfSale",
-                column: "productId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_article",
@@ -681,8 +670,8 @@ namespace Repuestos_San_jorge.Migrations
                 column: "roleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Voucher_purchaseOrderId",
-                table: "Voucher",
+                name: "IX_Vouchers_purchaseOrderId",
+                table: "Vouchers",
                 column: "purchaseOrderId",
                 unique: true);
         }
@@ -697,7 +686,7 @@ namespace Repuestos_San_jorge.Migrations
                 name: "BrandSuppliers");
 
             migrationBuilder.DropTable(
-                name: "ControlOrder");
+                name: "ControlOrders");
 
             migrationBuilder.DropTable(
                 name: "CustomerDiscounts");
@@ -724,7 +713,7 @@ namespace Repuestos_San_jorge.Migrations
                 name: "Stocks");
 
             migrationBuilder.DropTable(
-                name: "Voucher");
+                name: "Vouchers");
 
             migrationBuilder.DropTable(
                 name: "Suppliers");
@@ -736,7 +725,10 @@ namespace Repuestos_San_jorge.Migrations
                 name: "Brands");
 
             migrationBuilder.DropTable(
-                name: "PointOfSale");
+                name: "PointOfSales");
+
+            migrationBuilder.DropTable(
+                name: "Products");
 
             migrationBuilder.DropTable(
                 name: "PurchaseOrders");
@@ -746,9 +738,6 @@ namespace Repuestos_San_jorge.Migrations
 
             migrationBuilder.DropTable(
                 name: "Sellers");
-
-            migrationBuilder.DropTable(
-                name: "Products");
 
             migrationBuilder.DropTable(
                 name: "Users");

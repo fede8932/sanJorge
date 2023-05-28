@@ -26,6 +26,9 @@ namespace Repuestos_San_jorge.Data
         public DbSet<PurchaseOrderItem> PurchaseOrderItems => Set<PurchaseOrderItem>();
         public DbSet<Stock> Stocks => Set<Stock>();
         public DbSet<Session> Sessions => Set<Session>();
+        public DbSet<PointOfSale> PointOfSales => Set<PointOfSale>();
+        public DbSet<ControlOrder> ControlOrders => Set<ControlOrder>();
+        public DbSet<Voucher> Vouchers => Set<Voucher>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -34,7 +37,9 @@ namespace Repuestos_San_jorge.Data
                 .Entity<Movement>()
                 .Property(Movements => Movements.type)
                 .HasConversion<string>();
-            modelBuilder.Entity<Client>().Property(Client => Client.iva).HasConversion<string>();
+            modelBuilder.Entity<Client>().Property(client => client.iva).HasConversion<string>();
+            modelBuilder.Entity<PurchaseOrder>().Property(purchaseOrder => purchaseOrder.status).HasConversion<string>();
+            modelBuilder.Entity<Voucher>().Property(voucher => voucher.type).HasConversion<string>();
 
             // Restricciones
             modelBuilder.Entity<Brand>().HasIndex(brand => brand.name).IsUnique();
