@@ -19,11 +19,20 @@ namespace Repuestos_San_jorge.Controllers.Login
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateRole([FromBody] UserLoginDto user)
+        public async Task<IActionResult> LoginUser([FromBody] UserLoginDto user)
         {
             try
             {
-                var result = await _loginService.UserLoginAsync(user);
+                string? ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+                string? userAgent = Request.Headers.UserAgent;
+                if (ip == null || userAgent == null)
+                {
+                    return StatusCode(
+                        500,
+                        "Error de conexión, los datos proporcionados no son seguros"
+                    );
+                }
+                var result = await _loginService.UserLoginAsync(user, ip, userAgent);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -32,5 +41,29 @@ namespace Repuestos_San_jorge.Controllers.Login
                 return StatusCode(500, ex.Message);
             }
         }
+
+        // [HttpGet]
+        // public async Task<IActionResult> RefreshToken([FromQuery] string refresh)
+        // {
+        //     try
+        //     {
+        //         string? ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+        //         string? userAgent = Request.Headers.UserAgent;
+        //         if (ip == null || userAgent == null)
+        //         {
+        //             return StatusCode(
+        //                 500,
+        //                 "Error de conexión, los datos proporcionados no son seguros"
+        //             );
+        //         }
+        //         var result = await _loginService.UserRefreshTokenAsync(refresh, ip, userAgent);
+        //         return Ok(result);
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         Console.WriteLine(ex);
+        //         return StatusCode(500, ex.Message);
+        //     }
+        // }
     }
 }

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Repuestos_San_jorge.Dto.Enums;
 
 namespace Repuestos_San_jorge.Models
@@ -32,15 +33,17 @@ namespace Repuestos_San_jorge.Models
         public int codigoPostal { get; set; }
 
         [Required]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public IvaType iva { get; set; }
 
         [Required]
         [RegularExpression(@"^\d{10}$")]
         public string telefono { get; set; }
 
-        [Required]
         [StringLength(300)]
-        public string comentarios { get; set; }
+        public string? comentarios { get; set; }
+        
+        [Required]
         public int userId { get; set; }
 
         [ForeignKey("userId")]
@@ -48,31 +51,17 @@ namespace Repuestos_San_jorge.Models
 
         public ICollection<Schedule>? schedules { get; set; }
 
+        [Required]
         public int sellerId { get; set; }
 
         [ForeignKey("sellerId")]
         public Seller? seller { get; set; }
 
-        public int currentAcountId { get; set; }
+        public int? currentAcountId { get; set; }
 
         [ForeignKey("currentAcountId")]
         public CurrentAcount? currentAcount { get; set; }
 
         public ICollection<CustomerDiscount>? customerDiscounts { get; set; }
-
-        // public Client()
-        // {
-        //     razonSocial = "";
-        //     cuit = "";
-        //     calle = "";
-        //     coordenadas = "";
-        //     telefono = "";
-        //     comentarios = "";
-        //     localidad = "";
-        //     schedule = new Schedule();
-        //     seller = new Seller();
-        //     currentAcount = new CurrentAcount();
-        //     customerDiscounts = new List<CustomerDiscount>();
-        // }
     }
 }

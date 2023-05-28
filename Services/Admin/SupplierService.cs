@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Repuestos_San_jorge.Models;
 using Repuestos_San_jorge.Data;
 using Repuestos_San_jorge.Dto.Admin;
+using Repuestos_San_Jorge.Utils;
 
 namespace Repuestos_San_jorge.Services.Admin
 {
@@ -20,6 +21,12 @@ namespace Repuestos_San_jorge.Services.Admin
         {
             try
             {
+                CurrentAcount currentAcount = new CurrentAcount
+                {
+                    acountNumber = Utils.AcountNumberGen(supplier.cuit.Substring(0, 1)+supplier.cuit.Substring(3, 4)),
+                };
+                _dbContext.CurrentAcounts.Add(currentAcount);
+                supplier.currentAcount = currentAcount;
                 _dbContext.Suppliers.Add(supplier);
                 await _dbContext.SaveChangesAsync();
                 return "Registrado";
