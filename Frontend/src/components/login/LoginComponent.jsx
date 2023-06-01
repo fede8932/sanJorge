@@ -12,14 +12,14 @@ function LoginComponent() {
         <div className={styles.titleContainer}>
           <div className={styles.iconTitleContainer}>
             <img className={styles.logo} src={logo} alt="Logo" />
-            <h1 className={styles.title}>San Jorge</h1>
+            <h1 className={styles.title}>Ad panel</h1>
           </div>
           <h5 className={styles.saludo}>Hola, Bienvenido!</h5>
           <span className={styles.instruction}>
             Ingresá tus credenciales para continuar
           </span>
         </div>
-        <Separador />
+        <Separador props={{ clase: "separador" }} />
         <div className={styles.formContainer}>
           <span className={styles.instructionForm}>
             Ingresá con tu correo electrónico
@@ -31,7 +31,10 @@ function LoginComponent() {
             </Form.Group>
             <div>
               <Form.Group controlId="formBasicPassword">
-                <Form.Control type="password" placeholder="Ingresá tu contraseña" />
+                <Form.Control
+                  type="password"
+                  placeholder="Ingresá tu contraseña"
+                />
               </Form.Group>
               <div className={styles.submitContainer}>
                 <Form.Group controlId="formBasicCheckbox">
@@ -51,7 +54,7 @@ function LoginComponent() {
             </Button>
           </Form>
         </div>
-        <Separador />
+        <Separador props={{ clase: "separador" }} />
         <div className={styles.footContainer}>
           <a href="/ruta" className={styles.resetPassButton}>
             No tenés una cuenta?

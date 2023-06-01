@@ -1,0 +1,10 @@
+.sidebarContainer{
+    width: 23vw;
+    max-width: 250px;
+    height: calc(100vh - 65px);
+    padding: 25px 10px 10px 18px;
+}
+.sideTitle{
+    font-size: 15px;
+    font-weight: 450;
+}
