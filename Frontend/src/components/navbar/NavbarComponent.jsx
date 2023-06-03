@@ -5,7 +5,8 @@ import CustomButton from "../../commonds/button/CustomButton";
 import CustomSearch from "../../commonds/search/CustomSearch";
 import avatar from "../../assets/avatars/mujer.png";
 
-function NavbarComponent() {
+function NavbarComponent(props) {
+  const { fnSidebar } = props;
   const [classIcon, setClassIcon] = useState("configIconBlue");
   const [classConfigContainer, setClassConfigContainer] = useState(
     "configContainerWhite"
@@ -23,6 +24,7 @@ function NavbarComponent() {
             icon: "fa-solid fa-bars",
             iconStyle: "menuIconVio",
             iconHoverStyle: "menuIconBla",
+            fnSidebar: fnSidebar
           }}
         />
       </div>

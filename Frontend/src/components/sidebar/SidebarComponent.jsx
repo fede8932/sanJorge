@@ -4,9 +4,10 @@ import CustomButton from "../../commonds/button/CustomButton";
 import Separador from "../../commonds/separador/Separador";
 import CustomAcordion from "../../commonds/acordion/CustomAcordion";
 
-function SideBarComponent() {
+function SideBarComponent(props) {
+  const { status } = props;
   return (
-    <div className={styles.sidebarContainer}>
+    <div className={`${styles.sidebarContainer} ${status ? "" : `${styles.close}`}`}>
       <div className={styles.section}>
         <h5 className={styles.sideTitle}>Dashboard</h5>
         <CustomButton

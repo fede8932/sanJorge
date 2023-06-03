@@ -3,7 +3,14 @@ import styles from "./customButon.module.css";
 import { useState } from "react";
 
 const CustomButton = ({ props }) => {
-  const { buttonStyle, icon, iconStyle, iconHoverStyle, textButton} = props;
+  const {
+    buttonStyle,
+    icon,
+    iconStyle,
+    iconHoverStyle,
+    textButton,
+    fnSidebar,
+  } = props;
   const [iconClass, setIconClass] = useState(iconStyle);
   const [buttonClass, setButtonClass] = useState("textButton");
   return (
@@ -15,6 +22,9 @@ const CustomButton = ({ props }) => {
       onMouseLeave={() => {
         setIconClass(iconStyle);
         setButtonClass("textButton");
+      }}
+      onClick={() => {
+        fnSidebar();
       }}
       className={styles[buttonStyle]}
     >
