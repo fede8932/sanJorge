@@ -3,7 +3,7 @@ import styles from "./customButon.module.css";
 import { useState } from "react";
 
 const CustomButton = ({ props }) => {
-  const { buttonStyle, icon, iconStyle, iconHoverStyle, textButton } = props;
+  const { buttonStyle, icon, iconStyle, iconHoverStyle, textButton} = props;
   const [iconClass, setIconClass] = useState(iconStyle);
   const [buttonClass, setButtonClass] = useState("textButton");
   return (

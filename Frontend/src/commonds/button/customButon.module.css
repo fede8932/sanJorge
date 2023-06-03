@@ -81,6 +81,7 @@
   background-color: white;
   border: none;
   transition: 0.5s;
+  margin: 5px 0px
 }
 .sideOptionButton:hover{
   background-color: #EEE6FF;
