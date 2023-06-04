@@ -1,13 +1,24 @@
 import React from "react";
+import "./App.css";
 import LoginView from "./views/loginView/LoginView";
-import PanelAdministracion from "./views/panel/PanelAdministracion";
-import "@fortawesome/fontawesome-free/css/all.min.css";
+import NavbarContainer from "./containers/NavbarContainer";
+import SideBarContainer from "./containers/SideBarContainer";
+import { useSelector } from "react-redux";
+import AddUser from "./views/addUser/AddUser"
 
 function App() {
+  const isOpen = useSelector((state) => state.sidebar.isOpen);
   return (
-    <div>
-      {/* <LoginView/> */}
-      <PanelAdministracion />
+    <div className="panelViewContainer">
+      {/* <LoginView/>
+      <PanelAdministracion /> */}
+      <NavbarContainer />
+      <div className="panelSubContainer">
+        <SideBarContainer />
+        <div className={`viewContainer ${isOpen ? "" : "big"}`}>
+          <AddUser />
+        </div>
+      </div>
     </div>
   );
 }

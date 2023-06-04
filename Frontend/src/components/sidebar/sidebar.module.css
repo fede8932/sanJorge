@@ -1,17 +1,17 @@
 .sidebarContainer {
-  width: 23vw;
+  /* width: 23vw;
   max-width: 250px;
-  min-width: 220px;
+  min-width: 220px; */
+  width: 250px;
   height: calc(100vh - 65px);
   padding: 25px 10px 10px 18px;
-  overflow-y: auto;transition:
-  transform 0.4s ease-in-out;
+  overflow-y: auto;
+  transition: transform 0.4s ease-in-out;
   transform: translateX(0);
 }
-
 .sidebarContainer.close {
   transition: transform 0.4s ease-in-out;
-  transform: translateX(-300px);
+  transform: translateX(-250px);
 }
 .sidebarContainer::-webkit-scrollbar {
   width: 4px;
