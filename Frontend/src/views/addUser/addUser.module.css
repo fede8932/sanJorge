@@ -1,6 +1,28 @@
 .addUserContainer{
-    height: 100%;
+    height: calc(100% - 25px);
     width: 100%;
     border-radius: 12px;
     background-color: #FBFBFB;
+    padding: 20px 35px;
+}
+.formTitle{
+    font-size: 28px;
+    font-weight: 400;
+    margin-bottom: 25px;
+    color: #367FF6;
+}
+.formContainer{
+    display: flex;
+    justify-content: space-between;
+}
+.inputContainer{
+    width: 50%;
+    padding-right: 10px;
+    display: flex;
+    flex-direction: column;
+}
+.subTitle{
+    margin-bottom: 15px;
+    color: #575757;
+    font-size: 13px;
 }
