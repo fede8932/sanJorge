@@ -1,0 +1,24 @@
+.panelViewContainer {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.panelSubContainer{
+  display: flex;
+  justify-content: flex-start;
+}
+.viewContainer{
+  height: calc(100vh - 65px);
+  width: calc(100vw - 250px);
+  padding: 18px;
+  padding-top: 3px;
+  transition: width 0.5s;
+}
+.viewContainer.big {
+  width: 100vw;
+  position: absolute;
+  transition: width 0.5s;
+}

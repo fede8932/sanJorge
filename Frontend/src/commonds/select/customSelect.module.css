@@ -1,0 +1,9 @@
+.selectContainer{
+    height: 47px;
+    border: 1px solid #C6C6C6;
+    background-color: white;
+    margin-bottom: 25px;
+}
+.selectContainer:hover{
+    border: 1px solid #575757;
+}
