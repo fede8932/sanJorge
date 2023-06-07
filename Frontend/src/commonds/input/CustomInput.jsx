@@ -17,7 +17,7 @@ function CustomInput(props) {
       className={`${styles[classDivContainer]} ${styles[width]}`}
     >
       <i className={`${styles.searchIcon} ${icon}`}></i>
-      <input ref={inputRef} type={type} className={styles.input} placeholder={placeholder} />
+      <input ref={inputRef} className={styles.input} {...props} />
     </div>
   );
 }
