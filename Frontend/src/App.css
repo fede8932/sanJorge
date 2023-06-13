@@ -15,10 +15,19 @@
   width: calc(100vw - 250px);
   padding: 18px;
   padding-top: 3px;
-  transition: width 0.5s;
+  margin-left: 250px;
+  transform: translateX(0);
+  transition-property: transform, width;
+  transition-duration: 0.4s, 0.4s;
+  transition-timing-function: ease-in-out;
+  transition-delay: 0.3s, 0.1s;
+  position: absolute;
 }
 .viewContainer.big {
   width: 100vw;
-  position: absolute;
-  transition: width 0.5s;
+  transform: translateX(-255px);
+  transition-property: transform, width;
+  transition-duration: 0.4s, 0.4s;
+  transition-timing-function: ease-in-out;
+  transition-delay: 0.2s, 0.3s;
 }

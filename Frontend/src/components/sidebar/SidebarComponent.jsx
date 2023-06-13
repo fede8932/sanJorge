@@ -5,9 +5,13 @@ import Separador from "../../commonds/separador/Separador";
 import CustomAcordion from "../../commonds/acordion/CustomAcordion";
 
 function SideBarComponent(props) {
-  const { status } = props;
+  const { status, fnNavigate } = props;
   return (
-    <div className={`${styles.sidebarContainer} ${status ? "" : `${styles.close}`}`}>
+    <div
+      className={`${styles.sidebarContainer} ${
+        status ? "" : `${styles.close}`
+      }`}
+    >
       <div className={styles.section}>
         <h5 className={styles.sideTitle}>Dashboard</h5>
         <CustomButton
@@ -31,19 +35,19 @@ function SideBarComponent(props) {
               {
                 textButton: "Registrar vendedor",
                 fn: () => {
-                  console.log("01");
+                  fnNavigate("/add/seller");
                 },
               },
               {
                 textButton: "Registrar cliente",
                 fn: () => {
-                  console.log("02");
+                  fnNavigate("/add/client");
                 },
               },
               {
                 textButton: "Registrar proveedor",
                 fn: () => {
-                  console.log("03");
+                  fnNavigate("/add/supplier");
                 },
               },
             ],
@@ -57,13 +61,13 @@ function SideBarComponent(props) {
               {
                 textButton: "Registrar marca",
                 fn: () => {
-                  console.log("01");
+                  fnNavigate("/add/brand");
                 },
               },
               {
                 textButton: "Registrar producto",
                 fn: () => {
-                  console.log("02");
+                  fnNavigate("/add/product");
                 },
               },
             ],

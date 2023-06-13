@@ -1,18 +1,19 @@
 import React from "react";
-import styles from "./addUser.module.css";
+import styles from "./addClient.module.css";
 import { useForm } from "react-form";
 import CustomInput from "../../commonds/input/CustomInput";
 import CustomSelect from "../../commonds/select/CustomSelect";
 import Button from "react-bootstrap/Button";
 import TableContainer from "../../containers/TableContainer";
+import CustomTextArea from "../../commonds/textarea/CustomTextArea";
 
-function AddUser() {
+function AddClient() {
   const { Form, meta, values, getFormProps, getFieldProps } = useForm({
     onSubmit: (values) => {
       console.log(values);
     },
   });
-  const arrayPrueba = ["Pepito SRL", "Juancito S.A", "Fulanito"]; //los que esten asociados no deben aparecer
+  const arrayPrueba = ["Damian Cano", "Juan Martinez", "Sofia Altamirano"]; //los que esten asociados no deben aparecer
   const arrayPrueba2 = ["Corven", "SKF", "Katana"];
   const arrayPrueba3 = [
     { razonSocial: "fulanito", comision: "0.003" },
@@ -35,22 +36,42 @@ function AddUser() {
   ];
   return (
     <div className={styles.addUserContainer}>
-      <h6 className={styles.formTitle}>Registrar vendedor</h6>
+      <h6 className={styles.formTitle}>Registrar cliente</h6>
       <div>
         <Form className={styles.formContainer}>
           <div className={styles.subFormContainer}>
             <div className={styles.inputContainer}>
               <span className={styles.subTitle}>Datos de usuario</span>
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "space-between",
+                }}
+              >
+                <CustomInput
+                  type="text"
+                  width="small"
+                  placeholder="Nombre"
+                  icon="fa-solid fa-id-card"
+                />
+                <CustomInput
+                  type="text"
+                  width="small"
+                  placeholder="Apellido"
+                  icon="fa-solid fa-id-card"
+                />
+              </div>
               <CustomInput
                 type="text"
                 width="large"
-                placeholder="Nombre"
+                placeholder="Razon social"
                 icon="fa-solid fa-id-card"
               />
               <CustomInput
                 type="text"
                 width="large"
-                placeholder="Apellido"
+                placeholder="Cuit"
                 icon="fa-solid fa-id-card"
               />
               <CustomInput
@@ -59,15 +80,9 @@ function AddUser() {
                 placeholder="Correo electrónico"
                 icon="fa-regular fa-envelope"
               />
-              <CustomInput
-                type="text"
-                width="large"
-                placeholder="Cuil"
-                icon="fa-solid fa-id-card"
-              />
             </div>
             <div className={styles.inputContainer}>
-              <span className={styles.subTitle}>Datos personales</span>
+              <span className={styles.subTitle}>Datos adicionales</span>
               <CustomInput
                 type="text"
                 width="large"
@@ -100,40 +115,34 @@ function AddUser() {
                 placeholder="Localidad"
                 icon="fa-solid fa-location-dot"
               />
-              <CustomInput
-                type="text"
-                width="large"
-                placeholder="Número de teléfono"
-                icon="fa-solid fa-phone"
-              />
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "space-between",
+                }}
+              >
+                <CustomInput
+                  type="text"
+                  width="small"
+                  placeholder="Número de teléfono"
+                  icon="fa-solid fa-phone"
+                />
+                <CustomInput
+                  type="text"
+                  width="small"
+                  placeholder="Coordenadas"
+                  icon="fa-solid fa-location-dot"
+                />
+              </div>
             </div>
           </div>
           <div className={styles.inputContainerLong}>
-            <span className={styles.subTitle}>Set comisiones</span>
+            <span className={styles.subTitle}>Set descuentos</span>
             <div className={styles.divContainer}>
               <div className={styles.containerTable1}>
-                <div className={styles.subContainer}>
-                  <CustomInput
-                    width="small"
-                    placeholder="Comisión base"
-                    icon="fas fa-percentage"
-                    type="number"
-                    min="0"
-                    max="15"
-                    step="0.1"
-                  />
-                  <CustomInput
-                    width="small"
-                    placeholder="Comisión oferta"
-                    icon="fas fa-tags"
-                    type="number"
-                    min="0"
-                    max="15"
-                    step="0.1"
-                  />
-                </div>
                 <CustomSelect
-                  text="Seleccioná un cliente si deseas asociarlo"
+                  text="Seleccioná un vendedor si deseas asociarlo"
                   clientes={arrayPrueba}
                 />
                 <Button
@@ -145,20 +154,25 @@ function AddUser() {
                 >
                   Asociar
                 </Button>
-              </div>
-              <div className={styles.containerTable1}>
                 <CustomSelect
                   text="Seleccioná un proveedor"
                   clientes={arrayPrueba2}
                 />
                 <CustomInput
                   width="small"
-                  placeholder="Comisión"
+                  placeholder="Descuento"
                   icon="fas fa-percentage"
                   type="number"
-                  min="0"
-                  max="15"
+                  min="-100"
+                  max="100"
                   step="0.1"
+                />
+              </div>
+              <div className={styles.containerTable1}>
+                <CustomTextArea
+                  width="large"
+                  placeholder="En este campo puedes ingresar comentarios adicionales... (Máximo 160 caracteres)"
+                  type="textarea"
                 />
                 <Button
                   className={styles.selectButton}
@@ -171,7 +185,7 @@ function AddUser() {
                 </Button>
               </div>
               <div className={styles.containerTable2}>
-                <TableContainer proveedores={arrayPrueba3} indicadores={["Proveedor", "% Comisión"]}/>
+                <TableContainer proveedores={arrayPrueba3} indicadores={["Proveedor", "% Descuento"]} />
               </div>
             </div>
           </div>
@@ -190,4 +204,4 @@ function AddUser() {
   );
 }
 
-export default AddUser;
+export default AddClient;
