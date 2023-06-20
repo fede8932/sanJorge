@@ -11,7 +11,7 @@
   justify-content: flex-start;
 }
 .viewContainer{
-  height: calc(100vh - 65px);
+  height: calc(100vh - 72px);
   width: calc(100vw - 250px);
   padding: 18px;
   padding-top: 3px;

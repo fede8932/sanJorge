@@ -138,6 +138,95 @@ function SideBarComponent(props) {
           }}
         />
       </div>
+      <Separador props={{ clase: "sideSeparador" }} />
+      <div className={styles.section}>
+        <h5 className={styles.sideTitle}>Registros</h5>
+        <CustomAcordion
+          props={{
+            textButton: "Modelos",
+            icon01: "fa fa-tag",
+            items: [
+              {
+                textButton: "Marcas",
+                fn: () => {
+                  console.log("01");
+                },
+              },
+              {
+                textButton: "Productos",
+                fn: () => {
+                  console.log("02");
+                },
+              },
+            ],
+          }}
+        />
+        <CustomAcordion
+          props={{
+            textButton: "Compras",
+            icon01: "fa fa-tag",
+            items: [
+              {
+                textButton: "Nueva orden de compra",
+                fn: () => {
+                  console.log("01");
+                },
+              },
+              {
+                textButton: "Buscar orden de compra",
+                fn: () => {
+                  console.log("02");
+                },
+              },
+            ],
+          }}
+        />
+        <CustomAcordion
+          props={{
+            textButton: "Ventas",
+            icon01: "fa fa-smile",
+            items: [
+              {
+                textButton: "Nuevo presupuesto",
+                fn: () => {
+                  console.log("01");
+                },
+              },
+              {
+                textButton: "Buscar venta",
+                fn: () => {
+                  console.log("02");
+                },
+              },{
+                textButton: "Buscar venta o presupuesto",
+                fn: () => {
+                  console.log("01");
+                },
+              },
+            ],
+          }}
+        />
+        <CustomAcordion
+          props={{
+            textButton: "Comprobantes",
+            icon01: "fa fa-dolly",
+            items: [
+              {
+                textButton: "Generar comprobante",
+                fn: () => {
+                  console.log("01");
+                },
+              },
+              {
+                textButton: "Buscar comprobantes",
+                fn: () => {
+                  console.log("02");
+                },
+              },
+            ],
+          }}
+        />
+      </div>
     </div>
   );
 }

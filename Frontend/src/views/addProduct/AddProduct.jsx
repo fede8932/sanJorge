@@ -46,13 +46,13 @@ function AddProduct() {
                 type="text"
                 width="large"
                 placeholder="Código de artículo"
-                icon="fa-solid fa-id-card"
+                icon="fas fa-hashtag"
               />
               <CustomInput
                 type="text"
                 width="large"
                 placeholder="Código de barras"
-                icon="fa-solid fa-id-card"
+                icon="fa-solid fa-barcode"
               />
               <CustomInput
                 type="text"
@@ -84,7 +84,7 @@ function AddProduct() {
                   type="text"
                   width="extraSmall"
                   placeholder="Precio de lista"
-                  icon="fa-solid fa-location-dot"
+                  icon="fas fa-dollar-sign"
                 />
                 <CustomInput
                   width="extraSmall"
@@ -116,13 +116,13 @@ function AddProduct() {
                   type="text"
                   width="small"
                   placeholder="Oferta"
-                  icon="fa-solid fa-phone"
+                  icon="fa-solid fa-tag"
                 />
                 <CustomInput
                   type="text"
                   width="small"
                   placeholder="Cantidad"
-                  icon="fa-solid fa-location-dot"
+                  icon="fas fa-sort-numeric-up"
                 />
               </div>
                 <CustomInput
