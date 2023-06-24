@@ -155,7 +155,7 @@ function SideBarComponent(props) {
               {
                 textButton: "Productos",
                 fn: () => {
-                  console.log("02");
+                  fnNavigate("/search/product");
                 },
               },
             ],

@@ -7,3 +7,6 @@
 .selectContainer:hover{
     border: 1px solid #575757;
 }
+.selectContainerMedium{
+    max-width: 49%;
+}

@@ -36,6 +36,10 @@
     width: 75%;
     min-width: 280px;
 }
+.extraMedium{
+    width: 49%;
+    min-width: 280px;
+}
 .large{
     width: 100%;
     min-width: 380px;

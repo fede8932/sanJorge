@@ -11,6 +11,7 @@ import AddClient from "./views/addClient/AddClient";
 import AddSupplier from "./views/addSupplier/AddSupplier";
 import AddBrand from "./views/addBrand/AddBrand";
 import AddProduct from "./views/addProduct/AddProduct";
+import SearchProduct from "./views/searchProduct/SearchProduct";
 
 function App() {
   const isOpen = useSelector((state) => state.sidebar.isOpen);
@@ -38,6 +39,7 @@ function App() {
                 <Route path="add/supplier" element={<AddSupplier />} />
                 <Route path="add/brand" element={<AddBrand />} />
                 <Route path="add/product" element={<AddProduct />} />
+                <Route path="search/product" element={<SearchProduct />} />
               </Routes>
             </div>
           </div>
