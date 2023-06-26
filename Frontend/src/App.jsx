@@ -12,6 +12,7 @@ import AddSupplier from "./views/addSupplier/AddSupplier";
 import AddBrand from "./views/addBrand/AddBrand";
 import AddProduct from "./views/addProduct/AddProduct";
 import SearchProduct from "./views/searchProduct/SearchProduct";
+import SearchBrand from "./views/searchBrand/SearchBrand"
 
 function App() {
   const isOpen = useSelector((state) => state.sidebar.isOpen);
@@ -40,6 +41,7 @@ function App() {
                 <Route path="add/brand" element={<AddBrand />} />
                 <Route path="add/product" element={<AddProduct />} />
                 <Route path="search/product" element={<SearchProduct />} />
+                <Route path="search/brand" element={<SearchBrand />} />
               </Routes>
             </div>
           </div>

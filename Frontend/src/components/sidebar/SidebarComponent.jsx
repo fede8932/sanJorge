@@ -149,7 +149,7 @@ function SideBarComponent(props) {
               {
                 textButton: "Marcas",
                 fn: () => {
-                  console.log("01");
+                  fnNavigate("/search/brand");
                 },
               },
               {

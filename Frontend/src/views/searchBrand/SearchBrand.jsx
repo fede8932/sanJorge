@@ -1,12 +1,12 @@
 import React from "react";
-import styles from "./searchProduct.module.css";
+import styles from "./searchBrand.module.css";
 import { useForm } from "react-form";
 import CustomInput from "../../commonds/input/CustomInput";
 import CustomSelect from "../../commonds/select/CustomSelect";
 import Button from "react-bootstrap/Button";
 import LongTableContainer from "../../containers/LongTableContainer";
 
-function SearchProduct() {
+function SearchBrand() {
   const { Form, meta, values, getFormProps, getFieldProps } = useForm({
     onSubmit: (values) => {
       console.log(values);
@@ -16,71 +16,76 @@ function SearchProduct() {
   const content = [
     {
       article: "product01",
-      listPrice: 2000,
-      salePercentage: 0.2,
-      brand: "skf",
-      stock: 45,
+      marca: "skf",
     },
     {
       article: "product01",
-      listPrice: 2000,
-      salePercentage: 0.2,
-      brand: "skf",
-      stock: 45,
+      marca: "skf",
     },
     {
       article: "product01",
-      listPrice: 2000,
-      salePercentage: 0.2,
-      brand: "skf",
-      stock: 45,
+      marca: "skf",
     },
     {
       article: "product01",
-      listPrice: 2000,
-      salePercentage: 0.2,
-      brand: "skf",
-      stock: 45,
+      marca: "skf",
     },
     {
       article: "product01",
-      listPrice: 2000,
-      salePercentage: 0.2,
-      brand: "skf",
-      stock: 45,
+      marca: "skf",
     },
     {
       article: "product01",
-      listPrice: 2000,
-      salePercentage: 0.2,
-      brand: "skf",
-      stock: 45,
+      marca: "skf",
     },
     {
       article: "product01",
-      listPrice: 2000,
-      salePercentage: 0.2,
-      brand: "skf",
-      stock: 45,
+      marca: "skf",
     },
     {
       article: "product01",
-      listPrice: 2000,
-      salePercentage: 0.2,
-      brand: "skf",
-      stock: 45,
+      marca: "skf",
     },
     {
       article: "product01",
-      listPrice: 2000,
-      salePercentage: 0.2,
-      brand: "skf",
-      stock: 45,
+      marca: "skf",
+    },
+    {
+      article: "product01",
+      marca: "skf",
+    },
+    {
+      article: "product01",
+      marca: "skf",
+    },
+    {
+      article: "product01",
+      marca: "skf",
+    },
+    {
+      article: "product01",
+      marca: "skf",
+    },
+    {
+      article: "product01",
+      marca: "skf",
+    },
+    {
+      article: "product01",
+      marca: "skf",
+    },
+    {
+      article: "product01",
+      marca: "skf",
+    },
+    {
+      article: "product01",
+      marca: "skf",
     },
   ];
   return (
     <div className={styles.addUserContainer}>
-      <h6 className={styles.formTitle}>Buscador de productos</h6>
+      <h6 className={styles.formTitle}>Buscador de marcas</h6>
       <div>
         <Form className={styles.formContainer}>
           <div className={styles.subFormContainer}>
@@ -96,14 +101,13 @@ function SearchProduct() {
                 <CustomInput
                   type="text"
                   width="extraMedium"
-                  placeholder="Código de artículo"
+                  placeholder="Código de la marca"
                   icon="fas fa-hashtag"
                 />
-                <CustomInput
-                  type="text"
-                  width="extraMedium"
-                  placeholder="Código de barras"
-                  icon="fa-solid fa-barcode"
+                <CustomSelect
+                  text="Seleccioná la proveedor"
+                  clientes={arrayPrueba}
+                  width="selectContainerMedium"
                 />
               </div>
               <div
@@ -116,13 +120,8 @@ function SearchProduct() {
                 <CustomInput
                   type="text"
                   width="extraMedium"
-                  placeholder="Nombre / marca / referencia"
+                  placeholder="Nombre / referencia"
                   icon="fa-solid fa-id-card"
-                />
-                <CustomSelect
-                  text="Seleccioná la proveedor"
-                  clientes={arrayPrueba}
-                  width="selectContainerMedium"
                 />
               </div>
             </div>
@@ -140,7 +139,7 @@ function SearchProduct() {
           <div className={styles.tableContainer}>
             <span className={styles.subTitle}>Detalle de productos</span>
             <div>
-                <LongTableContainer colum={["Artículo", "Precio de lista", "Precio de venta", "Marca", "Stock", "Acciones"]} content={content} type="product" />
+                <LongTableContainer colum={["Artículo", "Marca", "Acciones"]} content={content} type="brand"/>
             </div>
           </div>
         </Form>
@@ -149,4 +148,4 @@ function SearchProduct() {
   );
 }
 
-export default SearchProduct;
+export default SearchBrand;
