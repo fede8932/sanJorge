@@ -83,8 +83,9 @@
   height: 260px;
 }
 .selectButton {
-  width: 50%;
+  width: 100%;
   color: white;
+  margin-bottom: 25px;
 }
 .subContainer{
   display: flex;

@@ -5,7 +5,8 @@ import Separador from "../../commonds/separador/Separador";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
-function LoginComponent() {
+function LoginComponent(props) {
+  const { handleSubmit } = props
   return (
     <div className={styles.LoginComponentContainer}>
       <div className={styles.contenedorSecundario}>
@@ -24,14 +25,19 @@ function LoginComponent() {
           <span className={styles.instructionForm}>
             Ingresá con tu correo electrónico
           </span>
-          <Form className={styles.formulario}>
+          <Form className={styles.formulario} onSubmit={handleSubmit}>
             <Form.Group controlId="formBasicEmail">
-              <Form.Control type="email" placeholder="Ingresá tu email" />
+              <Form.Control
+                type="email"
+                placeholder="Ingresá tu email"
+                id={styles.textInput}
+              />
               <Form.Text className="text-muted"></Form.Text>
             </Form.Group>
             <div>
               <Form.Group controlId="formBasicPassword">
                 <Form.Control
+                  id={styles.textInput}
                   type="password"
                   placeholder="Ingresá tu contraseña"
                 />
