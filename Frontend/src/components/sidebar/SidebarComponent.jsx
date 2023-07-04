@@ -169,7 +169,7 @@ function SideBarComponent(props) {
               {
                 textButton: "Nueva orden de compra",
                 fn: () => {
-                  console.log("01");
+                  fnNavigate("/new/buy");
                 },
               },
               {
@@ -189,7 +189,7 @@ function SideBarComponent(props) {
               {
                 textButton: "Nuevo presupuesto",
                 fn: () => {
-                  console.log("01");
+                  fnNavigate("/new/sell");
                 },
               },
               {
