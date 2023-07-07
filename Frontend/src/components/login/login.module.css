@@ -133,3 +133,8 @@
   font-weight: 400;
   font-size: medium;
 }
+.spanError{
+  color: #FF4848;
+  font-size: 12px;
+  margin-left: 15px;
+}

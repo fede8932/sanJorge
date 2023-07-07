@@ -17,19 +17,22 @@ namespace Repuestos_San_jorge.Services.Admin
             _dbContext = dbContext;
         }
 
-        public async Task<string> CreateSupplierAsync(Supplier supplier) // crear proveedor(seguir despues de seller)
+        public async Task<int> CreateSupplierAsync(Supplier supplier) // crear proveedor(seguir despues de seller)
         {
             try
             {
                 CurrentAcount currentAcount = new CurrentAcount
                 {
-                    acountNumber = Utils.AcountNumberGen(supplier.cuit.Substring(0, 1)+supplier.cuit.Substring(3, 4)),
+                    acountNumber = Utils.AcountNumberGen(
+                        supplier.cuit.Substring(0, 1) + supplier.cuit.Substring(3, 4)
+                    ),
                 };
                 _dbContext.CurrentAcounts.Add(currentAcount);
                 supplier.currentAcount = currentAcount;
                 _dbContext.Suppliers.Add(supplier);
                 await _dbContext.SaveChangesAsync();
-                return "Registrado";
+                await _dbContext.Entry(supplier).ReloadAsync(); // Recargar el objeto supplier desde la base de datos
+                return supplier.id;
             }
             catch
             {
@@ -142,7 +145,7 @@ namespace Repuestos_San_jorge.Services.Admin
 
     public interface ISupplierService
     {
-        Task<string> CreateSupplierAsync(Supplier supplier);
+        Task<int> CreateSupplierAsync(Supplier supplier);
         Task<IEnumerable<Supplier>> GetSuppliersAsync();
 
         Task<string> UpdateSupplierAsync(int id, UpdateSupplierDto data);

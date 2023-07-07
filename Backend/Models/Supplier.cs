@@ -15,20 +15,16 @@ namespace Repuestos_San_jorge.Models
         [RegularExpression(@"^\d{2}-\d{8}-\d{1}$", ErrorMessage = "El CUIT debe tener el formato XX-XXXXXXXX-X")]
         public string cuit { get; set; }
 
-        [Required]
-        public string calle { get; set; }
+        public string? calle { get; set; }
 
-        [Required]
-        public int altura { get; set; }
+        public int? altura { get; set; }
 
-        [Required]
-        public string localidad { get; set; }
+        public string? localidad { get; set; }
 
         [StringLength(300)]
         public string? comentarios { get; set; }
 
-        [Required]
-        public int codigoPostal { get; set; }
+        public int? codigoPostal { get; set; }
 
         public Boolean? status { get; set; }
 

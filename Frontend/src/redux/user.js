@@ -3,45 +3,51 @@ import * as userRequest from "../request/userRequest";
 
 const userState = {
   loading: false,
-  data: {},
+  data: null,
   error: "",
 };
 
-export const sendSignUpRequest = createAsyncThunk(
-  "REGISTER",
-  userRequest.sendSignUpRequest
-);
+// export const sendSignUpRequest = createAsyncThunk(
+//   "REGISTER",
+//   userRequest.sendSignUpRequest
+// );
 
 export const sendLoginRequest = createAsyncThunk(
   "LOGIN",
   userRequest.sendLoginRequest
 );
 
-export const sendLogoutRequest = createAsyncThunk(
-  "LOGOUT",
-  userRequest.sendLogoutRequest
-);
+// export const sendLogoutRequest = createAsyncThunk(
+//   "LOGOUT",
+//   userRequest.sendLogoutRequest
+// );
 
-export const persistUser = createAsyncThunk(
-  "PERSIST",
-  userRequest.persistUserRequest
-);
+
+export const persistUser = createAsyncThunk("PERSISTENCIA", async () => {
+  console.log("corriedno")
+  return JSON.parse(localStorage.getItem('user'));
+});
+
+// export const persistUser = createAsyncThunk(
+//   "PERSIST",
+//   userRequest.persistUserRequest
+// );
 
 const userSlice = createSlice({
   name: "user",
   initialState: userState,
   extraReducers: {
-    [sendSignUpRequest.pending]: (state, action) => {
-      state.loading = true;
-    },
-    [sendSignUpRequest.fulfilled]: (state, action) => {
-      state.data = action.payload;
-      state.loading = false;
-    },
-    [sendSignUpRequest.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    },
+    // [sendSignUpRequest.pending]: (state, action) => {
+    //   state.loading = true;
+    // },
+    // [sendSignUpRequest.fulfilled]: (state, action) => {
+    //   state.data = action.payload;
+    //   state.loading = false;
+    // },
+    // [sendSignUpRequest.rejected]: (state, action) => {
+    //   state.loading = false;
+    //   state.error = action.error.message;
+    // },
     [sendLoginRequest.pending]: (state, action) => {
       state.loading = true;
     },
@@ -53,18 +59,18 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.error.message;
     },
-    [sendLogoutRequest.pending]: (state, action) => {
-      state.loading = true;
-    },
-    [sendLogoutRequest.fulfilled]: (state, action) => {
-      state.data = {};
-      state.loading = false;
-    },
-    [sendLogoutRequest.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-      state.data = {};
-    },
+    // [sendLogoutRequest.pending]: (state, action) => {
+    //   state.loading = true;
+    // },
+    // [sendLogoutRequest.fulfilled]: (state, action) => {
+    //   state.data = {};
+    //   state.loading = false;
+    // },
+    // [sendLogoutRequest.rejected]: (state, action) => {
+    //   state.loading = false;
+    //   state.error = action.error.message;
+    //   state.data = {};
+    // },
     [persistUser.pending]: (state, action) => {
       state.loading = true;
     },
