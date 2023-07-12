@@ -26,7 +26,10 @@ export const suplierRegister = async (datos) => {
 export const getSuppliers = async () => {
   try {
     const { data } = await axios.get(`${apiUrl}/api/supplier`);
-    return data;
+    const arraySupplier = data.map((supplier) => {
+      return { text: supplier.razonSocial, value: supplier.razonSocial };
+    });
+    return arraySupplier;
   } catch (error) {
     throw error;
   }

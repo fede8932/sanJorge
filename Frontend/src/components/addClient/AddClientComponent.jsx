@@ -4,9 +4,13 @@ import CustomInput from "../../commonds/input/CustomInput";
 import Button from "react-bootstrap/Button";
 import { FormProvider } from "react-hook-form";
 import SubFormAddClientContainer from "../../containers/SubFormAddClientContainer";
+import CustomSelect from "../../commonds/select/CustomSelect";
+import Spinner from "react-bootstrap/esm/Spinner";
+import { useSelector } from "react-redux";
 
 function AddClientComponent(props) {
   const { onSubmit, status, methods } = props;
+  const sellers = useSelector((state) => state.seller.data);
   return (
     <div className={styles.formContainer}>
       <FormProvider {...methods}>
@@ -95,40 +99,24 @@ function AddClientComponent(props) {
                 <CustomInput
                   name="altura"
                   type="text"
-                  width="small"
+                  width="extraSmall"
                   placeholder="Altura"
                   icon="fa-solid fa-location-dot"
                   validate={{ required: true, maxLength: 10 }}
                 />
                 <CustomInput
-                  name="cp"
+                  name="codigoPostal"
                   type="text"
-                  width="small"
+                  width="extraSmall"
                   placeholder="Código postal"
                   icon="fa-solid fa-location-dot"
                   validate={{ required: true, maxLength: 10 }}
                 />
-              </div>
-              <CustomInput
-                name="localidad"
-                type="text"
-                width="large"
-                placeholder="Localidad"
-                icon="fa-solid fa-location-dot"
-                validate={{ required: true, maxLength: 25 }}
-              />
-              <div
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  justifyContent: "space-between",
-                }}
-              >
                 <CustomInput
-                  name="phone"
+                  name="telefono"
                   type="text"
-                  width="small"
-                  placeholder="Número de teléfono"
+                  width="extraSmall"
+                  placeholder="Teléfono"
                   icon="fa-solid fa-phone"
                   validate={{
                     required: true,
@@ -140,6 +128,40 @@ function AddClientComponent(props) {
                     },
                   }}
                 />
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "space-between",
+                }}
+              >
+                <CustomInput
+                  name="localidad"
+                  type="text"
+                  width="small"
+                  placeholder="Localidad"
+                  icon="fa-solid fa-location-dot"
+                  validate={{ required: true, maxLength: 25 }}
+                />
+                <div style={{ width: "49%" }}>
+                  {sellers && (
+                    <CustomSelect
+                      name="sellerId"
+                      text="Seleccioná un vendedor"
+                      arrayOptions={sellers}
+                      validate={{ required: true }}
+                    />
+                  )}
+                </div>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "space-between",
+                }}
+              >
                 <CustomInput
                   name="coordenadas"
                   type="text"
@@ -150,6 +172,23 @@ function AddClientComponent(props) {
                     required: false,
                   }}
                 />
+                <div style={{ width: "49%" }}>
+                  <CustomSelect
+                    name="iva"
+                    text="Seleccioná el tipo de iva"
+                    arrayOptions={[
+                      {
+                        value: "ResponsableInscripto",
+                        text: "ResponsableInscripto",
+                      },
+                      { value: "Monotributista", text: "Monotributista" },
+                      { value: "Excento", text: "Excento" },
+                      { value: "NoGravado", text: "NoGravado" },
+                      { value: "Final", text: "Final" },
+                    ]}
+                    validate={{ required: true }}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -167,7 +206,11 @@ function AddClientComponent(props) {
           marginTop: "35px",
         }}
       >
-        Agregar
+        {status ? (
+          <Spinner animation="border" variant="light" size="sm" />
+        ) : (
+          "Agregar"
+        )}
       </Button>
     </div>
   );

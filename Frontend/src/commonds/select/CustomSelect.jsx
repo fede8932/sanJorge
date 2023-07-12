@@ -3,7 +3,7 @@ import styles from "./customSelect.module.css";
 import { useFormContext, Controller } from "react-hook-form";
 
 function CustomSelect(props) {
-  const { text, clientes, width, name, validate } = props;
+  const { text, arrayOptions, width, name, validate } = props;
   const {
     control,
     formState: { errors },
@@ -23,10 +23,10 @@ function CustomSelect(props) {
           <option value="" disabled>
             {text}
           </option>
-          {clientes.map((cliente, i) => {
+          {arrayOptions.map((option, i) => {
             return (
-              <option key={i} value={cliente.razonSocial}>
-                {cliente.razonSocial}
+              <option key={i} value={option.value}>
+                {option.text}
               </option>
             );
           })}

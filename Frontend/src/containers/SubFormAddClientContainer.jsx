@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import SubFormAddClientComponent from "../components/subFormAddClientComponent/SubFormAddClient";
-import { getSuppliers } from "../request/supplierRequest";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { getSupplierRequest } from "../redux/supplier";
 
 function SubFormAddClientContainer(props) {
-  const [supplierList, setSupplierList] = useState([]);
   const [tableItems, setTableItems] = useState([]);
+  const dispatch = useDispatch();
   const selMethods = useForm();
   const supMethods = useForm();
   const addSupplier = (data) => {
@@ -13,24 +14,19 @@ function SubFormAddClientContainer(props) {
     if (arraySupplier.length !== 0) {
       const repetido = arraySupplier.map((sup) => {
         if (data.razonSocial == sup.razonSocial) return true;
-        return false;
+        return null;
       });
-      if (repetido) return;
+      if (repetido.includes(true)) return;
     }
     arraySupplier.push(data);
     setTableItems(arraySupplier);
   };
   useEffect(() => {
-    async function fetchSuppliers() {
-      const suppliers = await getSuppliers();
-      setSupplierList(suppliers);
-    }
-    fetchSuppliers();
+    dispatch(getSupplierRequest())
   }, []);
   return (
     <SubFormAddClientComponent
       {...props}
-      suppliers={supplierList}
       supMethods={supMethods}
       selMethods={selMethods}
       onSubmitSupplier={addSupplier}

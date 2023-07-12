@@ -5,22 +5,22 @@ import CustomTextArea from "../textarea/CustomTextArea";
 import CustomInput from "../input/CustomInput";
 import Button from "react-bootstrap/Button";
 import { FormProvider } from "react-hook-form";
+import { useSelector } from "react-redux";
 
 const FormClientSupplier = (props) => {
-    const {
-      suppliers,
-      supMethods,
-      onSubmitSupplier,
-    } = props;
+  const { supMethods, onSubmitSupplier } = props;
+  const suppliers = useSelector((state) => state.supplier.data);
   return (
     <FormProvider {...supMethods}>
       <form className={styles.containerTable1}>
-        <CustomSelect
-          name="razonSocial"
-          text="Seleccioná un proveedor"
-          clientes={suppliers}
-          validate={{ required: true }}
-        />
+        {suppliers && (
+          <CustomSelect
+            name="razonSocial"
+            text="Seleccioná un proveedor"
+            arrayOptions={suppliers}
+            validate={{ required: true }}
+          />
+        )}
         <CustomTextArea
           name="comentarios"
           width="large"

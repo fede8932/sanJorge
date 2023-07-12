@@ -5,6 +5,7 @@ namespace Repuestos_San_jorge.Dto.Enums
         ResponsableInscripto,
         Monotributista,
         Excento,
-        NoGravado
+        NoGravado,
+        Final
     }
 }

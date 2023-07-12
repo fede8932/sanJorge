@@ -40,7 +40,7 @@ namespace Repuestos_San_jorge.Services.Admin
         {
             try
             {
-                return await _dbContext.Sellers.ToListAsync();
+                return await _dbContext.Sellers.Include(seller => seller.user).ToListAsync();
             }
             catch
             {

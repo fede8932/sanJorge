@@ -1,7 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-// import logger from "redux-logger";
+import logger from "redux-logger";
 import sidebarReducer from "./sidebar";
 import supplierReducer from "./supplier";
+import clientReducer from "./client"
+import sellerReducer from "./seller"
 
 import userSlice from "./user";
 
@@ -11,6 +13,8 @@ const store = configureStore({
     user: userSlice,
     sidebar: sidebarReducer,
     supplier: supplierReducer,
+    client: clientReducer,
+    seller: sellerReducer
   },
 });
 

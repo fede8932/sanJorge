@@ -19,7 +19,7 @@ namespace Repuestos_San_jorge.Services.Admin
             _dbContext = dbContext;
         }
 
-        public async Task<string> CreateUserAsync(User user) // crear usuario
+        public async Task<int> CreateUserAsync(User user) // crear usuario
         {
             try
             {
@@ -33,7 +33,7 @@ namespace Repuestos_San_jorge.Services.Admin
                 user.password = passwordHash;
                 _dbContext.Users.Add(user);
                 await _dbContext.SaveChangesAsync();
-                return "Registrado";
+                return user.id;
             }
             catch
             {
@@ -81,7 +81,7 @@ namespace Repuestos_San_jorge.Services.Admin
 
     public interface IUserService
     {
-        Task<string> CreateUserAsync(User user);
+        Task<int> CreateUserAsync(User user);
         Task<IEnumerable<User>> GetUsersAsync();
         // Task<User> GetUserAsync();
     }
