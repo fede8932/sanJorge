@@ -8,8 +8,8 @@ function TableComponent(props) {
       <table className={`${styles.tableContainer} table`}>
         <thead>
           <tr style={{backgroundColor: "#DCBEFF"}}>
-            <th id={styles.title} scope="col">{indicadores[0]}</th>
-            <th id={styles.title} scope="col">{indicadores[1]}</th>
+            <th style={{width:"75%"}} id={styles.title} scope="col">{indicadores[0]}</th>
+            <th style={{width:"20%"}} id={styles.title} scope="col">{indicadores[1]}</th>
           </tr>
         </thead>
         <tbody>

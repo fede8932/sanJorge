@@ -22,3 +22,12 @@ export const suplierRegister = async (datos) => {
     throw error;
   }
 };
+
+export const getSuppliers = async () => {
+  try {
+    const { data } = await axios.get(`${apiUrl}/api/supplier`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

@@ -24,7 +24,6 @@ export const sendLoginRequest = createAsyncThunk(
 
 
 export const persistUser = createAsyncThunk("PERSISTENCIA", async () => {
-  console.log("corriedno")
   return JSON.parse(localStorage.getItem('user'));
 });
 
