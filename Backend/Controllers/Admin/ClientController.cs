@@ -21,11 +21,11 @@ namespace Repuestos_San_jorge.Controllers.Admin
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateClient([FromBody] Client client)
+        public async Task<IActionResult> CreateClient([FromBody] CreateClientRequestDto request)
         {
             try
             {
-                var result = await _clientService.CreateClientAsync(client);
+                var result = await _clientService.CreateClientAsync(request.Client, request.CustomerDiscounts);
                 return Ok(result);
             }
             catch (Exception ex)

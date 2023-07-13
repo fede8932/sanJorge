@@ -20,7 +20,10 @@ namespace Repuestos_San_jorge.Services.Admin
             _dbContext = dbContext;
         }
 
-        public async Task<string> CreateClientAsync(Client client) // crear cliente(seguir despues de seller)
+        public async Task<string> CreateClientAsync(
+            Client client,
+            CustomerDiscountDto[] customerDiscounts
+        ) // crear cliente(seguir despues de seller)
         {
             try
             {
@@ -45,13 +48,36 @@ namespace Repuestos_San_jorge.Services.Admin
                 client.seller = seller;
                 CurrentAcount currentAcount = new CurrentAcount
                 {
-                    acountNumber = Utils.AcountNumberGen(client.cuit.Substring(0, 1)+client.cuit.Substring(3, 4)),
+                    acountNumber = Utils.AcountNumberGen(
+                        client.cuit.Substring(0, 1) + client.cuit.Substring(3, 4)
+                    ),
                 };
                 _dbContext.CurrentAcounts.Add(currentAcount);
                 await _dbContext.SaveChangesAsync();
                 client.currentAcountId = currentAcount.id;
                 _dbContext.Clients.Add(client);
                 await _dbContext.SaveChangesAsync();
+                foreach (CustomerDiscountDto discount in customerDiscounts)
+                {
+                    var supplier = await _dbContext.Suppliers.FirstOrDefaultAsync(
+                        supplier => supplier.razonSocial == discount.supplierRazonScial
+                    );
+                    if (supplier == null)
+                    {
+                        throw new ArgumentNullException(
+                            nameof(supplier),
+                            "El proveedor no puede ser null"
+                        );
+                    }
+                    CustomerDiscount newDiscount = new CustomerDiscount
+                    {
+                        clientId = client.id,
+                        notas = discount.notas,
+                        porcentaje = discount.porcentaje,
+                        supplierId = supplier.id,
+                    };
+                    _dbContext.CustomerDiscounts.Add(newDiscount);
+                }
                 return "Registrado";
             }
             catch
@@ -250,7 +276,7 @@ namespace Repuestos_San_jorge.Services.Admin
 
     public interface IClientService
     {
-        Task<string> CreateClientAsync(Client client);
+        Task<string> CreateClientAsync(Client client, CustomerDiscountDto[] customerDiscounts);
         Task<IEnumerable<Client>> GetClientsAsync();
 
         Task<string> UpdateClientAsync(int id, UpdateClientDto data);

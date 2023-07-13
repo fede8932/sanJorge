@@ -4,6 +4,7 @@ import sidebarReducer from "./sidebar";
 import supplierReducer from "./supplier";
 import clientReducer from "./client"
 import sellerReducer from "./seller"
+import tableReducer from "./tableItems"
 
 import userSlice from "./user";
 
@@ -14,7 +15,8 @@ const store = configureStore({
     sidebar: sidebarReducer,
     supplier: supplierReducer,
     client: clientReducer,
-    seller: sellerReducer
+    seller: sellerReducer,
+    tableItems: tableReducer
   },
 });
 

@@ -11,9 +11,8 @@ namespace Repuestos_San_jorge.Models
         [Required]
         public float porcentaje { get; set; }
 
-        [Required]
         [StringLength(300)]
-        public string notas { get; set; }
+        public string? notas { get; set; }
 
         public int supplierId { get; set; }
 

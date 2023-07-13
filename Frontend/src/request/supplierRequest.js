@@ -34,3 +34,7 @@ export const getSuppliers = async () => {
     throw error;
   }
 };
+
+export const addSupplierToTable = async (datos) => {
+  return [datos];
+};
