@@ -9,6 +9,10 @@ export const getSellersRequest = createAsyncThunk(
   "GET_SELLER",
   sellerRequest.getSellers
 );
+export const createSellersRequest = createAsyncThunk(
+  "CREATE_SELLER",
+  sellerRequest.createSellers
+);
 
 const sellerSlice = createSlice({
   name: "seller",
@@ -22,6 +26,17 @@ const sellerSlice = createSlice({
       state.error = action.error.message;
     },
     [getSellersRequest.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.data = action.payload;
+    },
+    [createSellersRequest.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [createSellersRequest.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
+    [createSellersRequest.fulfilled]: (state, action) => {
       state.loading = false;
       state.data = action.payload;
     },

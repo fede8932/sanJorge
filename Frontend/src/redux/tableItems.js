@@ -10,6 +10,11 @@ export const addSupplierToTable = createAsyncThunk(
   supplierRequest.addSupplierToTable
 );
 
+export const resetSupplierToTable = createAsyncThunk(
+  "SUPPLIER_TABLE",
+  supplierRequest.resetSupplierToTable
+);
+
 const tableSlice = createSlice({
   name: "tableItems",
   initialState: userState,
@@ -27,7 +32,7 @@ const tableSlice = createSlice({
         state.data = state.data.concat(action.payload);
       } else {
         const repetido = state.data.map((obj) => {
-          if (obj.razonSocial ===  action.payload[0].razonSocial) {
+          if (obj.supplierRazonSocial ===  action.payload[0].supplierRazonSocial) {
             return true;
           } else {
             return false;
@@ -39,6 +44,10 @@ const tableSlice = createSlice({
           state.data = state.data.concat(action.payload);
         }
       }
+    },
+    [resetSupplierToTable.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.data = action.payload
     },
   },
 });

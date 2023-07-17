@@ -46,7 +46,7 @@ namespace Repuestos_San_jorge.Services.Admin
                     );
                 }
                 client.seller = seller;
-                CurrentAcount currentAcount = new CurrentAcount
+                CurrentAcount currentAcount = new()
                 {
                     acountNumber = Utils.AcountNumberGen(
                         client.cuit.Substring(0, 1) + client.cuit.Substring(3, 4)
@@ -60,7 +60,7 @@ namespace Repuestos_San_jorge.Services.Admin
                 foreach (CustomerDiscountDto discount in customerDiscounts)
                 {
                     var supplier = await _dbContext.Suppliers.FirstOrDefaultAsync(
-                        supplier => supplier.razonSocial == discount.supplierRazonScial
+                        supplier => supplier.razonSocial == discount.supplierRazonSocial
                     );
                     if (supplier == null)
                     {
@@ -69,7 +69,7 @@ namespace Repuestos_San_jorge.Services.Admin
                             "El proveedor no puede ser null"
                         );
                     }
-                    CustomerDiscount newDiscount = new CustomerDiscount
+                    CustomerDiscount newDiscount = new()
                     {
                         clientId = client.id,
                         notas = discount.notas,
@@ -78,6 +78,7 @@ namespace Repuestos_San_jorge.Services.Admin
                     };
                     _dbContext.CustomerDiscounts.Add(newDiscount);
                 }
+                await _dbContext.SaveChangesAsync();
                 return "Registrado";
             }
             catch

@@ -8,10 +8,11 @@ import { addSupplierToTable } from "../redux/tableItems";
 function SubFormAddClientContainer(props) {
   const tItems = useSelector((state) => state.tableItems.data);
   const dispatch = useDispatch();
-  const selMethods = useForm();
   const supMethods = useForm();
   const addSupplier = (data) => {
+    data.porcentaje = parseFloat(data.porcentaje);
     dispatch(addSupplierToTable(data));
+    supMethods.reset();
   };
   useEffect(() => {
     dispatch(getSupplierRequest());
@@ -20,7 +21,6 @@ function SubFormAddClientContainer(props) {
     <SubFormAddClientComponent
       {...props}
       supMethods={supMethods}
-      selMethods={selMethods}
       onSubmitSupplier={addSupplier}
       tableItems={tItems}
     />

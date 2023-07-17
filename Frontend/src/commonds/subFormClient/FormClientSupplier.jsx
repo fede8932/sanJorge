@@ -15,14 +15,14 @@ const FormClientSupplier = (props) => {
       <form className={styles.containerTable1}>
         {suppliers && (
           <CustomSelect
-            name="razonSocial"
+            name="supplierRazonSocial"
             text="Seleccioná un proveedor"
             arrayOptions={suppliers}
             validate={{ required: true }}
           />
         )}
         <CustomTextArea
-          name="comentarios"
+          name="notas"
           width="large"
           placeholder="En este campo puedes ingresar comentarios adicionales... (Máximo 160 caracteres)"
           type="textarea"
@@ -36,7 +36,7 @@ const FormClientSupplier = (props) => {
           }}
         >
           <CustomInput
-            name="comision" //es descuento
+            name="porcentaje" //es descuento
             width="small"
             placeholder="Descuento"
             icon="fas fa-percentage"

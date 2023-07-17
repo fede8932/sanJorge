@@ -3,19 +3,27 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 export const clientRegister = async (datos) => {
   try {
-    const { name, lastName, email, ...dataClient } = datos;
+    const client = datos.Client;
+    const discount = datos.CustomerDiscounts;
+    const { name, lastName, email, ...dataClient } = client;
     const dataUser = {
-      roleId: 4,
       name: name,
       lastName: lastName,
       email: email,
       password: `${lastName}1234`,
+      roleId: 4,
     };
     const userId = await axios.post(`${apiUrl}/api/users`, dataUser);
     dataClient.userId = userId.data;
     dataClient.altura = Number(dataClient.altura);
     dataClient.codigoPostal = Number(dataClient.codigoPostal);
-    await axios.post(`${apiUrl}/api/client`, dataClient);
+    console.log("dataClient", dataClient)
+    const dataRequest = {
+      Client: dataClient,
+      CustomerDiscounts: discount
+    }
+    console.log("dataClient", dataRequest)
+    await axios.post(`${apiUrl}/api/client`, dataRequest);
     return "Registrado";
   } catch (error) {
     throw error;
@@ -25,7 +33,10 @@ export const clientRegister = async (datos) => {
 export const getClients = async () => {
   try {
     const { data } = await axios.get(`${apiUrl}/api/client`);
-    return data;
+    const arrayClients = data.map((client) => {
+      return { text: client.razonSocial, value: client.razonSocial };
+    });
+    return arrayClients;
   } catch (error) {
     throw error;
   }

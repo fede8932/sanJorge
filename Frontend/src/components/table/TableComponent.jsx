@@ -15,8 +15,8 @@ function TableComponent(props) {
         <tbody>
           {proveedores.map((proveedor, i) => (
             <tr key={i}>
-              <td>{proveedor.razonSocial}</td>
-              <td>{proveedor.comision}</td>
+              <td>{proveedor.supplierRazonSocial}</td>
+              <td>{proveedor.porcentaje}</td>
             </tr>
           ))}
         </tbody>

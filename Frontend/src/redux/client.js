@@ -10,6 +10,11 @@ export const clientCreateRequest = createAsyncThunk(
   clientRequest.clientRegister
 );
 
+export const getClientRequest = createAsyncThunk(
+  "GET_CLIENT",
+  clientRequest.getClients
+);
+
 const clientSlice = createSlice({
   name: "client",
   initialState: userState,
@@ -22,6 +27,17 @@ const clientSlice = createSlice({
       state.error = action.error.message;
     },
     [clientCreateRequest.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.data = action.payload;
+    },
+    [getClientRequest.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [getClientRequest.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
+    [getClientRequest.fulfilled]: (state, action) => {
       state.loading = false;
       state.data = action.payload;
     },

@@ -2,41 +2,14 @@ import React from "react";
 import styles from "./sellerForm.module.css";
 import CustomInput from "../../commonds/input/CustomInput";
 import Button from "react-bootstrap/Button";
-import CustomSelect from "../../commonds/select/CustomSelect";
-import TableContainer from "../../containers/TableContainer";
-import { useForm, FormProvider } from "react-hook-form";
+import { FormProvider } from "react-hook-form";
+import Spinner from "react-bootstrap/esm/Spinner";
 
 function SellerFormComponent(props) {
-  const { suppliers } = props
-  const methods = useForm();
-  const onSubmit = (data) => console.log(data);
-  const arrayPrueba = ["Pepito SRL", "Juancito S.A", "Fulanito"]; //los que esten asociados no deben aparecer
-  const arrayPrueba2 = ["Corven", "SKF", "Katana"];
-  const arrayPrueba3 = [
-    { razonSocial: "fulanito", comision: "0.003" },
-    { razonSocial: "fulanito", comision: "0.003" },
-    { razonSocial: "fulanito", comision: "0.003" },
-    { razonSocial: "fulanito", comision: "0.003" },
-    { razonSocial: "fulanito", comision: "0.003" },
-    { razonSocial: "fulanito", comision: "0.003" },
-    { razonSocial: "fulanito", comision: "0.003" },
-    { razonSocial: "fulanito", comision: "0.003" },
-    { razonSocial: "fulanito", comision: "0.003" },
-    { razonSocial: "fulanito", comision: "0.003" },
-    { razonSocial: "fulanito", comision: "0.003" },
-    { razonSocial: "fulanito", comision: "0.003" },
-    { razonSocial: "fulanito", comision: "0.003" },
-    { razonSocial: "fulanito", comision: "0.003" },
-    { razonSocial: "fulanito", comision: "0.003" },
-    { razonSocial: "fulanito", comision: "0.003" },
-    { razonSocial: "fulanito", comision: "0.003" },
-  ];
+  const { methods, onSubmit, status } = props;
   return (
     <FormProvider {...methods}>
-      <form
-        className={styles.formContainer}
-        onSubmit={methods.handleSubmit(onSubmit)}
-      >
+      <form className={styles.formContainer}>
         <div className={styles.subFormContainer}>
           <div className={styles.inputContainer}>
             <span className={styles.subTitle}>Datos de usuario</span>
@@ -111,7 +84,7 @@ function SellerFormComponent(props) {
                 validate={{ required: true, maxLength: 10 }}
               />
               <CustomInput
-                name="cp"
+                name="codigoPostal"
                 type="text"
                 width="small"
                 placeholder="Código postal"
@@ -128,7 +101,7 @@ function SellerFormComponent(props) {
               validate={{ required: true, maxLength: 25 }}
             />
             <CustomInput
-              name="phone"
+              name="telefono"
               type="text"
               width="large"
               placeholder="Número de teléfono"
@@ -151,7 +124,7 @@ function SellerFormComponent(props) {
             <div className={styles.containerTable1}>
               <div className={styles.subContainer}>
                 <CustomInput
-                  name="comBase"
+                  name="comisionBase"
                   width="small"
                   placeholder="Comisión base"
                   icon="fas fa-percentage"
@@ -161,7 +134,7 @@ function SellerFormComponent(props) {
                   step="0.1"
                 />
                 <CustomInput
-                  name="comOfer"
+                  name="comisionOferta"
                   width="small"
                   placeholder="Comisión oferta"
                   icon="fas fa-tags"
@@ -171,62 +144,23 @@ function SellerFormComponent(props) {
                   step="0.1"
                 />
               </div>
-              <CustomSelect
-                text="Seleccioná un cliente si deseas asociarlo"
-                clientes={arrayPrueba}
-              />
-              <Button
-                className={styles.selectButton}
-                style={{
-                  backgroundColor: "#673ab7",
-                  border: "1px solid #673ab7",
-                }}
-              >
-                Asociar
-              </Button>
-            </div>
-            <div className={styles.containerTable1}>
-              <CustomSelect
-                text="Seleccioná un proveedor"
-                clientes={suppliers}
-              />
-              <CustomInput
-              name="comision"
-              width="small"
-              placeholder="Comisión"
-              icon="fas fa-percentage"
-              type="number"
-              min="0"
-              max="15"
-              step="0.1"
-            />
-              <Button
-                className={styles.selectButton}
-                style={{
-                  backgroundColor: "#673ab7",
-                  border: "1px solid #673ab7",
-                }}
-              >
-                Agregar
-              </Button>
-            </div>
-            <div className={styles.containerTable2}>
-              <TableContainer
-                proveedores={arrayPrueba3}
-                indicadores={["Proveedor", "% Comisión"]}
-              />
             </div>
           </div>
         </div>
         <Button
           type="submit"
+          onClick={methods.handleSubmit(onSubmit)}
           style={{
             backgroundColor: "#673ab7",
             border: "1px solid #673ab7",
             marginTop: "35px",
           }}
         >
-          Agregar
+          {!status ? (
+            "Agregar"
+          ) : (
+            <Spinner animation="border" variant="light" size="sm" />
+          )}
         </Button>
       </form>
     </FormProvider>

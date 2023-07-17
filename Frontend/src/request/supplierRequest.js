@@ -38,3 +38,7 @@ export const getSuppliers = async () => {
 export const addSupplierToTable = async (datos) => {
   return [datos];
 };
+
+export const resetSupplierToTable = async () => {
+  return [];
+};

@@ -11,10 +11,11 @@ namespace Repuestos_San_jorge.Models
         [Required]
         public string name { get; set; }
 
+        [Required]
+        public string code { get; set; }
+
         public ICollection<BrandSupplier>? brandSuppliers { get; set; }
 
         public ICollection<BrandProduct>? brandProducts { get; set; }
-
-        public Stock? stock { get; set; }
     }
 }
