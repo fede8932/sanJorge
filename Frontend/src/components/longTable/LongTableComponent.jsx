@@ -23,8 +23,8 @@ function LongTableComponent(props) {
                   <td>{obj.article}</td>
                   <td>{obj.listPrice}</td>
                   <td>{obj.listPrice * (1 + obj.salePercentage)}</td>
-                  <td>{obj.brand}</td>
-                  <td>{obj.stock}</td>
+                  <td>{"aca va la marca"}</td>
+                  <td>{"aca va el stock"}</td>
                   <td>
                     <div
                       style={{

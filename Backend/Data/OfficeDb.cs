@@ -38,8 +38,14 @@ namespace Repuestos_San_jorge.Data
                 .Property(Movements => Movements.type)
                 .HasConversion<string>();
             modelBuilder.Entity<Client>().Property(client => client.iva).HasConversion<string>();
-            modelBuilder.Entity<PurchaseOrder>().Property(purchaseOrder => purchaseOrder.status).HasConversion<string>();
-            modelBuilder.Entity<Voucher>().Property(voucher => voucher.type).HasConversion<string>();
+            modelBuilder
+                .Entity<PurchaseOrder>()
+                .Property(purchaseOrder => purchaseOrder.status)
+                .HasConversion<string>();
+            modelBuilder
+                .Entity<Voucher>()
+                .Property(voucher => voucher.type)
+                .HasConversion<string>();
 
             // Restricciones
             modelBuilder.Entity<Brand>().HasIndex(brand => brand.name).IsUnique();
@@ -153,9 +159,9 @@ namespace Repuestos_San_jorge.Data
                 .HasForeignKey<Stock>(stock => stock.productId);
             modelBuilder
                 .Entity<Brand>()
-                .HasOne(brand => brand.stock)
+                .HasMany(brand => brand.stocks) // Modificación: HasOne() -> HasMany()
                 .WithOne(stock => stock.brand)
-                .HasForeignKey<Stock>(stock => stock.brandId);
+                .HasForeignKey(stock => stock.brandId);
             modelBuilder
                 .Entity<CurrentAcount>()
                 .HasOne(currentAcount => currentAcount.supplier)
@@ -165,18 +171,19 @@ namespace Repuestos_San_jorge.Data
                 .Entity<PurchaseOrder>()
                 .HasOne(purchaseOrder => purchaseOrder.Voucher)
                 .WithOne(voucher => voucher.purchaseOrder)
-                .HasForeignKey<Voucher>(voucher => voucher.purchaseOrderId);  
+                .HasForeignKey<Voucher>(voucher => voucher.purchaseOrderId);
             modelBuilder
                 .Entity<PurchaseOrder>()
                 .HasOne(purchaseOrder => purchaseOrder.controlOrder)
                 .WithOne(controlOrder => controlOrder.purchaseOrder)
-                .HasForeignKey<ControlOrder>(controlOrder => controlOrder.purchaseOrderId);      
+                .HasForeignKey<ControlOrder>(controlOrder => controlOrder.purchaseOrderId);
             modelBuilder
                 .Entity<PointOfSale>()
                 .HasOne(pointOfSale => pointOfSale.stock)
                 .WithOne(stock => stock.pointOfSale)
                 .HasForeignKey<Stock>(stock => stock.pointOfSaleId);
-            modelBuilder.Entity<PointOfSale>()
+            modelBuilder
+                .Entity<PointOfSale>()
                 .HasMany(pointOfSale => pointOfSale.locations)
                 .WithOne(location => location.pointOfSale)
                 .HasForeignKey(location => location.pointOfSaleId);

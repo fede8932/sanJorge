@@ -37,7 +37,6 @@ namespace Repuestos_San_jorge.Services.Admin
                 productStock.stock = (int)(stock == null ? 0 : stock);
                 productStock.minStock = (int)(stockMin == null ? 3 : stockMin);
                 productStock.brand = brand;
-                productStock.product = product;
                 _dbContext.BrandProducts.Add(brandProduct);
                 _dbContext.Products.Add(product);
                 _dbContext.Stocks.Add(productStock);
@@ -59,6 +58,26 @@ namespace Repuestos_San_jorge.Services.Admin
             catch
             {
                 throw;
+            }
+        }
+
+        public async Task<IEnumerable<Product>> GetProductsByDataAsync(string data)
+        {
+            try
+            {
+                // Filtrar los productos cuyo código o descripción contengan el valor del parámetro "data"
+                var filteredProducts = await _dbContext.Products
+                    .Where(p => p.article.Contains(data) || p.description.Contains(data))
+                    .Include(p => p.brandProducts) // Incluir la relación de navegación "stock"
+                    .ThenInclude(bp => bp.brand)
+                    .ToListAsync();
+
+                return filteredProducts;
+            }
+            catch (Exception ex) // Es buena práctica capturar la excepción específica, en este caso "Exception"
+            {
+                // Manejar la excepción apropiadamente (registro, notificación, etc.)
+                throw new Exception("Error al obtener los productos por datos.", ex);
             }
         }
 
@@ -174,7 +193,7 @@ namespace Repuestos_San_jorge.Services.Admin
     {
         Task<string> CreateProductAsync(Product product, int brandId, int? stock, int? stockMin);
         Task<IEnumerable<Product>> GetProductsAsync();
-
+        Task<IEnumerable<Product>> GetProductsByDataAsync(string data);
         Task<string> UpdateProductAsync(int id, UpdateProductDto data);
         Task<string> AddBrandToProductAsync(int productId, int brandId);
         Task<string> UpdateProductStock(int productId, int brandId, UpdateProdStockDto data);

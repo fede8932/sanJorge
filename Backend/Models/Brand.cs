@@ -18,6 +18,6 @@ namespace Repuestos_San_jorge.Models
 
         public ICollection<BrandProduct>? brandProducts { get; set; }
 
-        public Stock? stock { get; set; }
+        public ICollection<Stock>? stocks { get; set; } 
     }
 }

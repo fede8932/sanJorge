@@ -109,5 +109,20 @@ namespace Repuestos_San_jorge.Controllers.Admin
                 return StatusCode(500, "Ocurrió un error interno en el servidor.");
             }
         }
+
+        [HttpGet("search")]
+        public async Task<ActionResult> SearchProductByData([FromQuery] string data)
+        {
+            try
+            {
+                var result = await _productService.GetProductsByDataAsync(data);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
     }
 }
