@@ -36,20 +36,20 @@ namespace Repuestos_San_jorge.Controllers.Admin
             }
         }
 
-        // [HttpGet]
-        // public async Task<ActionResult<IEnumerable<Seller>>> GetSellers()
-        // {
-        //     try
-        //     {
-        //         var result = await _supplierService.GetSuppliersAsync();
-        //         return Ok(result);
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         Console.WriteLine(ex);
-        //         return StatusCode(500, "Ocurrió un error interno en el servidor.");
-        //     }
-        // }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Brand>>> GetProducts()
+        {
+            try
+            {
+                var result = await _brandService.GetBrandsAsync();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
 
         // [HttpDelete("delete/{id}")]
         // public async Task<ActionResult<IEnumerable<Seller>>> DeleteSeller(int id)

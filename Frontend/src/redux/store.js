@@ -5,6 +5,8 @@ import supplierReducer from "./supplier";
 import clientReducer from "./client"
 import sellerReducer from "./seller"
 import tableReducer from "./tableItems"
+import brandReducer from "./brand"
+import productReducer from "./product"
 
 import userSlice from "./user";
 
@@ -16,7 +18,9 @@ const store = configureStore({
     supplier: supplierReducer,
     client: clientReducer,
     seller: sellerReducer,
-    tableItems: tableReducer
+    tableItems: tableReducer,
+    brand: brandReducer,
+    product: productReducer,
   },
 });
 

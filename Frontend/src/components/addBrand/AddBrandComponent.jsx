@@ -5,9 +5,10 @@ import CustomSelect from "../../commonds/select/CustomSelect";
 import CustomTextArea from "../../commonds/textarea/CustomTextArea";
 import Button from "react-bootstrap/esm/Button";
 import { FormProvider } from "react-hook-form";
+import Spinner from "react-bootstrap/esm/Spinner";
 
 function AddBrandComponent(props) {
-  const { onSubmit, status, methods } = props;
+  const { onSubmit, status, methods, suppliers } = props;
   return (
     <FormProvider {...methods}>
       <form className={styles.formContainer}>
@@ -20,6 +21,7 @@ function AddBrandComponent(props) {
               width="large"
               placeholder="Código de marca"
               icon="fas fa-hashtag"
+              validate={{ required: true }}
             />
             <CustomInput
               name="name"
@@ -27,13 +29,16 @@ function AddBrandComponent(props) {
               width="large"
               placeholder="Nombre"
               icon="fa-solid fa-id-card"
-            />
-            <CustomSelect
-              text="Seleccioná el proveedor"
-              name="supplierId"
               validate={{ required: true }}
-              arrayOptions={[{ text: "aaaa", value: "AAA" }]}
             />
+            {suppliers && (
+              <CustomSelect
+                text="Seleccioná el proveedor"
+                name="supplierName"
+                validate={{ required: true }}
+                arrayOptions={suppliers}
+              />
+            )}
           </div>
           <div className={styles.inputContainer}>
             <span className={styles.subTitle}>Datos adicionales</span>
@@ -47,13 +52,18 @@ function AddBrandComponent(props) {
           </div>
         </div>
         <Button
+          onClick={methods.handleSubmit(onSubmit)}
           style={{
             backgroundColor: "#673ab7",
             border: "1px solid #673ab7",
             marginTop: "35px",
           }}
         >
-          Agregar
+          {!status ? (
+            "Agregar"
+          ) : (
+            <Spinner animation="border" variant="light" size="sm" />
+          )}
         </Button>
       </form>
     </FormProvider>

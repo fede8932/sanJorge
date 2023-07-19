@@ -40,6 +40,18 @@ namespace Repuestos_San_jorge.Services.Admin
             }
         }
 
+        public async Task<IEnumerable<Brand>> GetBrandsAsync()
+        {
+            try
+            {
+                return await _dbContext.Brands.ToListAsync();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public async Task<string> UpdateBrandAsync(int id, UpdateBrandDto data) // editar nombre de marca
         {
             try
@@ -81,10 +93,7 @@ namespace Repuestos_San_jorge.Services.Admin
                 );
                 if (supplier == null)
                 {
-                    throw new ArgumentNullException(
-                        nameof(brand),
-                        "No proveedor en los registros"
-                    );
+                    throw new ArgumentNullException(nameof(brand), "No proveedor en los registros");
                 }
                 var brandSupplier = new BrandSupplier { brand = brand, supplier = supplier };
                 _dbContext.BrandSuppliers.Add(brandSupplier);
@@ -101,6 +110,7 @@ namespace Repuestos_San_jorge.Services.Admin
     public interface IBrandService
     {
         Task<string> CreateBrandAsync(int supplierId, Brand brand);
+        Task<IEnumerable<Brand>> GetBrandsAsync();
         Task<string> UpdateBrandAsync(int id, UpdateBrandDto data);
         Task<string> AddBrandSupplierAsync(int brandId, int supplierId);
     }

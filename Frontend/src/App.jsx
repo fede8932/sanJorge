@@ -11,7 +11,7 @@ import Dashbord from "./views/dashbord/Dashbord";
 import AddClient from "./views/addClient/AddClient";
 import AddSupplier from "./views/addSupplier/AddSupplier";
 import AddBrand from "./views/addBrand/AddBrand";
-// import AddProduct from "./views/addProduct/AddProduct";
+import AddProduct from "./views/addProduct/AddProduct";
 // import SearchProduct from "./views/searchProduct/SearchProduct";
 // import SearchBrand from "./views/searchBrand/SearchBrand"
 // import NewBuyOrder from "./views/newBuyOrder/NewBuyOrder";
@@ -51,8 +51,8 @@ function App() {
                     <Route path="add/supplier" element={<AddSupplier />} />
                     <Route path="add/client" element={<AddClient />} />
                     <Route path="add/brand" element={<AddBrand />} />
-                    {/* <Route path="add/product" element={<AddProduct />} />
-                    <Route path="search/product" element={<SearchProduct />} />
+                    <Route path="add/product" element={<AddProduct />} />
+                    { /*<Route path="search/product" element={<SearchProduct />} />
                     <Route path="search/brand" element={<SearchBrand />} />
                     <Route path="new/buy" element={<NewBuyOrder />} />
                     <Route path="new/sell" element={<NewSellOrder />} /> */}

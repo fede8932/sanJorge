@@ -48,6 +48,21 @@ namespace Repuestos_San_jorge.Controllers.Admin
             }
         }
 
+        [HttpGet("supplier")]
+        public async Task<ActionResult> GetSupplier([FromQuery] string razonSocial)
+        {
+            try
+            {
+                var result = await _supplierService.SupplierAsync(razonSocial);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
+
         [HttpDelete("delete/{id}")]
         public async Task<ActionResult<IEnumerable<Seller>>> DeleteSupplier(int id)
         {

@@ -20,7 +20,7 @@ namespace Repuestos_San_jorge.Models
 
         public int? brandId { get; set; }
 
-        [ForeignKey("productId")]
+        [ForeignKey("brandId")]
         public Brand? brand { get; set; }
 
         public int? pointOfSaleId { get; set; }
