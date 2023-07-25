@@ -23,7 +23,8 @@ const CustomButton = ({ props }) => {
         setIconClass(iconStyle);
         setButtonClass("textButton");
       }}
-      onClick={() => {
+      onClick={(event) => {
+        event.preventDefault();
         fnSidebar();
       }}
       className={styles[buttonStyle]}

@@ -141,7 +141,13 @@ namespace Repuestos_San_jorge.Data
                 .HasForeignKey(purchaseOrderItem => purchaseOrderItem.productId);
             modelBuilder
                 .Entity<BrandProduct>()
-                .HasKey(brandProduct => new { brandProduct.brandId, brandProduct.productId });
+                .HasKey(brandProduct => new { brandProduct.productId, brandProduct.brandId });
+            modelBuilder
+                .Entity<BrandProduct>()
+                .HasOne(brandProduct => brandProduct.product)
+                .WithMany(product => product.brandProducts)
+                .HasForeignKey(brandProduct => brandProduct.productId);
+
             modelBuilder
                 .Entity<BrandProduct>()
                 .HasOne(brandProduct => brandProduct.brand)
@@ -149,19 +155,32 @@ namespace Repuestos_San_jorge.Data
                 .HasForeignKey(brandProduct => brandProduct.brandId);
             modelBuilder
                 .Entity<BrandProduct>()
-                .HasOne(brandProduct => brandProduct.product)
-                .WithMany(product => product.brandProducts)
-                .HasForeignKey(brandProduct => brandProduct.productId);
-            modelBuilder
-                .Entity<Product>()
-                .HasOne(product => product.stock)
-                .WithOne(stock => stock.product)
-                .HasForeignKey<Stock>(stock => stock.productId);
-            modelBuilder
-                .Entity<Brand>()
-                .HasMany(brand => brand.stocks) // Modificación: HasOne() -> HasMany()
-                .WithOne(stock => stock.brand)
-                .HasForeignKey(stock => stock.brandId);
+                .HasOne(brandProduct => brandProduct.stock)
+                .WithOne()
+                .HasForeignKey<BrandProduct>(brandProduct => brandProduct.stockId);
+            // modelBuilder
+            //     .Entity<BrandProduct>()
+            //     .HasKey(brandProduct => new { brandProduct.brandId, brandProduct.productId });
+            // modelBuilder
+            //     .Entity<BrandProduct>()
+            //     .HasOne(brandProduct => brandProduct.brand)
+            //     .WithMany(brand => brand.brandProducts)
+            //     .HasForeignKey(brandProduct => brandProduct.brandId);
+            // modelBuilder
+            //     .Entity<BrandProduct>()
+            //     .HasOne(brandProduct => brandProduct.product)
+            //     .WithMany(product => product.brandProducts)
+            //     .HasForeignKey(brandProduct => brandProduct.productId);
+            // modelBuilder //Esto es li viejo
+            //     .Entity<Product>()
+            //     .HasOne(product => product.stock)
+            //     .WithOne(stock => stock.product)
+            //     .HasForeignKey<Stock>(stock => stock.productId);
+            // modelBuilder
+            //     .Entity<Brand>()
+            //     .HasMany(brand => brand.stocks)
+            //     .WithOne(stock => stock.brand)
+            //     .HasForeignKey(stock => stock.brandId); //Esto es li viejo
             modelBuilder
                 .Entity<CurrentAcount>()
                 .HasOne(currentAcount => currentAcount.supplier)

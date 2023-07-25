@@ -1,10 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import styles from "./customInput.module.css";
 import { useFormContext } from "react-hook-form";
 
 function CustomInput(props) {
   const { width, icon, name, validate } = props;
-  // const inputRef = useRef(null);
   const [classDivContainer, setClassDivContainer] = useState("inputContainer");
   const {
     register,
@@ -13,10 +12,6 @@ function CustomInput(props) {
   return (
     <div style={{marginBottom: "15px"}} className={`${styles[width]}`}>
       <div
-        // onClick={() => {
-        //   inputRef.current.focus();
-        //   setClassDivContainer("inputContainerActive");
-        // }}
         onBlur={() => {
           setClassDivContainer("inputContainer");
         }}
@@ -28,7 +23,6 @@ function CustomInput(props) {
           onFocus={() => {
             setClassDivContainer("inputContainerActive");
           }}
-          // ref={inputRef}
           className={styles.input}
           {...props}
         />

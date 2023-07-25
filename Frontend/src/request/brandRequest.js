@@ -28,3 +28,12 @@ export const getBrands = async () => {
     throw error;
   }
 };
+
+export const getBrandsByData = async (text) => {
+  try {
+    const { data } = await axios.get(`${apiUrl}/api/brand/search?data=${text}`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

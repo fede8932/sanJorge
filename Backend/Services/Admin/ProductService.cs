@@ -32,14 +32,14 @@ namespace Repuestos_San_jorge.Services.Admin
                 {
                     throw new ArgumentNullException(nameof(brand), "La marca no puede ser null");
                 }
-                var brandProduct = new BrandProduct { brand = brand, product = product };
                 var productStock = new Stock { };
                 productStock.stock = (int)(stock == null ? 0 : stock);
                 productStock.minStock = (int)(stockMin == null ? 3 : stockMin);
-                productStock.brand = brand;
+                var brandProduct = new BrandProduct { brand = brand, product = product };
+                brandProduct.stock = productStock;
+                _dbContext.Stocks.Add(productStock);
                 _dbContext.BrandProducts.Add(brandProduct);
                 _dbContext.Products.Add(product);
-                _dbContext.Stocks.Add(productStock);
                 await _dbContext.SaveChangesAsync();
                 return "Registrado";
             }
@@ -70,6 +70,8 @@ namespace Repuestos_San_jorge.Services.Admin
                     .Where(p => p.article.Contains(data) || p.description.Contains(data))
                     .Include(p => p.brandProducts) // Incluir la relación de navegación "stock"
                     .ThenInclude(bp => bp.brand)
+                    .Include(p => p.brandProducts)
+                    .ThenInclude(bp => bp.stock)
                     .ToListAsync();
 
                 return filteredProducts;
@@ -139,7 +141,15 @@ namespace Repuestos_San_jorge.Services.Admin
                         "No existe producto en los registros"
                     );
                 }
-                var brandProduct = new BrandProduct { brand = brand, product = product };
+                var stock = new Stock { minStock = 2, stock = 0 };
+                _dbContext.Stocks.Add(stock);
+                await _dbContext.SaveChangesAsync();
+                var brandProduct = new BrandProduct
+                {
+                    brand = brand,
+                    product = product,
+                    stockId = stock.id
+                };
                 _dbContext.BrandProducts.Add(brandProduct);
                 await _dbContext.SaveChangesAsync();
                 return "Producto actualizado";
@@ -158,8 +168,18 @@ namespace Repuestos_San_jorge.Services.Admin
         {
             try
             {
+                var brandProd = await _dbContext.BrandProducts.SingleOrDefaultAsync(
+                    brandProd => brandProd.brandId == brandId && brandProd.productId == productId
+                );
+                if (brandProd == null)
+                {
+                    throw new ArgumentNullException(
+                        nameof(brandProd),
+                        "No hay registro de ese producto y/o marca en los registros"
+                    );
+                }
                 var stock = await _dbContext.Stocks.SingleOrDefaultAsync(
-                    stock => stock.brandId == brandId && stock.productId == productId
+                    stock => stock.brandProduct == brandProd
                 );
                 if (stock == null)
                 {

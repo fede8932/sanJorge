@@ -7,6 +7,7 @@ import sellerReducer from "./seller"
 import tableReducer from "./tableItems"
 import brandReducer from "./brand"
 import productReducer from "./product"
+import searchBrandReducer from "./searchBrands"
 
 import userSlice from "./user";
 
@@ -21,6 +22,7 @@ const store = configureStore({
     tableItems: tableReducer,
     brand: brandReducer,
     product: productReducer,
+    searchBrand: searchBrandReducer,
   },
 });
 

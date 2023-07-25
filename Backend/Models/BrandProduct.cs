@@ -6,24 +6,21 @@ namespace Repuestos_San_jorge.Models
     public class BrandProduct
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
 
         [Required]
-        public int brandId { get; set; }
-
-        [Required]
         public int productId { get; set; }
-
-        [ForeignKey("brandId")]
-        public Brand brand { get; set; }
-
-        [ForeignKey("productId")]
         public Product product { get; set; }
 
-        // public BrandProduct()
-        // {
-        //     brand = new Brand();
-        //     product = new Product();
-        // }
+        [Required]
+        public int brandId { get; set; }
+        public Brand brand { get; set; }
+
+        [Required]
+        public int stockId { get; set; }
+
+        [ForeignKey("stockId")]
+        public Stock stock { get; set; }
     }
 }

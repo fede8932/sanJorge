@@ -105,12 +105,21 @@ namespace Repuestos_San_jorge.Services.Admin
                 throw;
             }
         }
+
+        public async Task<IEnumerable<Brand>> GetBrandByDataAsync(string data)
+        {
+            var filteredBrands = await _dbContext.Brands
+                .Where(b => b.name.Contains(data) || b.code.Contains(data))
+                .ToListAsync();
+            return filteredBrands;
+        }
     }
 
     public interface IBrandService
     {
         Task<string> CreateBrandAsync(int supplierId, Brand brand);
         Task<IEnumerable<Brand>> GetBrandsAsync();
+        Task<IEnumerable<Brand>> GetBrandByDataAsync(string data);
         Task<string> UpdateBrandAsync(int id, UpdateBrandDto data);
         Task<string> AddBrandSupplierAsync(int brandId, int supplierId);
     }

@@ -13,8 +13,8 @@ import AddSupplier from "./views/addSupplier/AddSupplier";
 import AddBrand from "./views/addBrand/AddBrand";
 import AddProduct from "./views/addProduct/AddProduct";
 import SearchProduct from "./views/searchProduct/SearchProduct";
-// import SearchBrand from "./views/searchBrand/SearchBrand"
-// import NewBuyOrder from "./views/newBuyOrder/NewBuyOrder";
+import SearchBrand from "./views/searchBrand/SearchBrand"
+import NewBuyOrder from "./views/newBuyOrder/NewBuyOrder";
 // import NewSellOrder from "./views/newSellOrder/NewSellOrder";
 
 function App() {
@@ -53,9 +53,9 @@ function App() {
                     <Route path="add/brand" element={<AddBrand />} />
                     <Route path="add/product" element={<AddProduct />} />
                     <Route path="search/product" element={<SearchProduct />} />
-                    {/*<Route path="search/brand" element={<SearchBrand />} />
+                    <Route path="search/brand" element={<SearchBrand />} />
                     <Route path="new/buy" element={<NewBuyOrder />} />
-                    <Route path="new/sell" element={<NewSellOrder />} /> */}
+                    {/*<Route path="new/sell" element={<NewSellOrder />} /> */}
                   </Routes>
                 </div>
               </div>

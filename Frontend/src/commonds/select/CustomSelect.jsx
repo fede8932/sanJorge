@@ -19,6 +19,11 @@ function CustomSelect(props) {
         <select
           className={`form-select ${styles.selectContainer} ${styles[width]}`}
           {...field}
+          onChange={(e) => {
+            field.onChange(e); // Asegurarse de que el controlador reciba el evento
+            const selectedValue = e.target.value;
+            console.log(selectedValue); // Llamar a la función onSelectChange con el valor seleccionado
+          }}
         >
           <option value="" disabled>
             {text}
