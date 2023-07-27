@@ -4,7 +4,6 @@ import ActionModalContainer from "../../containers/ActionModalContainer";
 
 function LongTableComponent(props) {
   const { data, colum, type } = props;
-  console.log(data);
   return (
     <div className={styles.container}>
       <table className={`table ${styles.table}`}>

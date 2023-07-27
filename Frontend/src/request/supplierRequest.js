@@ -35,6 +35,15 @@ export const getSuppliers = async () => {
   }
 };
 
+export const getInfoSuppliers = async (razonSocial) => {
+  try {
+    const { data } = await axios.get(`${apiUrl}/api/supplier/supplier?razonSocial=${razonSocial}`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const addSupplierToTable = async (datos) => {
   return [datos];
 };

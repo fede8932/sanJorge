@@ -17,12 +17,12 @@ namespace Repuestos_San_jorge.Services.Admin
             _dbContext = dbContext;
         }
 
-        public async Task<string> CreatePurchaseOrderAsync(int supplierId) // crear orden de compra
+        public async Task<int> CreatePurchaseOrderAsync(string supplierName) // crear orden de compra
         {
             try
             {
                 var supplier = await _dbContext.Suppliers.SingleOrDefaultAsync(
-                    supplier => supplier.id == supplierId
+                    supplier => supplier.razonSocial == supplierName
                 );
                 if (supplier == null)
                 {
@@ -35,11 +35,11 @@ namespace Repuestos_San_jorge.Services.Admin
                 {
                     date = DateTime.UtcNow,
                     total = 0,
-                    supplierId = supplierId
+                    supplierId = supplier.id
                 };
                 _dbContext.PurchaseOrders.Add(purchaseOrder);
                 await _dbContext.SaveChangesAsync();
-                return "Registrado";
+                return purchaseOrder.id;
             }
             catch
             {
@@ -154,7 +154,7 @@ namespace Repuestos_San_jorge.Services.Admin
 
     public interface IPurchaseOrderService
     {
-        Task<string> CreatePurchaseOrderAsync(int supplierId);
+        Task<int> CreatePurchaseOrderAsync(string supplierName);
         Task<IEnumerable<PurchaseOrder>> GetOrdersAsync();
         Task<string> DeleteOrdersAsync(int purchaseOrderId);
         Task<string> UpdateStatusOrdersAsync(

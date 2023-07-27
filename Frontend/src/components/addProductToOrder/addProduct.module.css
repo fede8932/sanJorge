@@ -57,6 +57,10 @@
   border: 1px solid #eaeaea;
   border-radius: 14px;
 }
+.tableProdContainerPrinc{
+  display: flex;
+  justify-content: space-between;
+}
 .subTitle {
   margin-top: -11px;
   margin-bottom: 15px;
@@ -175,16 +179,16 @@
   width: 100%;
 }
 .searchContainer {
-  width: 100%;
+  width: 44%;
   padding: 0px 16px;
   display: flex;
   flex-direction: column;
   border: 1px solid #eaeaea;
   border-radius: 14px;
-  height: 330px;
+  height: calc(100vh - 500px)
 }
 .listContainer {
-  width: 100%;
+  width: 53%;
   padding: 0px 16px;
   display: flex;
   flex-direction: column;
@@ -197,15 +201,14 @@
   width: 100%;
   height: 90%;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
 }
 .inputSearchContainer {
-  width: 31%;
+  width: 100%;
 }
 .tableProdContainer {
-  width: 69%;
-  padding: 0px 15px;
-  height: 290px;
+  width: 100%;
+  padding: 0px 10px;
   overflow-y: auto;
 }
 .tableProdContainer::-webkit-scrollbar {

@@ -53,6 +53,20 @@ namespace Repuestos_San_jorge.Services.Admin
             }
         }
 
+        public async Task<IEnumerable<Representative>> GetRepresentativesBySupplierAsync(string supplierRazonSocial)
+        {
+            var supplier = await _dbContext.Suppliers.SingleOrDefaultAsync(
+                supplier => supplier.razonSocial == supplierRazonSocial
+            );
+            if (supplier == null)
+            {
+                throw new ArgumentNullException(nameof(supplier), "El proveedor no puede ser null");
+            }
+            return await _dbContext.Representatives
+                .Where(r => r.supplierId == supplier.id)
+                .ToListAsync();
+        }
+
         public async Task<string> DeleteRepresentativeAsync(int id) // Eliminar representante
         {
             try
@@ -62,7 +76,10 @@ namespace Repuestos_San_jorge.Services.Admin
                 );
                 if (representative == null)
                 {
-                    throw new ArgumentNullException(nameof(representative), "El representante no puede ser null");
+                    throw new ArgumentNullException(
+                        nameof(representative),
+                        "El representante no puede ser null"
+                    );
                 }
                 representative.status = false;
                 await _dbContext.SaveChangesAsync();
@@ -83,7 +100,10 @@ namespace Repuestos_San_jorge.Services.Admin
                 );
                 if (representative == null)
                 {
-                    throw new ArgumentNullException(nameof(representative), "El representante no puede ser null");
+                    throw new ArgumentNullException(
+                        nameof(representative),
+                        "El representante no puede ser null"
+                    );
                 }
                 var dataUpdate = new Dictionary<string, object>();
                 foreach (var propiedad in data.GetType().GetProperties())
@@ -110,7 +130,7 @@ namespace Repuestos_San_jorge.Services.Admin
     {
         Task<string> CreateRepresentativeAsync(Representative representative);
         Task<IEnumerable<Representative>> GetRepresentativesAsync();
-
+        Task<IEnumerable<Representative>> GetRepresentativesBySupplierAsync(string supplierRazonSocial);
         Task<string> UpdateRepresentativeAsync(int id, UpdateRepresentativeDto data);
         Task<string> DeleteRepresentativeAsync(int id);
     }

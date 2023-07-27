@@ -7,9 +7,19 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { FormProvider } from "react-hook-form";
+import Spinner from "react-bootstrap/Spinner";
 
 function FormSelectProveedorComponent(props) {
-  const { proveedores, setView, methods } = props;
+  const {
+    proveedores,
+    representantes,
+    methods,
+    onSubmit,
+    fnSelect,
+    subSelectStatus,
+    infoProveedor,
+    orderState,
+  } = props;
   const navigate = useNavigate();
   return (
     <FormProvider {...methods}>
@@ -32,17 +42,17 @@ function FormSelectProveedorComponent(props) {
                     width="selectContainerMedium"
                     arrayOptions={proveedores}
                     validate={{ required: true }}
+                    fnSelect={fnSelect}
                   />
                 )}
-                {proveedores && (
-                  <CustomSelect
-                    name="represent"
-                    text="Seleccioná el representante"
-                    width="selectContainerMedium"
-                    arrayOptions={proveedores}
-                    validate={{ required: true }}
-                  />
-                )}
+                <CustomSelect
+                  active={subSelectStatus}
+                  name="represent"
+                  text="Seleccioná el representante"
+                  width="selectContainerMedium"
+                  arrayOptions={representantes}
+                  validate={{ required: true }}
+                />
               </div>
               <div className={styles.dataContainer}>
                 <Container style={{ margin: "0" }}>
@@ -50,20 +60,36 @@ function FormSelectProveedorComponent(props) {
                     <Col className={styles.colUno}>
                       <span className={styles.titleInfo}>
                         Razón social:
-                        <span className={styles.info}>Pirulino s.r.l.</span>
+                        <span className={styles.info}>
+                          {infoProveedor.razonSocial}
+                        </span>
                       </span>
                     </Col>
                     <Col className={styles.colDos}>
                       <span className={styles.titleInfo}>
                         CUIT:
-                        <span className={styles.info}>23-34766543-2</span>
+                        <span className={styles.info}>
+                          {infoProveedor.cuit}
+                        </span>
                       </span>
                     </Col>
                     <Col className={styles.colTres}>
                       <span className={styles.titleInfo}>
                         Estado:
-                        <span className={`${styles.info} ${styles.statusTrue}`}>
-                          Activo
+                        <span>
+                          {infoProveedor.status ? (
+                            <span
+                              className={`${styles.info} ${styles.statusTrue}`}
+                            >
+                              "Active"
+                            </span>
+                          ) : (
+                            <span
+                              className={`${styles.info} ${styles.statusFalse}`}
+                            >
+                              "Inactive"
+                            </span>
+                          )}
                         </span>
                       </span>
                     </Col>
@@ -73,20 +99,24 @@ function FormSelectProveedorComponent(props) {
                       <span className={styles.titleInfo}>
                         Calle:
                         <span className={styles.info}>
-                          Av. Hipólito Hirigoyen
+                          {infoProveedor.calle}
                         </span>
                       </span>
                     </Col>
                     <Col className={styles.colDos}>
                       <span className={styles.titleInfo}>
                         Altura:
-                        <span className={styles.info}>2167</span>
+                        <span className={styles.info}>
+                          {infoProveedor.altura}
+                        </span>
                       </span>
                     </Col>
                     <Col className={styles.colTres}>
                       <span className={styles.titleInfo}>
                         Localidad:
-                        <span className={styles.info}>Jose C. Paz</span>
+                        <span className={styles.info}>
+                          {infoProveedor.localidad}
+                        </span>
                       </span>
                     </Col>
                   </Row>
@@ -95,14 +125,16 @@ function FormSelectProveedorComponent(props) {
                       <span className={styles.titleInfo}>
                         Email:
                         <span className={styles.info}>
-                          ventas.pirulino@gmail.com
+                          {infoProveedor.email}
                         </span>
                       </span>
                     </Col>
                     <Col className={styles.colDos}>
                       <span className={styles.titleInfo}>
                         Teléfono:
-                        <span className={styles.info}>1123980816</span>
+                        <span className={styles.info}>
+                          {infoProveedor.telefono}
+                        </span>
                       </span>
                     </Col>
                     <Col className={styles.colTres}>
@@ -111,7 +143,9 @@ function FormSelectProveedorComponent(props) {
                         <span
                           className={`${styles.info} ${styles.statusFalse}`}
                         >
-                          $849725.00
+                          {infoProveedor.currentAcount
+                            ? `$ ${infoProveedor.currentAcount.resume}`
+                            : "$"}
                         </span>
                       </span>
                     </Col>
@@ -125,18 +159,7 @@ function FormSelectProveedorComponent(props) {
                 <span className={styles.titleInfo}>
                   Comentarios:
                   <span className={styles.info}>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Deserunt, veniam? Impedit quam, nam odit sed nemo est
-                    pariatur sint vero assumenda in quod, minima exercitationem
-                    commodi quasi provident consequuntur repellat? Lorem ipsum
-                    dolor sit amet consectetur adipisicing elit. Deserunt,
-                    veniam? Impedit quam, nam odit sed nemo est pariatur sint
-                    vero assumenda in quod, minima exercitationem commodi quasi
-                    provident consequuntur repellat? Lorem ipsum dolor sit amet
-                    consectetur adipisicing elit. Deserunt, veniam? Impedit
-                    quam, nam odit sed nemo est pariatur sint vero assumenda in
-                    quod, minima exercitationem commodi quasi provident
-                    consequuntur repellat?
+                    {infoProveedor.comentarios}
                   </span>
                 </span>
               </div>
@@ -154,11 +177,13 @@ function FormSelectProveedorComponent(props) {
             </Button>
             <Button
               className={`${styles.buttonStyle} ${styles.buttonStyleNext}`}
-              onClick={() => {
-                setView("Productos");
-              }}
+              onClick={methods.handleSubmit(onSubmit)}
             >
-              Siguiente
+              {!orderState.loading ? (
+                "Siguiente"
+              ) : (
+                <Spinner animation="border" variant="light" size="sm" />
+              )}
             </Button>
           </div>
         </div>

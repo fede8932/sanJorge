@@ -8,6 +8,9 @@ import tableReducer from "./tableItems"
 import brandReducer from "./brand"
 import productReducer from "./product"
 import searchBrandReducer from "./searchBrands"
+import representativesReducer from "./representative"
+import infoSupplierReducer from "./infoSupplier"
+import newBuyOrderReducer from "./newOrder"
 
 import userSlice from "./user";
 
@@ -23,6 +26,9 @@ const store = configureStore({
     brand: brandReducer,
     product: productReducer,
     searchBrand: searchBrandReducer,
+    representatives: representativesReducer,
+    infoSupplier: infoSupplierReducer,
+    newBuyOrder: newBuyOrderReducer,
   },
 });
 

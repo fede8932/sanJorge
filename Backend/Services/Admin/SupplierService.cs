@@ -114,9 +114,9 @@ namespace Repuestos_San_jorge.Services.Admin
         {
             try
             {
-                var supplier = await _dbContext.Suppliers.SingleOrDefaultAsync(
-                    supplier => supplier.razonSocial == razonSocial
-                );
+                var supplier = await _dbContext.Suppliers
+                    .Include(s => s.currentAcount)
+                    .SingleOrDefaultAsync(supplier => supplier.razonSocial == razonSocial);
                 if (supplier == null)
                 {
                     throw new ArgumentNullException(
@@ -169,7 +169,6 @@ namespace Repuestos_San_jorge.Services.Admin
     {
         Task<int> CreateSupplierAsync(Supplier supplier);
         Task<IEnumerable<Supplier>> GetSuppliersAsync();
-
         Task<string> UpdateSupplierAsync(int id, UpdateSupplierDto data);
         Task<string> DeleteSupplierAsync(int id);
         Task<Supplier> SupplierAsync(string razonSocial);

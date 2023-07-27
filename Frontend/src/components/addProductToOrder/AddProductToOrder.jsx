@@ -9,7 +9,7 @@ function AddProductToOrder(props) {
   return (
     <FormProvider {...methods}>
       <form className={styles.addProductContainer}>
-        <div>
+        <div className={styles.tableProdContainerPrinc}>
           <div className={styles.searchContainer}>
             <span className={styles.subTitle}>Buscador de productos</span>
             <div className={styles.searchTableContainer}>

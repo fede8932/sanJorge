@@ -3,7 +3,7 @@ import styles from "./customSelect.module.css";
 import { useFormContext, Controller } from "react-hook-form";
 
 function CustomSelect(props) {
-  const { text, arrayOptions, width, name, validate } = props;
+  const { text, arrayOptions, width, name, validate, active, fnSelect } = props;
   const {
     control,
     formState: { errors },
@@ -17,12 +17,16 @@ function CustomSelect(props) {
       rules={validate}
       render={({ field }) => (
         <select
+          disabled={active == undefined ? false : active}
           className={`form-select ${styles.selectContainer} ${styles[width]}`}
           {...field}
           onChange={(e) => {
             field.onChange(e); // Asegurarse de que el controlador reciba el evento
             const selectedValue = e.target.value;
-            console.log(selectedValue); // Llamar a la función onSelectChange con el valor seleccionado
+            // console.log(selectedValue);
+            if(fnSelect){
+              fnSelect(e.target.value)
+            }
           }}
         >
           <option value="" disabled>

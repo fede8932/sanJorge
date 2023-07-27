@@ -24,12 +24,12 @@ namespace Repuestos_San_jorge.Controllers.Admin
             _purchaseOrderItemService = purchaseOrderItemService;
         }
 
-        [HttpPost("{supplierId}")]
-        public async Task<IActionResult> CreateOrder(int supplierId)
+        [HttpPost("{supplierRazonSocial}")]
+        public async Task<IActionResult> CreateOrder(string supplierRazonSocial)
         {
             try
             {
-                var result = await _purchaseOrderService.CreatePurchaseOrderAsync(supplierId);
+                var result = await _purchaseOrderService.CreatePurchaseOrderAsync(supplierRazonSocial);
                 return Ok(result);
             }
             catch (Exception ex)

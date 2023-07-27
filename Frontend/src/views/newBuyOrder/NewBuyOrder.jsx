@@ -6,14 +6,7 @@ import FormSelectProveedorContainer from "../../containers/FormSelectProveedorCo
 import FindBuyOrderContainer from "../../containers/FindBuyOrderContainer";
 
 function NewBuyOrder() {
-  const [viewActive, setViewActive] = useState("General");
-  console.log(viewActive);
-  const arrayPrueba = [
-    { text: "Damian Cano", value: 1 },
-    { text: "Romina Gutierrez", value: 2 },
-    { text: "Fernando Lopez", value: 3 },
-  ]; //los que esten asociados no deben aparecer
-
+  const [viewActive, setViewActive] = useState("Productos");
   return (
     <div className={styles.addUserContainer}>
       <h6 className={styles.formTitle}>Crear orden de compra</h6>
