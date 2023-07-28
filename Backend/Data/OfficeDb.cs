@@ -29,6 +29,7 @@ namespace Repuestos_San_jorge.Data
         public DbSet<PointOfSale> PointOfSales => Set<PointOfSale>();
         public DbSet<ControlOrder> ControlOrders => Set<ControlOrder>();
         public DbSet<Voucher> Vouchers => Set<Voucher>();
+        public DbSet<Price> Prices => Set<Price>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -158,6 +159,11 @@ namespace Repuestos_San_jorge.Data
                 .HasOne(brandProduct => brandProduct.stock)
                 .WithOne()
                 .HasForeignKey<BrandProduct>(brandProduct => brandProduct.stockId);
+            modelBuilder
+                .Entity<BrandProduct>()
+                .HasOne(brandProduct => brandProduct.price)
+                .WithOne()
+                .HasForeignKey<BrandProduct>(brandProduct => brandProduct.priceId);
             // modelBuilder
             //     .Entity<BrandProduct>()
             //     .HasKey(brandProduct => new { brandProduct.brandId, brandProduct.productId });

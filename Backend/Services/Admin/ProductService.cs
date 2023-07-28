@@ -17,7 +17,7 @@ namespace Repuestos_San_jorge.Services.Admin
         }
 
         public async Task<string> CreateProductAsync(
-            Product product,
+            CreateProductRequestDto createProduct,
             int brandId,
             int? stock,
             int? stockMin
@@ -35,11 +35,13 @@ namespace Repuestos_San_jorge.Services.Admin
                 var productStock = new Stock { };
                 productStock.stock = (int)(stock == null ? 0 : stock);
                 productStock.minStock = (int)(stockMin == null ? 3 : stockMin);
-                var brandProduct = new BrandProduct { brand = brand, product = product };
+                var brandProduct = new BrandProduct { brand = brand, product = createProduct.product };
                 brandProduct.stock = productStock;
+                brandProduct.price = createProduct.price;
                 _dbContext.Stocks.Add(productStock);
+                _dbContext.Prices.Add(createProduct.price);
                 _dbContext.BrandProducts.Add(brandProduct);
-                _dbContext.Products.Add(product);
+                _dbContext.Products.Add(createProduct.product);
                 await _dbContext.SaveChangesAsync();
                 return "Registrado";
             }
@@ -77,6 +79,47 @@ namespace Repuestos_San_jorge.Services.Admin
                 return filteredProducts;
             }
             catch (Exception ex) // Es buena práctica capturar la excepción específica, en este caso "Exception"
+            {
+                // Manejar la excepción apropiadamente (registro, notificación, etc.)
+                throw new Exception("Error al obtener los productos por datos.", ex);
+            }
+        }
+
+        public async Task<GetProductsPageRequestDto> GetProductosByDatosPagesAsync(
+            string data,
+            int productosPorPagina,
+            int numeroPagina
+        )
+        {
+            try
+            {
+                int elementosSaltados = (numeroPagina - 1) * productosPorPagina;
+
+                // Filtrar los productos cuyo código o descripción contengan el valor del parámetro "data"
+                var productosFiltrados = await _dbContext.Products
+                    .Where(p => p.article.Contains(data) || p.description.Contains(data))
+                    .OrderBy(p => p.id)
+                    .Include(p => p.brandProducts) // Incluir la relación de navegación "stock"
+                    .ThenInclude(bp => bp.brand)
+                    .Include(p => p.brandProducts)
+                    .ThenInclude(bp => bp.stock)
+                    .Skip(elementosSaltados)
+                    .Take(productosPorPagina)
+                    .ToListAsync();
+
+                // Calcular el número total de productos que cumplen con el filtro
+                int totalProductos = await _dbContext.Products
+                    .Where(p => p.article.Contains(data) || p.description.Contains(data))
+                    .CountAsync();
+                int totalPaginas = (int)Math.Ceiling((double)totalProductos / productosPorPagina);
+                GetProductsPageRequestDto respuesta = new GetProductsPageRequestDto
+                {
+                    Products = productosFiltrados,
+                    Pages = totalPaginas,
+                };
+                return respuesta;
+            }
+            catch (Exception ex)
             {
                 // Manejar la excepción apropiadamente (registro, notificación, etc.)
                 throw new Exception("Error al obtener los productos por datos.", ex);
@@ -142,13 +185,16 @@ namespace Repuestos_San_jorge.Services.Admin
                     );
                 }
                 var stock = new Stock { minStock = 2, stock = 0 };
+                var price = new Price { price = 0, sellPercentage = (float)(0.3), salePercentage = (float)(0.1)};
                 _dbContext.Stocks.Add(stock);
+                _dbContext.Prices.Add(price);
                 await _dbContext.SaveChangesAsync();
                 var brandProduct = new BrandProduct
                 {
                     brand = brand,
                     product = product,
-                    stockId = stock.id
+                    stockId = stock.id,
+                    priceId = price.id
                 };
                 _dbContext.BrandProducts.Add(brandProduct);
                 await _dbContext.SaveChangesAsync();
@@ -211,8 +257,13 @@ namespace Repuestos_San_jorge.Services.Admin
 
     public interface IProductService
     {
-        Task<string> CreateProductAsync(Product product, int brandId, int? stock, int? stockMin);
+        Task<string> CreateProductAsync(CreateProductRequestDto product, int brandId, int? stock, int? stockMin);
         Task<IEnumerable<Product>> GetProductsAsync();
+        Task<GetProductsPageRequestDto>  GetProductosByDatosPagesAsync(
+            string data,
+            int productosPorPagina,
+            int numeroPagina
+        );
         Task<IEnumerable<Product>> GetProductsByDataAsync(string data);
         Task<string> UpdateProductAsync(int id, UpdateProductDto data);
         Task<string> AddBrandToProductAsync(int productId, int brandId);

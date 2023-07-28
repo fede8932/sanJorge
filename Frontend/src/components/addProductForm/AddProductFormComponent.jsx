@@ -80,9 +80,9 @@ function AddProductFormComponent(props) {
                 validate={{ required: true }}
               />
               <CustomInput
-                name="costProcent"
+                name="sellProcent"
                 width="extraSmall"
-                placeholder="Porcentaje de costo"
+                placeholder="Por. Venta"
                 icon="fas fa-percentage"
                 type="number"
                 min="-100"
@@ -91,9 +91,9 @@ function AddProductFormComponent(props) {
                 validate={{ required: true }}
               />
               <CustomInput
-                name="sellProcent"
+                name="saleProcent"
                 width="extraSmall"
-                placeholder="Porcentaje de venta"
+                placeholder="Por. Oferta"
                 icon="fas fa-percentage"
                 type="number"
                 min="-100"

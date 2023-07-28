@@ -10,7 +10,7 @@ function CustomInput(props) {
     formState: { errors },
   } = useFormContext();
   return (
-    <div style={{marginBottom: "15px"}} className={`${styles[width]}`}>
+    <div style={{ marginBottom: "15px" }} className={`${styles[width]}`}>
       <div
         onBlur={() => {
           setClassDivContainer("inputContainer");
@@ -27,7 +27,9 @@ function CustomInput(props) {
           {...props}
         />
       </div>
-      <div className={styles.errorContainer}>{errors[name] && <span>El campo es obligatorio</span>}</div>
+      <div className={styles.errorContainer}>
+        {errors[name] && <span>El campo es obligatorio</span>}
+      </div>
     </div>
   );
 }

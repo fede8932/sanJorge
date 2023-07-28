@@ -11,6 +11,7 @@ import searchBrandReducer from "./searchBrands"
 import representativesReducer from "./representative"
 import infoSupplierReducer from "./infoSupplier"
 import newBuyOrderReducer from "./newOrder"
+import productPagesReducer from "./productPageList"
 
 import userSlice from "./user";
 
@@ -29,6 +30,7 @@ const store = configureStore({
     representatives: representativesReducer,
     infoSupplier: infoSupplierReducer,
     newBuyOrder: newBuyOrderReducer,
+    productByPages: productPagesReducer
   },
 });
 

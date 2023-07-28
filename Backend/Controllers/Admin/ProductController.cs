@@ -20,7 +20,7 @@ namespace Repuestos_San_jorge.Controllers.Admin
 
         [HttpPost]
         public async Task<IActionResult> CreateProduct(
-            [FromBody] Product product,
+            [FromBody] CreateProductRequestDto product,
             [FromQuery] int brandId,
             [FromQuery] int stock,
             [FromQuery] int stockMin
@@ -116,6 +116,22 @@ namespace Repuestos_San_jorge.Controllers.Admin
             try
             {
                 var result = await _productService.GetProductsByDataAsync(data);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
+
+        [HttpGet("search/prod")]
+        public async Task<ActionResult> SearchProductByDataPage([FromQuery] string data, [FromQuery] int cant, [FromQuery] int page)
+        {
+            try
+            {
+                var result = await _productService.GetProductosByDatosPagesAsync(data, cant, page);
+                Console.WriteLine(result);
                 return Ok(result);
             }
             catch (Exception ex)

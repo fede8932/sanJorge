@@ -31,6 +31,8 @@ namespace Repuestos_San_jorge.Services.Admin
                 var brandProduct = await _dbContext.BrandProducts
                     .Include(brandProduct => brandProduct.product)
                     .Include(brandProduct => brandProduct.brand)
+                    .Include(brandProduct => brandProduct.price)
+                    .Include(brandProduct => brandProduct.stock)
                     .FirstOrDefaultAsync(
                         brandProduct =>
                             brandProduct.brandId == brandId && brandProduct.productId == productId
@@ -42,14 +44,14 @@ namespace Repuestos_San_jorge.Services.Admin
                         "La orden o marca/producto no puede ser null"
                     );
                 }
-                if (order.status == PurchaseOrderStatusType.Open)
+                if (order.status == PurchaseOrderStatusType.Open && brandProduct.stock.stock >= cantidad)
                 {
                     var purchaseOrderItem = new PurchaseOrderItem
                     {
                         amount = cantidad,
                         salePrice =
-                            brandProduct.product.listPrice
-                            * (1 - brandProduct.product.costPercentage),
+                            brandProduct.price.endPrice
+                            * (1 - brandProduct.price.salePercentage),
                         purchaseOrder = order,
                         product = brandProduct.product,
                     };

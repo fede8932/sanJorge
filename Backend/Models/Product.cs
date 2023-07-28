@@ -14,15 +14,6 @@ namespace Repuestos_San_jorge.Models
         [StringLength(300)]
         public string description { get; set; }
 
-        [Required]
-        public float listPrice { get; set; }
-
-        [Required]
-        public float costPercentage { get; set; }
-
-        [Required]
-        public float salePercentage { get; set; }
-
         public ICollection<PurchaseOrderItem>? purchaseOrderItems { get; set; }
 
         public virtual ICollection<BrandProduct>? brandProducts { get; set; }
