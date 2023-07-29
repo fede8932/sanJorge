@@ -11,8 +11,11 @@ namespace Repuestos_San_jorge.Models
         [Required]
         public float price { get; set; }
 
-        [Required]
-        public float endPrice { get; set; }
+        [NotMapped]
+        public float endPrice
+        {
+            get { return (float)(price * 1.21); }
+        }
 
         [Required]
         public float sellPercentage { get; set; }
@@ -21,10 +24,5 @@ namespace Repuestos_San_jorge.Models
         public float salePercentage { get; set; }
 
         public BrandProduct? brandProduct { get; set; }
-
-        public Price()
-        {
-            endPrice = (float)(price * 1.21);
-        }
     }
 }

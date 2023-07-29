@@ -19,14 +19,9 @@ namespace Repuestos_San_jorge.Models
 
         [Required]
         public int stockId { get; set; }
-
-        [ForeignKey("stockId")]
         public Stock stock { get; set; }
-
         [Required]
         public int priceId { get; set; }
-
-        [ForeignKey("priceId")]
         public Price price { get; set; }
     }
 }

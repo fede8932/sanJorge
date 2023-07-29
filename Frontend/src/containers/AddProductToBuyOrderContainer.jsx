@@ -1,23 +1,21 @@
 import React from "react";
 import AddProductToOrder from "../components/addProductToOrder/AddProductToOrder";
 import { useForm } from "react-hook-form";
-import { searchProductPageRequest } from "../redux/productPageList";
+import { searchProductRequest } from "../redux/product";
 import { useDispatch, useSelector } from "react-redux";
 
 function AddProductToBuyOrderContainer(props) {
   const methods = useForm();
   const dispatch = useDispatch();
-  const productPages = useSelector((state) => state.productByPages);
-  const searchProduct = (data) => {
-    data.cant = 8;
-    data.page = 1;
-    dispatch(searchProductPageRequest(data));
+  const productPages = useSelector((state) => state.product);
+  const searchProd = (data) => {
+    dispatch(searchProductRequest(data.dataSearch));
   };
   return (
     <AddProductToOrder
       {...props}
       methods={methods}
-      onSubmit={searchProduct}
+      onSubmit={searchProd}
       productPages={productPages}
     />
   );

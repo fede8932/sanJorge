@@ -224,10 +224,10 @@
 .tableProdContainer {
   width: 100%;
   padding: 0px 10px;
-  height: 405px;
-  /* overflow-y: auto; */
+  height: 450px;
+  overflow-y: auto;
 }
-/* .tableProdContainer::-webkit-scrollbar {
+.tableProdContainer::-webkit-scrollbar {
   width: 4px;
   border-radius: 2px;
 }
@@ -241,7 +241,7 @@
 
 .tableProdContainer::-webkit-scrollbar-thumb:hover {
   background-color: #e7e5ec;
-} */
+}
 .pagContainer{
   width: 100%;
   display: flex;

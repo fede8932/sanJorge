@@ -74,6 +74,8 @@ namespace Repuestos_San_jorge.Services.Admin
                     .ThenInclude(bp => bp.brand)
                     .Include(p => p.brandProducts)
                     .ThenInclude(bp => bp.stock)
+                    .Include(p => p.brandProducts)
+                    .ThenInclude(bp => bp.price)
                     .ToListAsync();
 
                 return filteredProducts;
@@ -103,6 +105,8 @@ namespace Repuestos_San_jorge.Services.Admin
                     .ThenInclude(bp => bp.brand)
                     .Include(p => p.brandProducts)
                     .ThenInclude(bp => bp.stock)
+                    .Include(p => p.brandProducts)
+                    .ThenInclude(bp => bp.price)
                     .Skip(elementosSaltados)
                     .Take(productosPorPagina)
                     .ToListAsync();
@@ -194,7 +198,7 @@ namespace Repuestos_San_jorge.Services.Admin
                     brand = brand,
                     product = product,
                     stockId = stock.id,
-                    priceId = price.id
+                    price = price
                 };
                 _dbContext.BrandProducts.Add(brandProduct);
                 await _dbContext.SaveChangesAsync();

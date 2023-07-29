@@ -1,15 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./customTable.module.css";
 import { Table } from "semantic-ui-react";
+import IconButton from "../../commonds/iconButton/IconButon";
 
 const CustomTable = (props) => {
-  let { colum, rows, color } = props;
-  const emptyRows = new Array(8 - rows.length).fill("");
-  rows = [...rows, ...emptyRows];
-  console.log("row", rows)
-  //yo tendria que buscar brandProduct cuando productId = id de producto
+  let { colum, products, color, fnInfo, fnAdd } = props;
   return (
-    <Table color={color} key={color} styles={{ zIndez: 10 }}>
+    <Table color={color} key={color}>
       <Table.Header>
         <Table.Row>
           {colum.map((dataColumn, i) => (
@@ -20,27 +17,37 @@ const CustomTable = (props) => {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {rows.map((row, i) => {
-          if (row === "")
-            return (
-              <Table.Row key={i} style={{ height: "40px", maxHeight: "40px"}}>
-                <Table.Cell></Table.Cell>
-                <Table.Cell></Table.Cell>
-                <Table.Cell></Table.Cell>
-                <Table.Cell></Table.Cell>
-                <Table.Cell></Table.Cell>
-              </Table.Row>
-            );
-          return row.brandProducts.map((bp) => (
-            <Table.Row key={i} style={{ height: "40px", maxHeight: "40px"}}>
-              <Table.Cell>{row.article}</Table.Cell>
-              <Table.Cell>{bp.brand.name}</Table.Cell>
-              <Table.Cell>sdfh</Table.Cell>
-              <Table.Cell>dsfhsdh</Table.Cell>
-              <Table.Cell>ACCIONES</Table.Cell>
-            </Table.Row>
-          ));
-        })}
+        {products.length > 0
+          ? products.map((p, i) =>
+              p.brandProducts.map((bp, i) => (
+                <Table.Row
+                  key={i}
+                  style={{ height: "40px", maxHeight: "40px" }}
+                >
+                  <Table.Cell>{p.article}</Table.Cell>
+                  <Table.Cell>{bp.brand.name}</Table.Cell>
+                  <Table.Cell>{bp.price.price}</Table.Cell>
+                  <Table.Cell>{bp.stock.stock}</Table.Cell>
+                  <Table.Cell>
+                    <div className={styles.butContainer}>
+                      <IconButton
+                        icon="fa-regular fa-circle-question"
+                        iconInitialStyle="iconStyleGrey"
+                        fn={() => {
+                          console.log("click");
+                        }}
+                      />
+                      <IconButton
+                        icon="fa-solid fa-arrow-right-to-bracket"
+                        iconInitialStyle="iconStyleBlue"
+                        fn={fnAdd(p.id, bp.brand.id)}
+                      />
+                    </div>
+                  </Table.Cell>
+                </Table.Row>
+              ))
+            )
+          : null}
       </Table.Body>
     </Table>
   );

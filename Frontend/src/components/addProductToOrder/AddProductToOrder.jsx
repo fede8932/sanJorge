@@ -5,10 +5,9 @@ import Spinner from "react-bootstrap/esm/Spinner";
 import { FormProvider } from "react-hook-form";
 import CustomInput from "../../commonds/input/CustomInput";
 import CustomTable from "../../commonds/table/CustomTable";
-import CustomPagination from "../../commonds/pagination/CustomPagination";
 
 function AddProductToOrder(props) {
-  const { setView, methods, onSubmit, productPages } = props;
+  const { setView, methods, onSubmit, productPages, fnAdd } = props;
   return (
     <FormProvider {...methods}>
       <form className={styles.addProductContainer}>
@@ -45,7 +44,8 @@ function AddProductToOrder(props) {
               <div className={styles.tableProdContainer}>
                 <CustomTable
                   color="blue"
-                  rows={productPages.data.products}
+                  products={productPages.data}
+                  fnAdd={fnAdd}
                   colum={[
                     { title: "Artículo", width: "40%" },
                     { title: "Marca", width: "20%" },
@@ -54,9 +54,6 @@ function AddProductToOrder(props) {
                     { title: "Acción", width: "10%" },
                   ]}
                 />
-                <div className={styles.pagContainer}>
-                  <CustomPagination />
-                </div>
               </div>
             </div>
           </div>
@@ -97,7 +94,7 @@ function AddProductToOrder(props) {
             <div className={styles.listContainer}>
               <span className={styles.subTitle}>Productos en orden</span>
               <div className={styles.prodToOrderContainer}>
-                <CustomTable
+                {/* <CustomTable
                   color="teal"
                   rows={["", "", "", "", "", "", ""]}
                   colum={[
@@ -108,10 +105,7 @@ function AddProductToOrder(props) {
                     { title: "Subtotal", width: "10%" },
                     { title: "Acción", width: "10%" },
                   ]}
-                />
-                <div className={styles.pagContainer}>
-                  <CustomPagination />
-                </div>
+                /> */}
               </div>
             </div>
           </div>

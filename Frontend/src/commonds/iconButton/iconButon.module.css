@@ -1,0 +1,12 @@
+.butStyle {
+  all: unset;
+  height: 20px;
+}
+.iconStyleGrey {
+  color: #5F655C;
+  font-size: 17px;
+}
+.iconStyleBlue {
+  color: #2185d0;
+  font-size: 17px;
+}
