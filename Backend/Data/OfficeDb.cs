@@ -137,6 +137,11 @@ namespace Repuestos_San_jorge.Data
                 .HasForeignKey(purchaseOrderItem => purchaseOrderItem.purchaseOrderId);
             modelBuilder
                 .Entity<PurchaseOrderItem>()
+                .HasOne(purchaseOrderItem => purchaseOrderItem.brand)
+                .WithMany(brand => brand.purchaseOrderItems)
+                .HasForeignKey(purchaseOrderItem => purchaseOrderItem.brandId);
+            modelBuilder
+                .Entity<PurchaseOrderItem>()
                 .HasOne(purchaseOrderItem => purchaseOrderItem.product)
                 .WithMany(product => product.purchaseOrderItems)
                 .HasForeignKey(purchaseOrderItem => purchaseOrderItem.productId);
@@ -170,6 +175,11 @@ namespace Repuestos_San_jorge.Data
                 .HasOne(currentAcount => currentAcount.supplier)
                 .WithOne(supplier => supplier.currentAcount)
                 .HasForeignKey<Supplier>(supplier => supplier.currentAcountId);
+            modelBuilder
+                .Entity<PurchaseOrder>()
+                .HasOne(purchaseOrder => purchaseOrder.supplier)
+                .WithMany(supplier => supplier.purchaseOrders)
+                .HasForeignKey(purchaseOrder => purchaseOrder.supplierId);
             modelBuilder
                 .Entity<PurchaseOrder>()
                 .HasOne(purchaseOrder => purchaseOrder.Voucher)

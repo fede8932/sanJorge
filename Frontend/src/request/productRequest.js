@@ -25,10 +25,9 @@ export const createProduct = async (productData) => {
 };
 
 export const searchProduct = async (productData) => {
-  console.log(productData);
   try {
     const products = await axios.get(
-      `${apiUrl}/api/productos/search?data=${productData}`
+      `${apiUrl}/api/productos/search?data=${productData.dataSearch}&supplierId=${productData.supplierId}`
     );
     return products.data;
   } catch (error) {
@@ -36,6 +35,16 @@ export const searchProduct = async (productData) => {
   }
 };
 export const searchProductPage = async (productData) => {
+  try {
+    const { data } = await axios.get(
+      `${apiUrl}/api/productos/search/prod?data=${productData.dataSearch}&cant=${productData.cant}&page=${productData.page}`
+    );
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const searchOneProduct = async (productData) => {
   try {
     const { data } = await axios.get(
       `${apiUrl}/api/productos/search/prod?data=${productData.dataSearch}&cant=${productData.cant}&page=${productData.page}`

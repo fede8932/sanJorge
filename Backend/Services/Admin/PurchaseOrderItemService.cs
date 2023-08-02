@@ -16,7 +16,7 @@ namespace Repuestos_San_jorge.Services.Admin
             _dbContext = dbContext;
         }
 
-        public async Task<string> AddItemToOrder(
+        public async Task<ICollection<PurchaseOrderItem>> AddItemToOrder(
             int purchaseOrderId,
             int productId,
             int brandId,
@@ -44,29 +44,39 @@ namespace Repuestos_San_jorge.Services.Admin
                         "La orden o marca/producto no puede ser null"
                     );
                 }
-                if (order.status == PurchaseOrderStatusType.Open && brandProduct.stock.stock >= cantidad)
+                if (
+                    order.status == PurchaseOrderStatusType.Open
+                    && brandProduct.stock.stock >= cantidad
+                )
                 {
                     var purchaseOrderItem = new PurchaseOrderItem
                     {
                         amount = cantidad,
-                        salePrice =
-                            brandProduct.price.endPrice
-                            * (1 - brandProduct.price.salePercentage),
+                        buyPrice = brandProduct.price.price,
                         purchaseOrder = order,
                         product = brandProduct.product,
+                        brand = brandProduct.brand,
                     };
                     order.total =
-                        order.total + (purchaseOrderItem.amount * purchaseOrderItem.salePrice);
+                        order.total + (purchaseOrderItem.amount * purchaseOrderItem.buyPrice);
                     _dbContext.PurchaseOrderItems.Add(purchaseOrderItem);
                     _dbContext.PurchaseOrders.Update(order);
                     await _dbContext.SaveChangesAsync();
-                    return "Registrado";
+                    var orderItems = await _dbContext.PurchaseOrderItems
+                        .Include(item => item.product)
+                        .Include(item => item.brand)
+                        .ThenInclude(b => b.brandProducts)
+                        .ThenInclude(bp => bp.price)
+                        .Include(item => item.brand)
+                        .ThenInclude(b => b.brandProducts)
+                        .ThenInclude(bp => bp.stock)
+                        .Where(i => i.purchaseOrderId == order.id)
+                        .ToListAsync();
+                    return orderItems;
                 }
                 else
                 {
-                    throw new Exception(
-                        "No es posible agregar items a la orden"
-                    );
+                    throw new Exception("No es posible agregar items a la orden");
                 }
             }
             catch
@@ -99,7 +109,10 @@ namespace Repuestos_San_jorge.Services.Admin
                         "El item pertenece a una orden que no esta abierta"
                     );
                 }
+                var order = orderItem.purchaseOrder;
+                order.total = order.total - orderItem.buyPrice * orderItem.amount;
                 _dbContext.PurchaseOrderItems.Remove(orderItem);
+                _dbContext.PurchaseOrders.Update(order);
                 await _dbContext.SaveChangesAsync();
                 return "Eliminado";
             }
@@ -107,6 +120,21 @@ namespace Repuestos_San_jorge.Services.Admin
             {
                 throw;
             }
+        }
+
+        public async Task<ICollection<PurchaseOrderItem>> GetItemByOrder(int id)
+        {
+            var orderItems = await _dbContext.PurchaseOrderItems
+                // .Include(item => item.product)
+                // .Include(item => item.brand)
+                // .ThenInclude(b => b.brandProducts)
+                // .ThenInclude(bp => bp.price)
+                // .Include(item => item.brand)
+                // .ThenInclude(b => b.brandProducts)
+                // .ThenInclude(bp => bp.stock)
+                .Where(i => i.purchaseOrderId == id)
+                .ToListAsync();
+            return orderItems;
         }
 
         public async Task<string> UpdateCantToOrderItem(int id, int cantidad)
@@ -133,12 +161,60 @@ namespace Repuestos_San_jorge.Services.Admin
                         "El item pertenece a una orden que no esta abierta"
                     );
                 }
-                if(orderItem.purchaseOrder?.status == PurchaseOrderStatusType.Open)
+                if (orderItem.purchaseOrder?.status == PurchaseOrderStatusType.Open)
                 {
-                orderItem.amount = cantidad;
-                _dbContext.PurchaseOrderItems.Update(orderItem);
-                await _dbContext.SaveChangesAsync();
-                return "Cantidad actualizada";
+                    var order = orderItem.purchaseOrder;
+                    order.total = order.total + orderItem.buyPrice * (cantidad - orderItem.amount);
+                    orderItem.amount = cantidad;
+                    _dbContext.PurchaseOrderItems.Update(orderItem);
+                    _dbContext.PurchaseOrders.Update(order);
+                    await _dbContext.SaveChangesAsync();
+                    return "Cantidad actualizada";
+                }
+                else
+                {
+                    throw new Exception("No se puede actualizar una orden que no esta abierta");
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<string> UpdatePriceToOrderItem(int id, float price)
+        {
+            try
+            {
+                var orderItem = await _dbContext.PurchaseOrderItems
+                    .Include(PurchaseOrderItems => PurchaseOrderItems.purchaseOrder)
+                    .FirstOrDefaultAsync(PurchaseOrderItems => PurchaseOrderItems.id == id);
+                if (orderItem == null)
+                {
+                    throw new ArgumentNullException(
+                        nameof(orderItem),
+                        "No existe el item en los registros"
+                    );
+                }
+                if (
+                    orderItem.purchaseOrder != null
+                    && orderItem.purchaseOrder.status != Dto.Enums.PurchaseOrderStatusType.Open
+                )
+                {
+                    throw new ArgumentNullException(
+                        nameof(orderItem),
+                        "El item pertenece a una orden que no esta abierta"
+                    );
+                }
+                if (orderItem.purchaseOrder?.status == PurchaseOrderStatusType.Open)
+                {
+                    var order = orderItem.purchaseOrder;
+                    order.total = order.total + orderItem.amount * (price - orderItem.buyPrice);
+                    orderItem.buyPrice = price;
+                    _dbContext.PurchaseOrderItems.Update(orderItem);
+                    _dbContext.PurchaseOrders.Update(order);
+                    await _dbContext.SaveChangesAsync();
+                    return "Cantidad actualizada";
                 }
                 else
                 {
@@ -154,8 +230,15 @@ namespace Repuestos_San_jorge.Services.Admin
 
     public interface IPurchaseOrderItemService
     {
-        Task<string> AddItemToOrder(int purchaseOrderId, int productId, int brandId, int cantidad);
+        Task<ICollection<PurchaseOrderItem>> AddItemToOrder(
+            int purchaseOrderId,
+            int productId,
+            int brandId,
+            int cantidad
+        );
         Task<string> DeleteItemToOrder(int id);
+        Task<ICollection<PurchaseOrderItem>> GetItemByOrder(int id);
         Task<string> UpdateCantToOrderItem(int id, int cantidad);
+        Task<string> UpdatePriceToOrderItem(int id, float price);
     }
 }

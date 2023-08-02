@@ -6,7 +6,7 @@ import FormSelectProveedorContainer from "../../containers/FormSelectProveedorCo
 import FindBuyOrderContainer from "../../containers/FindBuyOrderContainer";
 
 function NewBuyOrder() {
-  const [viewActive, setViewActive] = useState("Productos");
+  const [viewActive, setViewActive] = useState("General");
   return (
     <div className={styles.addUserContainer}>
       <h6 className={styles.formTitle}>Crear orden de compra</h6>

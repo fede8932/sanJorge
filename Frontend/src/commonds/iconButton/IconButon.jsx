@@ -1,14 +1,19 @@
 import React from "react";
 import styles from "./iconButon.module.css";
-import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const IconButton = (props) => {
-  const { icon, iconInitialStyle, fn } = props;
+  const { icon, iconInitialStyle, fn, product, type } = props;
+  const listProduct = useSelector((state) => state.listOrderItems);
+  const data = {
+    orderItemId: product.product.id,
+    orderItems: listProduct.data,
+  };
   return (
     <button
       onClick={(event) => {
         event.preventDefault();
-        fn();
+        type == "delete" ? fn(data) : fn(product);
       }}
       className={styles.butStyle}
     >

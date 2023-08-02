@@ -14,9 +14,9 @@ namespace Repuestos_San_jorge.Models
         [StringLength(300)]
         public string description { get; set; }
 
-        public ICollection<PurchaseOrderItem>? purchaseOrderItems { get; set; }
-
         public virtual ICollection<BrandProduct>? brandProducts { get; set; }
+
+        public ICollection<PurchaseOrderItem>? purchaseOrderItems { get; set; }
 
         // public Stock? stock { get; set; }
     }

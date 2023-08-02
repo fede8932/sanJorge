@@ -18,11 +18,5 @@ namespace Repuestos_San_jorge.Models
 
         [ForeignKey("brandId")]
         public Brand brand { get; set; }
-
-        // public BrandSupplier()
-        // {
-        //     supplier = new Supplier();
-        //     brand = new Brand();
-        // }
     }
 }

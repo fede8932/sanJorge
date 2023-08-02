@@ -18,5 +18,7 @@ namespace Repuestos_San_jorge.Models
 
         public List<BrandProduct>? brandProducts { get; set; }
 
+        public ICollection<PurchaseOrderItem>? purchaseOrderItems { get; set; }
+
     }
 }

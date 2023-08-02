@@ -7,7 +7,19 @@ import CustomInput from "../../commonds/input/CustomInput";
 import CustomTable from "../../commonds/table/CustomTable";
 
 function AddProductToOrder(props) {
-  const { setView, methods, onSubmit, productPages, fnAdd } = props;
+  const {
+    setView,
+    methods,
+    onSubmit,
+    productPages,
+    fnAdd,
+    fnInfo,
+    fnDelete,
+    fnUpdate,
+    fnPrUpdate,
+    listOrder,
+    order,
+  } = props;
   return (
     <FormProvider {...methods}>
       <form className={styles.addProductContainer}>
@@ -43,9 +55,11 @@ function AddProductToOrder(props) {
               </div>
               <div className={styles.tableProdContainer}>
                 <CustomTable
+                  type="search"
                   color="blue"
                   products={productPages.data}
                   fnAdd={fnAdd}
+                  fnInfo={fnInfo}
                   colum={[
                     { title: "Artículo", width: "40%" },
                     { title: "Marca", width: "20%" },
@@ -64,11 +78,15 @@ function AddProductToOrder(props) {
                 <div className={styles.infoProvContainer}>
                   <span className={styles.labelInfoProv}>
                     Razon Social:
-                    <span className={styles.textInfoProv}>Pirulino S.A.</span>
+                    <span className={styles.textInfoProv}>
+                      {order.data.supplier.razonSocial}
+                    </span>
                   </span>
                   <span className={styles.labelInfoProv}>
                     CUIT:
-                    <span className={styles.textInfoProv}>30-31214452-9</span>
+                    <span className={styles.textInfoProv}>
+                      {order.data.supplier.cuit}
+                    </span>
                   </span>
                   <span className={styles.labelInfoProv}>
                     Nº de compra:
@@ -78,15 +96,21 @@ function AddProductToOrder(props) {
                 <div className={styles.infoProvContainer}>
                   <div className={styles.infoCostoCont}>
                     <h6 className={styles.precioLabel}>Subtotal:</h6>
-                    <span className={styles.precioText}>$10000</span>
+                    <span
+                      className={styles.precioText}
+                    >{`$ ${order.data.total}`}</span>
                   </div>
                   <div className={styles.infoCostoCont}>
                     <h6 className={styles.precioLabel}>IVA:</h6>
-                    <span className={styles.precioText}>$2100</span>
+                    <span className={styles.precioText}>{`$ ${
+                      (order.data.total * 0.21).toFixed(2)
+                    }`}</span>
                   </div>
                   <div className={styles.infoCostoCont}>
                     <h6 className={styles.precioLabel}>Total:</h6>
-                    <span className={styles.precioText}>$12100</span>
+                    <span className={styles.precioText}>{`$ ${
+                      (order.data.total * 1.21).toFixed(2)
+                    }`}</span>
                   </div>
                 </div>
               </div>
@@ -94,9 +118,13 @@ function AddProductToOrder(props) {
             <div className={styles.listContainer}>
               <span className={styles.subTitle}>Productos en orden</span>
               <div className={styles.prodToOrderContainer}>
-                {/* <CustomTable
+                <CustomTable
+                  type="list"
+                  fnDelete={fnDelete}
                   color="teal"
-                  rows={["", "", "", "", "", "", ""]}
+                  products={listOrder}
+                  fnUpdate={fnUpdate}
+                  fnPrUpdate={fnPrUpdate}
                   colum={[
                     { title: "Artículo", width: "35%" },
                     { title: "Marca", width: "20%" },
@@ -105,7 +133,7 @@ function AddProductToOrder(props) {
                     { title: "Subtotal", width: "10%" },
                     { title: "Acción", width: "10%" },
                   ]}
-                /> */}
+                />
               </div>
             </div>
           </div>

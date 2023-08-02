@@ -111,11 +111,11 @@ namespace Repuestos_San_jorge.Controllers.Admin
         }
 
         [HttpGet("search")]
-        public async Task<ActionResult> SearchProductByData([FromQuery] string data)
+        public async Task<ActionResult> SearchProductByData([FromQuery] string data, [FromQuery] int supplierId)
         {
             try
             {
-                var result = await _productService.GetProductsByDataAsync(data);
+                var result = await _productService.GetProductsByDataAsync(data, supplierId);
                 return Ok(result);
             }
             catch (Exception ex)

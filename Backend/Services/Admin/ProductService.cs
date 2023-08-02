@@ -35,7 +35,11 @@ namespace Repuestos_San_jorge.Services.Admin
                 var productStock = new Stock { };
                 productStock.stock = (int)(stock == null ? 0 : stock);
                 productStock.minStock = (int)(stockMin == null ? 3 : stockMin);
-                var brandProduct = new BrandProduct { brand = brand, product = createProduct.product };
+                var brandProduct = new BrandProduct
+                {
+                    brand = brand,
+                    product = createProduct.product
+                };
                 brandProduct.stock = productStock;
                 brandProduct.price = createProduct.price;
                 _dbContext.Stocks.Add(productStock);
@@ -63,7 +67,7 @@ namespace Repuestos_San_jorge.Services.Admin
             }
         }
 
-        public async Task<IEnumerable<Product>> GetProductsByDataAsync(string data)
+        public async Task<IEnumerable<Product>> GetProductsByDataAsync(string data, int supplierId)
         {
             try
             {
@@ -72,11 +76,18 @@ namespace Repuestos_San_jorge.Services.Admin
                     .Where(p => p.article.Contains(data) || p.description.Contains(data))
                     .Include(p => p.brandProducts) // Incluir la relación de navegación "stock"
                     .ThenInclude(bp => bp.brand)
+                    .ThenInclude(b => b.brandSuppliers)
                     .Include(p => p.brandProducts)
                     .ThenInclude(bp => bp.stock)
                     .Include(p => p.brandProducts)
                     .ThenInclude(bp => bp.price)
                     .ToListAsync();
+                foreach (var product in filteredProducts)
+                {
+                    product.brandProducts = product.brandProducts
+                        .Where(bp => bp.brand.brandSuppliers.Any(bs => bs.supplierId == supplierId))
+                        .ToList();
+                }
 
                 return filteredProducts;
             }
@@ -189,7 +200,12 @@ namespace Repuestos_San_jorge.Services.Admin
                     );
                 }
                 var stock = new Stock { minStock = 2, stock = 0 };
-                var price = new Price { price = 0, sellPercentage = (float)(0.3), salePercentage = (float)(0.1)};
+                var price = new Price
+                {
+                    price = 0,
+                    sellPercentage = (float)(0.3),
+                    salePercentage = (float)(0.1)
+                };
                 _dbContext.Stocks.Add(stock);
                 _dbContext.Prices.Add(price);
                 await _dbContext.SaveChangesAsync();
@@ -261,14 +277,19 @@ namespace Repuestos_San_jorge.Services.Admin
 
     public interface IProductService
     {
-        Task<string> CreateProductAsync(CreateProductRequestDto product, int brandId, int? stock, int? stockMin);
+        Task<string> CreateProductAsync(
+            CreateProductRequestDto product,
+            int brandId,
+            int? stock,
+            int? stockMin
+        );
         Task<IEnumerable<Product>> GetProductsAsync();
-        Task<GetProductsPageRequestDto>  GetProductosByDatosPagesAsync(
+        Task<GetProductsPageRequestDto> GetProductosByDatosPagesAsync(
             string data,
             int productosPorPagina,
             int numeroPagina
         );
-        Task<IEnumerable<Product>> GetProductsByDataAsync(string data);
+        Task<IEnumerable<Product>> GetProductsByDataAsync(string data, int supplierId);
         Task<string> UpdateProductAsync(int id, UpdateProductDto data);
         Task<string> AddBrandToProductAsync(int productId, int brandId);
         Task<string> UpdateProductStock(int productId, int brandId, UpdateProdStockDto data);
