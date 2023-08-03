@@ -18,12 +18,12 @@ function LongTableComponent(props) {
         </thead>
         <tbody>
           {type == "product"
-            ? data.map((obj, i) =>
-                obj.brandProducts.map((brand) => (
+            ? data.map((obj) =>
+                obj.brandProducts.map((brand, i) => (
                   <tr key={i}>
                     <td>{obj.article}</td>
-                    <td>{obj.listPrice}</td>
-                    <td>{obj.listPrice * (1 + obj.salePercentage)}</td>
+                    <td>{`$ ${obj.brandProducts[i].price.price}`}</td>
+                    <td>{`$ ${obj.brandProducts[i].price.price * (1 + obj.brandProducts[i].price.sellPercentage)}`}</td>
                     <td>{brand.brand.name}</td>
                     <td>{brand.stock.stock}</td>
                     <td>

@@ -79,39 +79,19 @@ function SideBarComponent(props) {
         <h5 className={styles.sideTitle}>Administración</h5>
         <CustomAcordion
           props={{
-            textButton: "Vendedores",
-            icon01: "fa fa-tag",
+            textButton: "Usuarios",
+            icon01: "fa fa-smile",
             items: [
               {
                 textButton: "Buscar vendedor",
                 fn: () => {
-                  console.log("01");
+                  fnNavigate("search/seller");
                 },
               },
-              {
-                textButton: "Editar vendedor",
-                fn: () => {
-                  console.log("02");
-                },
-              },
-            ],
-          }}
-        />
-        <CustomAcordion
-          props={{
-            textButton: "Clientes",
-            icon01: "fa fa-smile",
-            items: [
               {
                 textButton: "Buscar cliente",
                 fn: () => {
-                  console.log("01");
-                },
-              },
-              {
-                textButton: "Editar cliente",
-                fn: () => {
-                  console.log("02");
+                  fnNavigate("search/client");
                 },
               },
             ],
@@ -125,13 +105,7 @@ function SideBarComponent(props) {
               {
                 textButton: "Buscar proveedor",
                 fn: () => {
-                  console.log("01");
-                },
-              },
-              {
-                textButton: "Editar proveedor",
-                fn: () => {
-                  console.log("02");
+                  fnNavigate("search/supplier");
                 },
               },
             ],

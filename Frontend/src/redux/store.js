@@ -13,6 +13,9 @@ import infoSupplierReducer from "./infoSupplier"
 import newBuyOrderReducer from "./newOrder"
 import productPagesReducer from "./productPageList"
 import addOrderItem from "./addOrderItems"
+import searchSellersReducer from "./searchSeller"
+import searchClientsReducer from "./searchClient"
+import searchSuppliersReducer from "./searchSupplier"
 
 import userSlice from "./user";
 
@@ -32,7 +35,10 @@ const store = configureStore({
     infoSupplier: infoSupplierReducer,
     newBuyOrder: newBuyOrderReducer,
     productByPages: productPagesReducer,
-    listOrderItems: addOrderItem
+    listOrderItems: addOrderItem,
+    searchSellers: searchSellersReducer,
+    searchClients: searchClientsReducer,
+    searchSuppliers: searchSuppliersReducer
   },
 });
 

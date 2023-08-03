@@ -41,3 +41,12 @@ export const createSellers = async (objData) => {
     throw error;
   }
 };
+
+export const getSellersByText = async (dataSearch) => {
+  try {
+    const { data } = await axios.get(`${apiUrl}/api/seller/data?text=${dataSearch.text}&by=${dataSearch.by}`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

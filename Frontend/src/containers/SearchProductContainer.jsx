@@ -3,7 +3,7 @@ import SearchProductComponent from "../components/searchProduct/SearchProductCom
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { getSupplierRequest } from "../redux/supplier";
-import { searchProductRequest } from "../redux/product";
+import { searchProductsRequest } from "../redux/product";
 
 function SearchProductContainer(props) {
   const { data } = useSelector((state) => state.supplier);
@@ -11,7 +11,7 @@ function SearchProductContainer(props) {
   const methods = useForm();
   const dispatch = useDispatch();
   const search = (data) => {
-    dispatch(searchProductRequest(data.campo));
+    dispatch(searchProductsRequest(data.campo));
   };
 
   useEffect(() => {

@@ -48,6 +48,39 @@ namespace Repuestos_San_jorge.Services.Admin
             }
         }
 
+        public async Task<IEnumerable<Seller>> GetSellersBydataAsync(string text, string by) // Listar vendedores
+        {
+            try
+            {
+                if (by == "cuil")
+                {
+                    var sellers = await _dbContext.Sellers
+                        .Where(s => s.cuil.Contains(text))
+                        .Include(s => s.user)
+                        .ToListAsync();
+                    return sellers;
+                }
+                else
+                {
+                    var users = await _dbContext.Users
+                        .Where(u => u.name.Contains(text) || u.lastName.Contains(text))
+                        .Include(u => u.seller)
+                        .ToListAsync();
+
+                    // Cargar los vendedores relacionados después de obtener los usuarios
+                    var sellers = users
+                        .Where(user => user.seller != null)
+                        .Select(user => user.seller)
+                        .ToList();
+                    return sellers;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public async Task<string> DeleteSellerAsync(int id) // desactivar vendedores
         {
             try
@@ -118,7 +151,7 @@ namespace Repuestos_San_jorge.Services.Admin
     {
         Task<string> CreateSellerAsync(Seller seller);
         Task<IEnumerable<Seller>> GetSellersAsync();
-
+        Task<IEnumerable<Seller>> GetSellersBydataAsync(string text, string by);
         Task<string> UpdateSellerAsync(int id, UpdateSellerDto data);
         Task<string> DeleteSellerAsync(int id);
     }

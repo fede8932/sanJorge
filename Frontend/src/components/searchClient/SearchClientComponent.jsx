@@ -1,13 +1,13 @@
 import React from "react";
-import styles from "./searchProduct.module.css";
+import styles from "./searchClient.module.css";
 import Button from "react-bootstrap/esm/Button";
 import CustomInput from "../../commonds/input/CustomInput";
-import LongTableContainer from "../../containers/LongTableContainer";
 import { FormProvider } from "react-hook-form";
 import Spinner from "react-bootstrap/esm/Spinner";
+import RoleTableContainer from "../../containers/RoleTableContainer";
 
-function SearchProductComponent(props) {
-  const { onSubmit, products, methods } = props;
+function SearchClientComponent(props) {
+  const { methods, onSubmit, list } = props;
   return (
     <FormProvider {...methods}>
       <form
@@ -27,8 +27,8 @@ function SearchProductComponent(props) {
                 name="campo"
                 type="text"
                 width="extraMedium"
-                placeholder="Código de artículo / Nombre / Referencia"
-                icon="fas fa-hashtag"
+                placeholder="Ingrese el cuit o razón social del cliente"
+                icon="fa-solid fa-magnifying-glass"
                 validate={{ required: true }}
               />
               <Button
@@ -41,7 +41,7 @@ function SearchProductComponent(props) {
                   marginLeft: "10px",
                 }}
               >
-                {!products.loading ? (
+                {!list.loading ? (
                   "Buscar"
                 ) : (
                   <Spinner animation="border" variant="light" size="sm" />
@@ -51,19 +51,19 @@ function SearchProductComponent(props) {
           </div>
         </div>
         <div className={styles.tableContainer}>
-          <span className={styles.subTitle}>Detalle de productos</span>
+          <span className={styles.subTitle}>Detalle de clientes</span>
           <div>
-            <LongTableContainer
+            <RoleTableContainer
               colum={[
-                "Artículo",
-                "Precio de lista",
-                "Precio de venta",
-                "Marca",
-                "Stock",
+                "ID Cliente",
+                "Razón Social",
+                "CUIL",
+                "C. Corriente",
+                "Estado",
                 "Acciones",
               ]}
-              data={products.data}
-              type="product"
+              data={list.data}
+              type="client"
             />
           </div>
         </div>
@@ -72,4 +72,4 @@ function SearchProductComponent(props) {
   );
 }
 
-export default SearchProductComponent;
+export default SearchClientComponent;

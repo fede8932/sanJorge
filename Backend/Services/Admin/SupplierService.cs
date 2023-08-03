@@ -52,6 +52,22 @@ namespace Repuestos_San_jorge.Services.Admin
             }
         }
 
+        public async Task<IEnumerable<Supplier>> GetSuppliersByDataAsync(string text) // Listar proveedores
+        {
+            try
+            {
+                var suppliers = await _dbContext.Suppliers
+                    .Where(s => s.cuit.Contains(text) || s.razonSocial.Contains(text))
+                    .Include(s => s.currentAcount)
+                    .ToListAsync();
+                return suppliers;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public async Task<string> DeleteSupplierAsync(int id) // Eliminar Proveedor
         {
             try
@@ -170,6 +186,7 @@ namespace Repuestos_San_jorge.Services.Admin
         Task<int> CreateSupplierAsync(Supplier supplier);
         Task<IEnumerable<Supplier>> GetSuppliersAsync();
         Task<string> UpdateSupplierAsync(int id, UpdateSupplierDto data);
+        Task<IEnumerable<Supplier>> GetSuppliersByDataAsync(string text);
         Task<string> DeleteSupplierAsync(int id);
         Task<Supplier> SupplierAsync(string razonSocial);
         Task<string> AddBrandToSupplierAsync(int supplierId, int brandId);

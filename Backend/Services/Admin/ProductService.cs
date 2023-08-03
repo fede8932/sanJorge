@@ -55,11 +55,21 @@ namespace Repuestos_San_jorge.Services.Admin
             }
         }
 
-        public async Task<IEnumerable<Product>> GetProductsAsync() // Listar productos
+        public async Task<IEnumerable<Product>> GetProductsAsync(string data) // Listar productos
         {
             try
             {
-                return await _dbContext.Products.ToListAsync();
+                // Filtrar los productos cuyo código o descripción contengan el valor del parámetro "data"
+                var filteredProducts = await _dbContext.Products
+                    .Where(p => p.article.Contains(data) || p.description.Contains(data))
+                    .Include(p => p.brandProducts)
+                    .ThenInclude(bp => bp.brand)
+                    .Include(p => p.brandProducts)
+                    .ThenInclude(bp => bp.stock)
+                    .Include(p => p.brandProducts)
+                    .ThenInclude(bp => bp.price)
+                    .ToListAsync();
+                return filteredProducts;
             }
             catch
             {
@@ -283,7 +293,7 @@ namespace Repuestos_San_jorge.Services.Admin
             int? stock,
             int? stockMin
         );
-        Task<IEnumerable<Product>> GetProductsAsync();
+        Task<IEnumerable<Product>> GetProductsAsync(string data);
         Task<GetProductsPageRequestDto> GetProductosByDatosPagesAsync(
             string data,
             int productosPorPagina,

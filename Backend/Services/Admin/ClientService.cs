@@ -46,12 +46,13 @@ namespace Repuestos_San_jorge.Services.Admin
                     );
                 }
                 client.seller = seller;
-                CurrentAcount currentAcount = new()
-                {
-                    acountNumber = Utils.AcountNumberGen(
-                        client.cuit.Substring(0, 1) + client.cuit.Substring(3, 4)
-                    ),
-                };
+                CurrentAcount currentAcount =
+                    new()
+                    {
+                        acountNumber = Utils.AcountNumberGen(
+                            client.cuit.Substring(0, 1) + client.cuit.Substring(3, 4)
+                        ),
+                    };
                 _dbContext.CurrentAcounts.Add(currentAcount);
                 await _dbContext.SaveChangesAsync();
                 client.currentAcountId = currentAcount.id;
@@ -69,13 +70,14 @@ namespace Repuestos_San_jorge.Services.Admin
                             "El proveedor no puede ser null"
                         );
                     }
-                    CustomerDiscount newDiscount = new()
-                    {
-                        clientId = client.id,
-                        notas = discount.notas,
-                        porcentaje = discount.porcentaje,
-                        supplierId = supplier.id,
-                    };
+                    CustomerDiscount newDiscount =
+                        new()
+                        {
+                            clientId = client.id,
+                            notas = discount.notas,
+                            porcentaje = discount.porcentaje,
+                            supplierId = supplier.id,
+                        };
                     _dbContext.CustomerDiscounts.Add(newDiscount);
                 }
                 await _dbContext.SaveChangesAsync();
@@ -92,6 +94,23 @@ namespace Repuestos_San_jorge.Services.Admin
             try
             {
                 return await _dbContext.Clients.ToListAsync();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<Client>> GetClientsByDataAsync(string text) // Listar Clientes
+        {
+            try
+            {
+                var clients = await _dbContext.Clients
+                    .Where(s => s.cuit.Contains(text) || s.razonSocial.Contains(text))
+                    .Include(s => s.user)
+                    .Include(s => s.currentAcount)
+                    .ToListAsync();
+                return clients;
             }
             catch
             {
@@ -279,7 +298,7 @@ namespace Repuestos_San_jorge.Services.Admin
     {
         Task<string> CreateClientAsync(Client client, CustomerDiscountDto[] customerDiscounts);
         Task<IEnumerable<Client>> GetClientsAsync();
-
+        Task<IEnumerable<Client>> GetClientsByDataAsync(string text);
         Task<string> UpdateClientAsync(int id, UpdateClientDto data);
         Task<string> DeleteClientAsync(int id);
         Task<string> AddClientDiscountAsync(CustomerDiscount customerDiscount);

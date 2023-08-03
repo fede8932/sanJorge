@@ -34,6 +34,16 @@ export const searchProduct = async (productData) => {
     throw error;
   }
 };
+export const searchProducts = async (productData) => {
+  try {
+    const products = await axios.get(
+      `${apiUrl}/api/productos?data=${productData}`
+    );
+    return products.data;
+  } catch (error) {
+    throw error;
+  }
+};
 export const searchProductPage = async (productData) => {
   try {
     const { data } = await axios.get(

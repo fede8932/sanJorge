@@ -1,0 +1,33 @@
+.editContainer {
+  height: 550px;
+  padding: 15px;
+}
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.inputContainer {
+  display: flex;
+  justify-content: space-around;
+  height: 450px;
+  margin-bottom: 15px;
+}
+.leftInputContainer {
+  width: 49%;
+  height: 99%;
+  border: 1px solid red;
+}
+.rigthInputContainer {
+  width: 49%;
+  height: 99%;
+  border: 1px solid red;
+}
+.buttonContainer {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+.buttonSubContainer {
+    margin: 0 5px;
+}

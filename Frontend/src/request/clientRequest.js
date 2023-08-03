@@ -41,3 +41,12 @@ export const getClients = async () => {
     throw error;
   }
 };
+
+export const getClientsByData = async (dataSearch) => {
+  try {
+    const { data } = await axios.get(`${apiUrl}/api/client/data?text=${dataSearch}`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

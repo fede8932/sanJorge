@@ -10,7 +10,7 @@ function SearchBrandComponent(props) {
   const { onSubmit, methods, brands, status } = props;
   return (
     <FormProvider {...methods}>
-      <form className={styles.formContainer}>
+      <form className={styles.formContainer} onSubmit={methods.handleSubmit(onSubmit)}>
         <div className={styles.subFormContainer}>
           <div className={styles.inputContainer}>
             <span className={styles.subTitle}>Campos de filtrado</span>
@@ -24,7 +24,6 @@ function SearchBrandComponent(props) {
                 validate={{ required: true }}
               />
               <Button
-                onClick={methods.handleSubmit(onSubmit)}
                 style={{
                   backgroundColor: "#673ab7",
                   border: "1px solid #673ab7",

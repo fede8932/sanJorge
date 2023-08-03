@@ -15,6 +15,11 @@ export const searchProductRequest = createAsyncThunk(
   productRequest.searchProduct
 );
 
+export const searchProductsRequest = createAsyncThunk(
+  "SEARCH_PRODUCTS",
+  productRequest.searchProducts
+);
+
 const productSlice = createSlice({
   name: "product",
   initialState: initState,
@@ -38,6 +43,17 @@ const productSlice = createSlice({
       state.error = action.error.message;
     },
     [searchProductRequest.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.data = action.payload;
+    },
+    [searchProductsRequest.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [searchProductsRequest.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
+    [searchProductsRequest.fulfilled]: (state, action) => {
       state.loading = false;
       state.data = action.payload;
     },

@@ -44,11 +44,11 @@ namespace Repuestos_San_jorge.Controllers.Admin
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts([FromQuery] string data)
         {
             try
             {
-                var result = await _productService.GetProductsAsync();
+                var result = await _productService.GetProductsAsync(data);
                 return Ok(result);
             }
             catch (Exception ex)
