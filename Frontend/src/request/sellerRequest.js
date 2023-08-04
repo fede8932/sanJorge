@@ -50,3 +50,13 @@ export const getSellersByText = async (dataSearch) => {
     throw error;
   }
 };
+
+export const updateSellerById = async (dataUpdate) => {
+  try {
+    const { id, ...infoUpdate } = dataUpdate
+    const { data } = await axios.put(`${apiUrl}/api/seller/update/${id}`, infoUpdate);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

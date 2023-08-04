@@ -1,9 +1,11 @@
 import React from "react";
 import styles from "./roleTable.module.css";
 import ActionModalContainer from "../../containers/ActionModalContainer";
+import { Label } from "semantic-ui-react";
+import IconButonUsersTable from "../../commonds/iconButtonUsersTable/IconButonUsersTable";
 
 function RoleTableComponent(props) {
-  const { data, colum, type } = props;
+  const { data, colum, type, statusToogle } = props;
   return (
     <div className={styles.container}>
       <table className={`table ${styles.table}`}>
@@ -24,20 +26,52 @@ function RoleTableComponent(props) {
                 <td>{obj.user.lastName}</td>
                 <td>{obj.cuil}</td>
                 <td>{obj.user.id}</td>
-                <td>{obj.user.status ? "Activo" : "Inactivo"}</td>
+                <td>
+                  {obj.user.status ? (
+                    <Label color="green" horizontal>
+                      Activo
+                    </Label>
+                  ) : (
+                    <Label color="red" horizontal>
+                      Inactivo
+                    </Label>
+                  )}
+                </td>
                 <td>
                   <div
                     style={{
                       display: "flex",
                       width: "130px",
-                      justifyContent: "space-between",
                     }}
                   >
                     <ActionModalContainer
+                      size="xl"
+                      data={obj}
                       title="Información de vendedor"
                       type="update"
                       icon="fa-regular fa-pen-to-square"
                     />
+                    <div
+                      style={{
+                        margin: "1px 0px 0px 8px",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <IconButonUsersTable
+                        fn={() => {
+                          statusToogle(obj.user.id);
+                        }}
+                        icon={
+                          !obj.user.status
+                            ? "fa-solid fa-check"
+                            : "fa-solid fa-xmark"
+                        }
+                        iconInitialStyle={
+                          !obj.user.status ? "iconStyleGreen" : "iconStyleRed"
+                        }
+                      />
+                    </div>
                   </div>
                 </td>
               </tr>

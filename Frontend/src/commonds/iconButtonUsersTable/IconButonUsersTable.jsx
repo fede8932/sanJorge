@@ -1,6 +1,5 @@
 import React from "react";
 import styles from "./iconButon.module.css";
-import { useSelector } from "react-redux";
 
 const IconButonUsersTable = (props) => {
   const { icon, iconInitialStyle, fn } = props;

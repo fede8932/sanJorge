@@ -22,6 +22,14 @@ export const sendLoginRequest = async (data) => {
         throw error
     }
 }
+export const updateUserStatusRequest = async (id) => {
+    try {
+        const { data } = await axios.put(`${apiUrl}/api/users/status/${id}`)
+        return data
+    } catch (error) {
+        throw error
+    }
+}
 
 // export const sendLogoutRequest = async (data) => {
 //     try {

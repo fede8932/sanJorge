@@ -77,12 +77,29 @@ namespace Repuestos_San_jorge.Services.Admin
                 throw;
             }
         }
+        public async Task<User> ChangeStatusUserAsync(int id)
+        {
+            try
+            {
+                var user = await _dbContext.Users
+                .SingleOrDefaultAsync(u => u.id == id);
+                user.status = !user.status;
+                _dbContext.Entry(user).State = EntityState.Modified;
+                await _dbContext.SaveChangesAsync();
+                return user;
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 
     public interface IUserService
     {
         Task<int> CreateUserAsync(User user);
         Task<IEnumerable<User>> GetUsersAsync();
+        Task<User> ChangeStatusUserAsync(int id);
         // Task<User> GetUserAsync();
     }
 }

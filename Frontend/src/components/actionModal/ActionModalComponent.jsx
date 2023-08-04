@@ -7,13 +7,12 @@ import IconButonUsersTable from "../../commonds/iconButtonUsersTable/IconButonUs
 import EditUserViewContainer from "../../containers/EditUserViewContainer";
 
 const MyVerticallyCenteredModal = (props) => {
-  console.log(props);
-  const { title, type } = props;
+  const { title, type, data, size } = props;
   //size es: 'sm' | 'lg' | 'xl'
   return (
     <Modal
       {...props}
-      size="xl"
+      size={size}
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
@@ -27,7 +26,7 @@ const MyVerticallyCenteredModal = (props) => {
       </Modal.Header>
       <Modal.Body>
         {type == "add" ? <AddProductViewModalContainer /> : null}
-        {type == "update" ? <EditUserViewContainer /> : null}
+        {type == "update" ? <EditUserViewContainer seller={data} close={props.onHide}/> : null}
       </Modal.Body>
       {type == "update" ? null : (
         <Modal.Footer>
@@ -39,7 +38,7 @@ const MyVerticallyCenteredModal = (props) => {
 };
 
 function ActionModalComponent(props) {
-  const { icon, title, type } = props;
+  const { icon, title, type, data, size } = props;
   const [modalShow, setModalShow] = React.useState(false);
 
   return (
@@ -50,10 +49,12 @@ function ActionModalComponent(props) {
         iconInitialStyle="iconStyleBlue"
       />
       <MyVerticallyCenteredModal
+        size={size}
         show={modalShow}
         onHide={() => setModalShow(false)}
         title={title}
         type={type}
+        data={data}
       />
     </>
   );
