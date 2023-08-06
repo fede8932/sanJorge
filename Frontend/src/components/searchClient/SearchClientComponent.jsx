@@ -57,7 +57,7 @@ function SearchClientComponent(props) {
               colum={[
                 "ID Cliente",
                 "Razón Social",
-                "CUIL",
+                "CUIT",
                 "C. Corriente",
                 "Estado",
                 "Acciones",
