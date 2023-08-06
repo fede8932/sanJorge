@@ -8,7 +8,15 @@ import Button from "react-bootstrap/esm/Button";
 import Spinner from "react-bootstrap/esm/Spinner";
 
 function AddProductFormComponent(props) {
-  const { onSubmit, status, methods, suppliers, brands } = props;
+  const {
+    onSubmit,
+    status,
+    methods,
+    suppliers,
+    brands,
+    selectStatus,
+    setSelectStatus,
+  } = props;
   return (
     <FormProvider {...methods}>
       <form className={styles.formContainer}>
@@ -44,16 +52,18 @@ function AddProductFormComponent(props) {
                 name="supplierName"
                 validate={{ required: true }}
                 arrayOptions={suppliers}
+                fnSelect={setSelectStatus}
               />
             )}
-            {brands && (
+            {
               <CustomSelect
+                active={selectStatus}
                 text="Seleccioná la marca"
                 name="brandId"
                 validate={{ required: true }}
                 arrayOptions={brands}
               />
-            )}
+            }
           </div>
           <div className={styles.inputContainer}>
             <span className={styles.subTitle}>Datos adicionales</span>
@@ -145,6 +155,7 @@ function AddProductFormComponent(props) {
             backgroundColor: "#673ab7",
             border: "1px solid #673ab7",
             marginTop: "35px",
+            height: "48px",
           }}
         >
           {!status ? (

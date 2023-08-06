@@ -154,6 +154,7 @@ function SellerFormComponent(props) {
             backgroundColor: "#673ab7",
             border: "1px solid #673ab7",
             marginTop: "35px",
+            height: "48px",
           }}
         >
           {!status ? (

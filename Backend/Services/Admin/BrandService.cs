@@ -113,6 +113,16 @@ namespace Repuestos_San_jorge.Services.Admin
                 .ToListAsync();
             return filteredBrands;
         }
+    
+        public async Task<IEnumerable<Brand>> GetBrandByRazonSocialAsync(string rs)
+        {
+            var filteredBrands = await _dbContext.Brands
+            .Include(b => b.brandSuppliers)
+            .ThenInclude(bs => bs.supplier)
+            .Where(b => b.brandSuppliers.Any(bs => bs.supplier.razonSocial == rs))
+            .ToListAsync();
+            return filteredBrands;
+        }
     }
 
     public interface IBrandService
@@ -122,5 +132,6 @@ namespace Repuestos_San_jorge.Services.Admin
         Task<IEnumerable<Brand>> GetBrandByDataAsync(string data);
         Task<string> UpdateBrandAsync(int id, UpdateBrandDto data);
         Task<string> AddBrandSupplierAsync(int brandId, int supplierId);
+        Task<IEnumerable<Brand>> GetBrandByRazonSocialAsync(string rs);
     }
 }

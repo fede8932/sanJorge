@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as sellerRequest from "../request/sellerRequest"
 const sellerState = {
   loading: false,
-  data: null,
+  data: [],
   error: "",
 };
 export const getSellersRequest = createAsyncThunk(
@@ -38,7 +38,6 @@ const sellerSlice = createSlice({
     },
     [createSellersRequest.fulfilled]: (state, action) => {
       state.loading = false;
-      state.data = action.payload;
     },
   },
 });

@@ -17,7 +17,6 @@ export const getSellers = async () => {
 };
 
 export const createSellers = async (objData) => {
-  console.log(objData);
   try {
     const { name, lastName, email, ...dataSeller } = objData;
     const dataUser = {

@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as supplierRequest from "../request/supplierRequest"
 const userState = {
   loading: false,
-  data: null,
+  data: [],
   error: "",
 };
 export const supplierCreateRequest = createAsyncThunk(
@@ -27,7 +27,6 @@ const supplierSlice = createSlice({
     },
     [supplierCreateRequest.fulfilled]: (state, action) => {
       state.loading = false;
-      state.data = action.payload;
     },
     [getSupplierRequest.pending]: (state, action) => {
       state.loading = true;

@@ -29,11 +29,11 @@ const MyVerticallyCenteredModal = (props) => {
         {type == "updateSeller" ? <EditUserViewContainer seller={data} close={props.onHide}/> : null}
         {type == "updateClient" ? <EditUserViewContainer seller={data} close={props.onHide}/> : null}
       </Modal.Body>
-      {type == "update" ? null : (
+      {/* {type == "update" ? null : (
         <Modal.Footer>
           <Button onClick={props.onHide}>Guardar</Button>
         </Modal.Footer>
-      )}
+      )} */}
     </Modal>
   );
 };

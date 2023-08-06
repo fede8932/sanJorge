@@ -51,7 +51,22 @@ namespace Repuestos_San_jorge.Controllers.Admin
             }
         }
 
-        [HttpGet("search")]
+        [HttpGet("search/supplier")]
+        public async Task<ActionResult<IEnumerable<Brand>>> GetProductsBySupplier(
+            [FromQuery] string razonSocial)
+        {
+            try
+            {
+                var result = await _brandService.GetBrandByRazonSocialAsync(razonSocial);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
+                [HttpGet("search")]
         public async Task<ActionResult<IEnumerable<Brand>>> GetProductsByData(
             [FromQuery] string data)
         {

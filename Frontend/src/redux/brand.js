@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as brandRequest from "../request/brandRequest"
 const initState = {
   loading: false,
-  data: "",
+  data: [],
   error: "",
 };
 export const brandCreateRequest = createAsyncThunk(
@@ -12,6 +12,10 @@ export const brandCreateRequest = createAsyncThunk(
 export const getBrandRequest = createAsyncThunk(
   "GET_BRAND",
   brandRequest.getBrands
+);
+export const getBrandByRSRequest = createAsyncThunk(
+  "GET_BRAND_RS",
+  brandRequest.getBrandsBySupplier
 );
 
 const brandSlice = createSlice({
@@ -27,7 +31,6 @@ const brandSlice = createSlice({
     },
     [brandCreateRequest.fulfilled]: (state, action) => {
       state.loading = false;
-      state.data = action.payload;
     },
     [getBrandRequest.pending]: (state, action) => {
       state.loading = true;
@@ -37,6 +40,17 @@ const brandSlice = createSlice({
       state.error = action.error.message;
     },
     [getBrandRequest.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.data = action.payload;
+    },
+    [getBrandByRSRequest.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [getBrandByRSRequest.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
+    [getBrandByRSRequest.fulfilled]: (state, action) => {
       state.loading = false;
       state.data = action.payload;
     },

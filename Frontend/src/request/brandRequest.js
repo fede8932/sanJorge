@@ -28,7 +28,6 @@ export const getBrands = async () => {
     throw error;
   }
 };
-
 export const getBrandsByData = async (text) => {
   try {
     const { data } = await axios.get(`${apiUrl}/api/brand/search?data=${text}`);
@@ -37,3 +36,15 @@ export const getBrandsByData = async (text) => {
     throw error;
   }
 };
+export const getBrandsBySupplier = async (rz) => {
+  try {
+    const { data } = await axios.get(`${apiUrl}/api/brand/search/supplier?razonSocial=${rz}`);
+    const brands = data.map((brand) => {
+      return { text: brand.name, value: brand.id };
+    });
+    return brands;
+  } catch (error) {
+    throw error;
+  }
+};
+
