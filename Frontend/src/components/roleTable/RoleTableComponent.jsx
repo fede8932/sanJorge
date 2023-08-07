@@ -86,6 +86,7 @@ function RoleTableComponent(props) {
                 <td>{obj.razonSocial}</td>
                 <td>{obj.cuit}</td>
                 <td>{obj.currentAcount.acountNumber}</td>
+                <td>{`$ ${obj.currentAcount.resume}`}</td>
                 <td>
                   {obj.user.status ? (
                     <Label color="green" horizontal>

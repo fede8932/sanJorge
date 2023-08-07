@@ -10,6 +10,10 @@ export const getClientssByTextRequest = createAsyncThunk(
   "GET_CLIENTS",
   clientRequest.getClientsByData
 );
+export const UpdateClientsRequest = createAsyncThunk(
+  "UPDATE_SELLER",
+  clientRequest.updateClientById
+);
 export const UpdateStatusClientRequest = createAsyncThunk(
   "UPDATE_STATUS_CLIENT",
   userRequest.updateUserStatusRequest
@@ -45,6 +49,21 @@ const clientsSlice = createSlice({
         return client;
       });
       state.loading = false;
+      state.data = newStateData;
+    },
+    [UpdateClientsRequest.pending]: (state, action) => {
+      state.loading = false;
+    },
+    [UpdateClientsRequest.rejected]: (state, action) => {
+      state.error = action.error.message;
+    },
+    [UpdateClientsRequest.fulfilled]: (state, action) => {
+      const newStateData = state.data.map((client) => {
+        if (client.id === action.payload.id) {
+          client = action.payload;
+        }
+        return client;
+      });
       state.data = newStateData;
     },
   },

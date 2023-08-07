@@ -84,7 +84,7 @@ namespace Repuestos_San_jorge.Controllers.Admin
         }
 
         [HttpPut("update/{id}")]
-        public async Task<ActionResult<IEnumerable<Client>>> UpdateClient(
+        public async Task<ActionResult<Client>> UpdateClient(
             int id,
             [FromBody] UpdateClientDto data
         )

@@ -17,12 +17,12 @@ export const clientRegister = async (datos) => {
     dataClient.userId = userId.data;
     dataClient.altura = Number(dataClient.altura);
     dataClient.codigoPostal = Number(dataClient.codigoPostal);
-    console.log("dataClient", dataClient)
+    console.log("dataClient", dataClient);
     const dataRequest = {
       Client: dataClient,
-      CustomerDiscounts: discount
-    }
-    console.log("dataClient", dataRequest)
+      CustomerDiscounts: discount,
+    };
+    console.log("dataClient", dataRequest);
     await axios.post(`${apiUrl}/api/client`, dataRequest);
     return "Registrado";
   } catch (error) {
@@ -44,7 +44,23 @@ export const getClients = async () => {
 
 export const getClientsByData = async (dataSearch) => {
   try {
-    const { data } = await axios.get(`${apiUrl}/api/client/data?text=${dataSearch}`);
+    const { data } = await axios.get(
+      `${apiUrl}/api/client/data?text=${dataSearch}`
+    );
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateClientById = async (dataUpdate) => {
+  try {
+    const { id, ...infoUpdate } = dataUpdate;
+    console.log("mando esto: ", infoUpdate);
+    const { data } = await axios.put(
+      `${apiUrl}/api/client/update/${id}`,
+      infoUpdate
+    );
     return data;
   } catch (error) {
     throw error;
