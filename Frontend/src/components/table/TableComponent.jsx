@@ -8,15 +8,15 @@ function TableComponent(props) {
       <table className={`${styles.tableContainer} table`}>
         <thead>
           <tr style={{backgroundColor: "#DCBEFF"}}>
-            <th id={styles.title} scope="col">{indicadores[0]}</th>
-            <th id={styles.title} scope="col">{indicadores[1]}</th>
+            <th style={{width:"80%"}} id={styles.title} scope="col">{indicadores[0]}</th>
+            <th style={{width:"15%"}} id={styles.title} scope="col">{indicadores[1]}</th>
           </tr>
         </thead>
         <tbody>
           {proveedores.map((proveedor, i) => (
             <tr key={i}>
-              <td>{proveedor.razonSocial}</td>
-              <td>{proveedor.comision}</td>
+              <td>{proveedor.supplierRazonSocial}</td>
+              <td>{proveedor.porcentaje}</td>
             </tr>
           ))}
         </tbody>

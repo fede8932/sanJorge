@@ -24,12 +24,14 @@ namespace Repuestos_San_jorge.Controllers.Admin
             _purchaseOrderItemService = purchaseOrderItemService;
         }
 
-        [HttpPost("{supplierId}")]
-        public async Task<IActionResult> CreateOrder(int supplierId)
+        [HttpPost("{supplierRazonSocial}")]
+        public async Task<IActionResult> CreateOrder(string supplierRazonSocial)
         {
             try
             {
-                var result = await _purchaseOrderService.CreatePurchaseOrderAsync(supplierId);
+                var result = await _purchaseOrderService.CreatePurchaseOrderAsync(
+                    supplierRazonSocial
+                );
                 return Ok(result);
             }
             catch (Exception ex)
@@ -45,6 +47,36 @@ namespace Repuestos_San_jorge.Controllers.Admin
             try
             {
                 var result = await _purchaseOrderService.GetOrdersAsync();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<PurchaseOrder>> GetOrderByIdAsync(int id)
+        {
+            try
+            {
+                var result = await _purchaseOrderService.GetOrderByIdAsync(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
+
+        [HttpGet("items/{orderId}")]
+        public async Task<ActionResult<IEnumerable<PurchaseOrder>>> GetItemByOrder(int orderId)
+        {
+            try
+            {
+                var result = await _purchaseOrderItemService.GetItemByOrder(orderId);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -120,6 +152,27 @@ namespace Repuestos_San_jorge.Controllers.Admin
                 var result = await _purchaseOrderItemService.UpdateCantToOrderItem(
                     purchaseOrderItemId,
                     cantidad
+                );
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
+
+        [HttpPut("items/price/{purchaseOrderItemId}")]
+        public async Task<IActionResult> AddOrderItem(
+            [FromQuery] float price,
+            int purchaseOrderItemId
+        )
+        {
+            try
+            {
+                var result = await _purchaseOrderItemService.UpdatePriceToOrderItem(
+                    purchaseOrderItemId,
+                    price
                 );
                 return Ok(result);
             }

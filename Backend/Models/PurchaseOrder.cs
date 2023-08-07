@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using Repuestos_San_jorge.Dto.Enums;
 
@@ -20,6 +21,9 @@ namespace Repuestos_San_jorge.Models
         public float total { get; set; }
 
         public int? supplierId { get; set; }
+
+        [ForeignKey("supplierId")]
+        public Supplier? supplier { get; set; }
 
         public ICollection<PurchaseOrderItem>? purchaseOrderItems { get; set; }
 

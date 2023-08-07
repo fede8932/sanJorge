@@ -19,7 +19,9 @@ namespace Repuestos_San_jorge.Controllers.Admin
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateRepresentative([FromBody] Representative representative)
+        public async Task<IActionResult> CreateRepresentative(
+            [FromBody] Representative representative
+        )
         {
             try
             {
@@ -34,7 +36,7 @@ namespace Repuestos_San_jorge.Controllers.Admin
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Seller>>> GetRepresentative()
+        public async Task<ActionResult<IEnumerable<Representative>>> GetRepresentative()
         {
             try
             {
@@ -48,8 +50,23 @@ namespace Repuestos_San_jorge.Controllers.Admin
             }
         }
 
+        [HttpGet("{supplierRazonSocial}")]
+        public async Task<ActionResult<IEnumerable<Representative>>> GetRepresentativeBySupplier(string supplierRazonSocial)
+        {
+            try
+            {
+                var result = await _representativeService.GetRepresentativesBySupplierAsync(supplierRazonSocial);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
+
         [HttpDelete("delete/{id}")]
-        public async Task<ActionResult<IEnumerable<Seller>>> DeleteRepresentative(int id)
+        public async Task<ActionResult<IEnumerable<Representative>>> DeleteRepresentative(int id)
         {
             try
             {

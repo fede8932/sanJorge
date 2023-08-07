@@ -1,23 +1,35 @@
-import React, {useRef, useState} from "react";
+import React, { useState } from "react";
 import styles from "./customInput.module.css";
+import { useFormContext } from "react-hook-form";
 
 function CustomInput(props) {
-  const { type, width, placeholder, icon } = props;
-  const inputRef = useRef(null);
-  const [classDivContainer, setClassDivContainer] = useState("inputContainer")
+  const { width, icon, name, validate } = props;
+  const [classDivContainer, setClassDivContainer] = useState("inputContainer");
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
   return (
-    <div
-      onClick={() => {
-        inputRef.current.focus();
-        setClassDivContainer("inputContainerActive")
-      }}
-      onBlur={()=>{
-        setClassDivContainer("inputContainer")
-      }}
-      className={`${styles[classDivContainer]} ${styles[width]}`}
-    >
-      <i className={`${styles.searchIcon} ${icon}`}></i>
-      <input ref={inputRef} className={styles.input} {...props} />
+    <div style={{ marginBottom: "15px" }} className={`${styles[width]}`}>
+      <div
+        onBlur={() => {
+          setClassDivContainer("inputContainer");
+        }}
+        className={`${styles[classDivContainer]}`}
+      >
+        <i className={`${styles.searchIcon} ${icon}`}></i>
+        <input
+          {...register(name, validate)}
+          onFocus={() => {
+            setClassDivContainer("inputContainerActive");
+          }}
+          className={styles.input}
+          {...props}
+        />
+      </div>
+      <div className={styles.errorContainer}>
+        {errors[name] && <span>El campo es obligatorio</span>}
+      </div>
     </div>
   );
 }

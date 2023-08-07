@@ -20,7 +20,7 @@ namespace Repuestos_San_jorge.Controllers.Admin
 
         [HttpPost]
         public async Task<IActionResult> CreateProduct(
-            [FromBody] Product product,
+            [FromBody] CreateProductRequestDto product,
             [FromQuery] int brandId,
             [FromQuery] int stock,
             [FromQuery] int stockMin
@@ -44,11 +44,11 @@ namespace Repuestos_San_jorge.Controllers.Admin
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts([FromQuery] string data)
         {
             try
             {
-                var result = await _productService.GetProductsAsync();
+                var result = await _productService.GetProductsAsync(data);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -101,6 +101,37 @@ namespace Repuestos_San_jorge.Controllers.Admin
             try
             {
                 var result = await _productService.UpdateProductStock(productId, brandId, data);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
+
+        [HttpGet("search")]
+        public async Task<ActionResult> SearchProductByData([FromQuery] string data, [FromQuery] int supplierId)
+        {
+            try
+            {
+                var result = await _productService.GetProductsByDataAsync(data, supplierId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
+
+        [HttpGet("search/prod")]
+        public async Task<ActionResult> SearchProductByDataPage([FromQuery] string data, [FromQuery] int cant, [FromQuery] int page)
+        {
+            try
+            {
+                var result = await _productService.GetProductosByDatosPagesAsync(data, cant, page);
+                Console.WriteLine(result);
                 return Ok(result);
             }
             catch (Exception ex)

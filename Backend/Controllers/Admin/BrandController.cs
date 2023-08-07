@@ -36,20 +36,51 @@ namespace Repuestos_San_jorge.Controllers.Admin
             }
         }
 
-        // [HttpGet]
-        // public async Task<ActionResult<IEnumerable<Seller>>> GetSellers()
-        // {
-        //     try
-        //     {
-        //         var result = await _supplierService.GetSuppliersAsync();
-        //         return Ok(result);
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         Console.WriteLine(ex);
-        //         return StatusCode(500, "Ocurrió un error interno en el servidor.");
-        //     }
-        // }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Brand>>> GetProducts()
+        {
+            try
+            {
+                var result = await _brandService.GetBrandsAsync();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
+
+        [HttpGet("search/supplier")]
+        public async Task<ActionResult<IEnumerable<Brand>>> GetProductsBySupplier(
+            [FromQuery] string razonSocial)
+        {
+            try
+            {
+                var result = await _brandService.GetBrandByRazonSocialAsync(razonSocial);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
+                [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<Brand>>> GetProductsByData(
+            [FromQuery] string data)
+        {
+            try
+            {
+                var result = await _brandService.GetBrandByDataAsync(data);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
 
         // [HttpDelete("delete/{id}")]
         // public async Task<ActionResult<IEnumerable<Seller>>> DeleteSeller(int id)

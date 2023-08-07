@@ -38,5 +38,21 @@ namespace Repuestos_San_jorge.Controllers.Admin
             var users = await _userService.GetUsersAsync();
             return Ok(users);
         }
+
+        [HttpPut("status/{id}")]
+        public async Task<ActionResult<User>> ChangeStatusUserAsync(int id)
+        {
+            try
+            {
+                var user = await _userService.ChangeStatusUserAsync(id);
+                
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
     }
 }

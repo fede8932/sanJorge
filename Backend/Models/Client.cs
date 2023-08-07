@@ -23,8 +23,7 @@ namespace Repuestos_San_jorge.Models
         [Required]
         public int altura { get; set; }
 
-        [Required]
-        public string coordenadas { get; set; }
+        public string? coordenadas { get; set; }
 
         [Required]
         public string localidad { get; set; }

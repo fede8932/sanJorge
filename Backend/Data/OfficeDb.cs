@@ -29,6 +29,7 @@ namespace Repuestos_San_jorge.Data
         public DbSet<PointOfSale> PointOfSales => Set<PointOfSale>();
         public DbSet<ControlOrder> ControlOrders => Set<ControlOrder>();
         public DbSet<Voucher> Vouchers => Set<Voucher>();
+        public DbSet<Price> Prices => Set<Price>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -38,8 +39,14 @@ namespace Repuestos_San_jorge.Data
                 .Property(Movements => Movements.type)
                 .HasConversion<string>();
             modelBuilder.Entity<Client>().Property(client => client.iva).HasConversion<string>();
-            modelBuilder.Entity<PurchaseOrder>().Property(purchaseOrder => purchaseOrder.status).HasConversion<string>();
-            modelBuilder.Entity<Voucher>().Property(voucher => voucher.type).HasConversion<string>();
+            modelBuilder
+                .Entity<PurchaseOrder>()
+                .Property(purchaseOrder => purchaseOrder.status)
+                .HasConversion<string>();
+            modelBuilder
+                .Entity<Voucher>()
+                .Property(voucher => voucher.type)
+                .HasConversion<string>();
 
             // Restricciones
             modelBuilder.Entity<Brand>().HasIndex(brand => brand.name).IsUnique();
@@ -130,12 +137,23 @@ namespace Repuestos_San_jorge.Data
                 .HasForeignKey(purchaseOrderItem => purchaseOrderItem.purchaseOrderId);
             modelBuilder
                 .Entity<PurchaseOrderItem>()
+                .HasOne(purchaseOrderItem => purchaseOrderItem.brand)
+                .WithMany(brand => brand.purchaseOrderItems)
+                .HasForeignKey(purchaseOrderItem => purchaseOrderItem.brandId);
+            modelBuilder
+                .Entity<PurchaseOrderItem>()
                 .HasOne(purchaseOrderItem => purchaseOrderItem.product)
                 .WithMany(product => product.purchaseOrderItems)
                 .HasForeignKey(purchaseOrderItem => purchaseOrderItem.productId);
             modelBuilder
                 .Entity<BrandProduct>()
-                .HasKey(brandProduct => new { brandProduct.brandId, brandProduct.productId });
+                .HasKey(brandProduct => new { brandProduct.productId, brandProduct.brandId });
+            modelBuilder
+                .Entity<BrandProduct>()
+                .HasOne(brandProduct => brandProduct.product)
+                .WithMany(product => product.brandProducts)
+                .HasForeignKey(brandProduct => brandProduct.productId);
+
             modelBuilder
                 .Entity<BrandProduct>()
                 .HasOne(brandProduct => brandProduct.brand)
@@ -143,19 +161,15 @@ namespace Repuestos_San_jorge.Data
                 .HasForeignKey(brandProduct => brandProduct.brandId);
             modelBuilder
                 .Entity<BrandProduct>()
-                .HasOne(brandProduct => brandProduct.product)
-                .WithMany(product => product.brandProducts)
-                .HasForeignKey(brandProduct => brandProduct.productId);
+                .HasOne(brandProduct => brandProduct.stock)
+                .WithOne()
+                .HasForeignKey<BrandProduct>(brandProduct => brandProduct.stockId);
+
             modelBuilder
-                .Entity<Product>()
-                .HasOne(product => product.stock)
-                .WithOne(stock => stock.product)
-                .HasForeignKey<Stock>(stock => stock.productId);
-            modelBuilder
-                .Entity<Brand>()
-                .HasOne(brand => brand.stock)
-                .WithOne(stock => stock.brand)
-                .HasForeignKey<Stock>(stock => stock.brandId);
+                .Entity<BrandProduct>()
+                .HasOne(brandProduct => brandProduct.price)
+                .WithOne()
+                .HasForeignKey<BrandProduct>(brandProduct => brandProduct.priceId);
             modelBuilder
                 .Entity<CurrentAcount>()
                 .HasOne(currentAcount => currentAcount.supplier)
@@ -163,20 +177,26 @@ namespace Repuestos_San_jorge.Data
                 .HasForeignKey<Supplier>(supplier => supplier.currentAcountId);
             modelBuilder
                 .Entity<PurchaseOrder>()
+                .HasOne(purchaseOrder => purchaseOrder.supplier)
+                .WithMany(supplier => supplier.purchaseOrders)
+                .HasForeignKey(purchaseOrder => purchaseOrder.supplierId);
+            modelBuilder
+                .Entity<PurchaseOrder>()
                 .HasOne(purchaseOrder => purchaseOrder.Voucher)
                 .WithOne(voucher => voucher.purchaseOrder)
-                .HasForeignKey<Voucher>(voucher => voucher.purchaseOrderId);  
+                .HasForeignKey<Voucher>(voucher => voucher.purchaseOrderId);
             modelBuilder
                 .Entity<PurchaseOrder>()
                 .HasOne(purchaseOrder => purchaseOrder.controlOrder)
                 .WithOne(controlOrder => controlOrder.purchaseOrder)
-                .HasForeignKey<ControlOrder>(controlOrder => controlOrder.purchaseOrderId);      
+                .HasForeignKey<ControlOrder>(controlOrder => controlOrder.purchaseOrderId);
             modelBuilder
                 .Entity<PointOfSale>()
                 .HasOne(pointOfSale => pointOfSale.stock)
                 .WithOne(stock => stock.pointOfSale)
                 .HasForeignKey<Stock>(stock => stock.pointOfSaleId);
-            modelBuilder.Entity<PointOfSale>()
+            modelBuilder
+                .Entity<PointOfSale>()
                 .HasMany(pointOfSale => pointOfSale.locations)
                 .WithOne(location => location.pointOfSale)
                 .HasForeignKey(location => location.pointOfSaleId);

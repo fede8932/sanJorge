@@ -8,6 +8,7 @@ using Repuestos_San_jorge.Data;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Repuestos_San_Jorge.Utils;
 using Repuestos_San_jorge.Dto.Admin;
+using Repuestos_San_jorge.Dto.Enums;
 
 namespace Repuestos_San_jorge.Services.Admin
 {
@@ -20,7 +21,10 @@ namespace Repuestos_San_jorge.Services.Admin
             _dbContext = dbContext;
         }
 
-        public async Task<string> CreateClientAsync(Client client) // crear cliente(seguir despues de seller)
+        public async Task<string> CreateClientAsync(
+            Client client,
+            CustomerDiscountDto[] customerDiscounts
+        ) // crear cliente(seguir despues de seller)
         {
             try
             {
@@ -43,14 +47,40 @@ namespace Repuestos_San_jorge.Services.Admin
                     );
                 }
                 client.seller = seller;
-                CurrentAcount currentAcount = new CurrentAcount
-                {
-                    acountNumber = Utils.AcountNumberGen(client.cuit.Substring(0, 1)+client.cuit.Substring(3, 4)),
-                };
+                CurrentAcount currentAcount =
+                    new()
+                    {
+                        acountNumber = Utils.AcountNumberGen(
+                            client.cuit.Substring(0, 1) + client.cuit.Substring(3, 4)
+                        ),
+                    };
                 _dbContext.CurrentAcounts.Add(currentAcount);
                 await _dbContext.SaveChangesAsync();
                 client.currentAcountId = currentAcount.id;
                 _dbContext.Clients.Add(client);
+                await _dbContext.SaveChangesAsync();
+                foreach (CustomerDiscountDto discount in customerDiscounts)
+                {
+                    var supplier = await _dbContext.Suppliers.FirstOrDefaultAsync(
+                        supplier => supplier.razonSocial == discount.supplierRazonSocial
+                    );
+                    if (supplier == null)
+                    {
+                        throw new ArgumentNullException(
+                            nameof(supplier),
+                            "El proveedor no puede ser null"
+                        );
+                    }
+                    CustomerDiscount newDiscount =
+                        new()
+                        {
+                            clientId = client.id,
+                            notas = discount.notas,
+                            porcentaje = discount.porcentaje,
+                            supplierId = supplier.id,
+                        };
+                    _dbContext.CustomerDiscounts.Add(newDiscount);
+                }
                 await _dbContext.SaveChangesAsync();
                 return "Registrado";
             }
@@ -65,6 +95,25 @@ namespace Repuestos_San_jorge.Services.Admin
             try
             {
                 return await _dbContext.Clients.ToListAsync();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<Client>> GetClientsByDataAsync(string text) // Listar Clientes
+        {
+            try
+            {
+                var clients = await _dbContext.Clients
+                    .Where(s => s.cuit.Contains(text) || s.razonSocial.Contains(text))
+                    .Include(s => s.user)
+                    .Include(s => s.currentAcount)
+                    .Include(s => s.seller)
+                    .ThenInclude(ss => ss.user)
+                    .ToListAsync();
+                return clients;
             }
             catch
             {
@@ -100,30 +149,77 @@ namespace Repuestos_San_jorge.Services.Admin
             }
         }
 
-        public async Task<string> UpdateClientAsync(int id, UpdateClientDto data) // editar clientes
+        // public async Task<string> UpdateClientAsync(int id, UpdateClientDto data) // editar clientes
+        // {
+        //     try
+        //     {
+        //         var client = await _dbContext.Clients.SingleOrDefaultAsync(
+        //             client => client.id == id
+        //         );
+        //         if (client == null)
+        //         {
+        //             throw new ArgumentNullException(nameof(client), "El cliente no puede ser null");
+        //         }
+        //         var dataUpdate = new Dictionary<string, object>();
+        //         foreach (var propiedad in data.GetType().GetProperties())
+        //         {
+        //             string nombrePropiedad = propiedad.Name;
+        //             var valorPropiedad = propiedad.GetValue(data);
+        //             if (valorPropiedad != null)
+        //             {
+        //                 dataUpdate.Add(nombrePropiedad, valorPropiedad);
+        //             }
+        //         }
+        //         _dbContext.Entry(client).CurrentValues.SetValues(dataUpdate);
+        //         await _dbContext.SaveChangesAsync();
+        //         return "Datos de cliente actualizados";
+        //     }
+        //     catch
+        //     {
+        //         throw;
+        //     }
+        // }
+        public async Task<Client> UpdateClientAsync(int id, UpdateClientDto data) // editar vendedores
         {
             try
             {
-                var client = await _dbContext.Clients.SingleOrDefaultAsync(
-                    client => client.id == id
-                );
-                if (client == null)
+                IvaType ivaType;
+                if (!Enum.TryParse(data.iva, out ivaType))
                 {
-                    throw new ArgumentNullException(nameof(client), "El cliente no puede ser null");
+                    throw new ArgumentException("Valor de IVA inválido", nameof(data.iva));
                 }
-                var dataUpdate = new Dictionary<string, object>();
-                foreach (var propiedad in data.GetType().GetProperties())
+                var cliente = await _dbContext.Clients
+                    .Include(c => c.user) // Incluir la relación con User
+                    .Include(c => c.currentAcount)
+                    .SingleOrDefaultAsync(c => c.id == id);
+                if (cliente == null)
                 {
-                    string nombrePropiedad = propiedad.Name;
-                    var valorPropiedad = propiedad.GetValue(data);
-                    if (valorPropiedad != null)
-                    {
-                        dataUpdate.Add(nombrePropiedad, valorPropiedad);
-                    }
+                    throw new ArgumentNullException(
+                        nameof(cliente),
+                        "El cliente no puede ser null"
+                    );
                 }
-                _dbContext.Entry(client).CurrentValues.SetValues(dataUpdate);
+                var vendedor = await _dbContext.Sellers
+                    .Include(s => s.user)
+                    .SingleOrDefaultAsync(s => s.id == data.sellerId);
+                if (vendedor == null)
+                {
+                    throw new ArgumentNullException(
+                        nameof(cliente),
+                        "El vendedor no puede ser null"
+                    );
+                }
+                cliente.user.email = data.email;
+                cliente.altura = data.altura;
+                cliente.calle = data.calle;
+                cliente.localidad = data.localidad;
+                cliente.codigoPostal = data.codigoPostal;
+                cliente.telefono = data.telefono;
+                cliente.iva = ivaType;
+                cliente.seller = vendedor;
+                _dbContext.Entry(cliente).State = EntityState.Modified;
                 await _dbContext.SaveChangesAsync();
-                return "Datos de cliente actualizados";
+                return cliente;
             }
             catch
             {
@@ -250,10 +346,10 @@ namespace Repuestos_San_jorge.Services.Admin
 
     public interface IClientService
     {
-        Task<string> CreateClientAsync(Client client);
+        Task<string> CreateClientAsync(Client client, CustomerDiscountDto[] customerDiscounts);
         Task<IEnumerable<Client>> GetClientsAsync();
-
-        Task<string> UpdateClientAsync(int id, UpdateClientDto data);
+        Task<IEnumerable<Client>> GetClientsByDataAsync(string text);
+        Task<Client> UpdateClientAsync(int id, UpdateClientDto data);
         Task<string> DeleteClientAsync(int id);
         Task<string> AddClientDiscountAsync(CustomerDiscount customerDiscount);
         Task<CustomerDiscount> GetClientDiscountAsync(int clientId, int supplierId);

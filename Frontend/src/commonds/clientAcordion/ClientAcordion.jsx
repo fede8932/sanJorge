@@ -32,7 +32,7 @@ function ClientAcordion() {
                   <Col className={styles.colUno}>
                     <span className={styles.titleInfo}>
                       Razón social:
-                      <span className={styles.info}>Pirulino s.r.l.</span>
+                      <span className={styles.info}>Pirulino s.r..</span>
                     </span>
                   </Col>
                   <Col className={styles.colDos}>

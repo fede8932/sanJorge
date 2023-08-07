@@ -17,12 +17,12 @@ namespace Repuestos_San_jorge.Services.Admin
             _dbContext = dbContext;
         }
 
-        public async Task<string> CreatePurchaseOrderAsync(int supplierId) // crear orden de compra
+        public async Task<PurchaseOrder> CreatePurchaseOrderAsync(string supplierName) // crear orden de compra
         {
             try
             {
                 var supplier = await _dbContext.Suppliers.SingleOrDefaultAsync(
-                    supplier => supplier.id == supplierId
+                    supplier => supplier.razonSocial == supplierName
                 );
                 if (supplier == null)
                 {
@@ -35,11 +35,12 @@ namespace Repuestos_San_jorge.Services.Admin
                 {
                     date = DateTime.UtcNow,
                     total = 0,
-                    supplierId = supplierId
+                    supplierId = supplier.id,
+                    supplier = supplier
                 };
                 _dbContext.PurchaseOrders.Add(purchaseOrder);
                 await _dbContext.SaveChangesAsync();
-                return "Registrado";
+                return purchaseOrder;
             }
             catch
             {
@@ -59,6 +60,21 @@ namespace Repuestos_San_jorge.Services.Admin
             }
         }
 
+        public async Task<PurchaseOrder> GetOrderByIdAsync(int purchaseOrderId)
+        {
+            var order = await _dbContext.PurchaseOrders
+                .Include(o => o.supplier)
+                .SingleOrDefaultAsync(order => order.id == purchaseOrderId);
+            if (order == null)
+            {
+                throw new ArgumentNullException(
+                    nameof(order),
+                    "No existe la orden en los registros"
+                );
+            }
+            return order;
+        }
+
         public async Task<string> DeleteOrdersAsync(int purchaseOrderId) // eliminar orden
         {
             try
@@ -74,11 +90,12 @@ namespace Repuestos_San_jorge.Services.Admin
                         "No existe la orden en los registros"
                     );
                 }
-                if (order.status != PurchaseOrderStatusType.Confirm && order.status != PurchaseOrderStatusType.Recived)
+                if (
+                    order.status != PurchaseOrderStatusType.Confirm
+                    && order.status != PurchaseOrderStatusType.Recived
+                )
                 {
-                    throw new Exception(
-                        "No se puede eliminar esta orden"
-                    );
+                    throw new Exception("No se puede eliminar esta orden");
                 }
                 _dbContext.PurchaseOrders.Remove(order);
                 await _dbContext.SaveChangesAsync();
@@ -137,8 +154,8 @@ namespace Repuestos_San_jorge.Services.Admin
                     voucher.numRemito = numRemito;
                     controlOrder.purchaseOrder = order;
                     voucher.purchaseOrder = order;
-                    voucher.iva = (float)(voucher.subtotal *0.21);
-                    voucher.total = (float?)(voucher.subtotal *1.21);
+                    voucher.iva = (float)(voucher.subtotal * 0.21);
+                    voucher.total = (float?)(voucher.subtotal * 1.21);
                     _dbContext.ControlOrders.Add(controlOrder);
                     _dbContext.Vouchers.Add(voucher);
                 }
@@ -154,9 +171,10 @@ namespace Repuestos_San_jorge.Services.Admin
 
     public interface IPurchaseOrderService
     {
-        Task<string> CreatePurchaseOrderAsync(int supplierId);
+        Task<PurchaseOrder> CreatePurchaseOrderAsync(string supplierName);
         Task<IEnumerable<PurchaseOrder>> GetOrdersAsync();
         Task<string> DeleteOrdersAsync(int purchaseOrderId);
+        Task<PurchaseOrder> GetOrderByIdAsync(int purchaseOrderId);
         Task<string> UpdateStatusOrdersAsync(
             int purchaseOrderId,
             PurchaseOrderStatusType status,

@@ -21,11 +21,14 @@ namespace Repuestos_San_jorge.Controllers.Admin
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateClient([FromBody] Client client)
+        public async Task<IActionResult> CreateClient([FromBody] CreateClientRequestDto request)
         {
             try
             {
-                var result = await _clientService.CreateClientAsync(client);
+                var result = await _clientService.CreateClientAsync(
+                    request.Client,
+                    request.CustomerDiscounts
+                );
                 return Ok(result);
             }
             catch (Exception ex)
@@ -41,6 +44,21 @@ namespace Repuestos_San_jorge.Controllers.Admin
             try
             {
                 var result = await _clientService.GetClientsAsync();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
+
+        [HttpGet("data")]
+        public async Task<ActionResult<IEnumerable<Seller>>> GetSellersByData([FromQuery] string text)
+        {
+            try
+            {
+                var result = await _clientService.GetClientsByDataAsync(text);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -66,7 +84,7 @@ namespace Repuestos_San_jorge.Controllers.Admin
         }
 
         [HttpPut("update/{id}")]
-        public async Task<ActionResult<IEnumerable<Client>>> UpdateClient(
+        public async Task<ActionResult<Client>> UpdateClient(
             int id,
             [FromBody] UpdateClientDto data
         )

@@ -40,7 +40,40 @@ namespace Repuestos_San_jorge.Services.Admin
         {
             try
             {
-                return await _dbContext.Sellers.ToListAsync();
+                return await _dbContext.Sellers.Include(seller => seller.user).ToListAsync();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<Seller>> GetSellersBydataAsync(string text, string by) // Listar vendedores
+        {
+            try
+            {
+                if (by == "cuil")
+                {
+                    var sellers = await _dbContext.Sellers
+                        .Where(s => s.cuil.Contains(text))
+                        .Include(s => s.user)
+                        .ToListAsync();
+                    return sellers;
+                }
+                else
+                {
+                    var users = await _dbContext.Users
+                        .Where(u => u.name.Contains(text) || u.lastName.Contains(text))
+                        .Include(u => u.seller)
+                        .ToListAsync();
+
+                    // Cargar los vendedores relacionados después de obtener los usuarios
+                    var sellers = users
+                        .Where(user => user.seller != null)
+                        .Select(user => user.seller)
+                        .ToList();
+                    return sellers;
+                }
             }
             catch
             {
@@ -79,13 +112,13 @@ namespace Repuestos_San_jorge.Services.Admin
             }
         }
 
-        public async Task<string> UpdateSellerAsync(int id, UpdateSellerDto data) // editar vendedores
+        public async Task<Seller> UpdateSellerAsync(int id, UpdateSellerDto data) // editar vendedores
         {
             try
             {
-                var vendedor = await _dbContext.Sellers.SingleOrDefaultAsync(
-                    seller => seller.id == id
-                );
+                var vendedor = await _dbContext.Sellers
+                    .Include(s => s.user) // Incluir la relación con User
+                    .SingleOrDefaultAsync(s => s.id == id);
                 if (vendedor == null)
                 {
                     throw new ArgumentNullException(
@@ -93,19 +126,17 @@ namespace Repuestos_San_jorge.Services.Admin
                         "El vendedor no puede ser null"
                     );
                 }
-                var dataUpdate = new Dictionary<string, object>();
-                foreach (var propiedad in data.GetType().GetProperties())
-                {
-                    string nombrePropiedad = propiedad.Name;
-                    var valorPropiedad = propiedad.GetValue(data);
-                    if (valorPropiedad != null)
-                    {
-                        dataUpdate.Add(nombrePropiedad, valorPropiedad);
-                    }
-                }
-                _dbContext.Entry(vendedor).CurrentValues.SetValues(dataUpdate);
+                vendedor.user.email = data.email;
+                vendedor.altura = data.altura;
+                vendedor.calle = data.calle;
+                vendedor.localidad = data.localidad;
+                vendedor.codigoPostal = data.codigoPostal;
+                vendedor.telefono = data.telefono;
+                vendedor.comisionBase= data.comisionBase;
+                vendedor.comisionOferta = data.comisionOferta;
+                _dbContext.Entry(vendedor).State = EntityState.Modified;
                 await _dbContext.SaveChangesAsync();
-                return "Datos de vendedor actualizados";
+                return vendedor;
             }
             catch
             {
@@ -118,8 +149,8 @@ namespace Repuestos_San_jorge.Services.Admin
     {
         Task<string> CreateSellerAsync(Seller seller);
         Task<IEnumerable<Seller>> GetSellersAsync();
-
-        Task<string> UpdateSellerAsync(int id, UpdateSellerDto data);
+        Task<IEnumerable<Seller>> GetSellersBydataAsync(string text, string by);
+        Task<Seller> UpdateSellerAsync(int id, UpdateSellerDto data);
         Task<string> DeleteSellerAsync(int id);
     }
 }

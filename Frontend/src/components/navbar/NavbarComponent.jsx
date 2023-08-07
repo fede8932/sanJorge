@@ -3,14 +3,10 @@ import styles from "./navbar.module.css";
 import logo from "../../assets/logo/logo.png";
 import CustomButton from "../../commonds/button/CustomButton";
 import CustomSearch from "../../commonds/search/CustomSearch";
-import avatar from "../../assets/avatars/mujer.png";
+import CustomMenu from "../../commonds/menu/CustomMenu";
 
 function NavbarComponent(props) {
   const { fnSidebar } = props;
-  const [classIcon, setClassIcon] = useState("configIconBlue");
-  const [classConfigContainer, setClassConfigContainer] = useState(
-    "configContainerWhite"
-  );
   return (
     <div className={styles.navbarContainer}>
       <div className={styles.titleLogo}>
@@ -24,7 +20,7 @@ function NavbarComponent(props) {
             icon: "fa-solid fa-bars",
             iconStyle: "menuIconVio",
             iconHoverStyle: "menuIconBla",
-            fnSidebar: fnSidebar
+            fnSidebar: fnSidebar,
           }}
         />
       </div>
@@ -39,28 +35,7 @@ function NavbarComponent(props) {
               iconHoverStyle: "menuIconBla",
             }}
           />
-          <div
-            onMouseOver={() => {
-              setClassIcon("configIconWhite");
-              setClassConfigContainer("configContainerBlue");
-            }}
-            onMouseOut={() => {
-              setClassIcon("configIconBlue");
-              setClassConfigContainer("configContainerWhite");
-            }}
-            className={styles[classConfigContainer]}
-          >
-            <div className={styles.avatarContainer}>
-              <img
-                src={avatar}
-                alt="Avatar de usuario"
-                style={{ heigth: "25px", width: "25px" }}
-              />
-            </div>
-            <div>
-              <i className={`${styles[classIcon]} fa-solid fa-gear`}></i>
-            </div>
-          </div>
+          <CustomMenu />
         </div>
       </div>
     </div>

@@ -17,19 +17,22 @@ namespace Repuestos_San_jorge.Services.Admin
             _dbContext = dbContext;
         }
 
-        public async Task<string> CreateSupplierAsync(Supplier supplier) // crear proveedor(seguir despues de seller)
+        public async Task<int> CreateSupplierAsync(Supplier supplier) // crear proveedor(seguir despues de seller)
         {
             try
             {
                 CurrentAcount currentAcount = new CurrentAcount
                 {
-                    acountNumber = Utils.AcountNumberGen(supplier.cuit.Substring(0, 1)+supplier.cuit.Substring(3, 4)),
+                    acountNumber = Utils.AcountNumberGen(
+                        supplier.cuit.Substring(0, 1) + supplier.cuit.Substring(3, 4)
+                    ),
                 };
                 _dbContext.CurrentAcounts.Add(currentAcount);
                 supplier.currentAcount = currentAcount;
                 _dbContext.Suppliers.Add(supplier);
                 await _dbContext.SaveChangesAsync();
-                return "Registrado";
+                await _dbContext.Entry(supplier).ReloadAsync(); // Recargar el objeto supplier desde la base de datos
+                return supplier.id;
             }
             catch
             {
@@ -42,6 +45,22 @@ namespace Repuestos_San_jorge.Services.Admin
             try
             {
                 return await _dbContext.Suppliers.ToListAsync();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<Supplier>> GetSuppliersByDataAsync(string text) // Listar proveedores
+        {
+            try
+            {
+                var suppliers = await _dbContext.Suppliers
+                    .Where(s => s.cuit.Contains(text) || s.razonSocial.Contains(text))
+                    .Include(s => s.currentAcount)
+                    .ToListAsync();
+                return suppliers;
             }
             catch
             {
@@ -107,6 +126,28 @@ namespace Repuestos_San_jorge.Services.Admin
             }
         }
 
+        public async Task<Supplier> SupplierAsync(string razonSocial)
+        {
+            try
+            {
+                var supplier = await _dbContext.Suppliers
+                    .Include(s => s.currentAcount)
+                    .SingleOrDefaultAsync(supplier => supplier.razonSocial == razonSocial);
+                if (supplier == null)
+                {
+                    throw new ArgumentNullException(
+                        nameof(supplier),
+                        "No existe proveedor en los registros"
+                    );
+                }
+                return supplier;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public async Task<string> AddBrandToSupplierAsync(int supplierId, int brandId) // agregar marca a proveedor
         {
             try
@@ -142,11 +183,12 @@ namespace Repuestos_San_jorge.Services.Admin
 
     public interface ISupplierService
     {
-        Task<string> CreateSupplierAsync(Supplier supplier);
+        Task<int> CreateSupplierAsync(Supplier supplier);
         Task<IEnumerable<Supplier>> GetSuppliersAsync();
-
         Task<string> UpdateSupplierAsync(int id, UpdateSupplierDto data);
+        Task<IEnumerable<Supplier>> GetSuppliersByDataAsync(string text);
         Task<string> DeleteSupplierAsync(int id);
+        Task<Supplier> SupplierAsync(string razonSocial);
         Task<string> AddBrandToSupplierAsync(int supplierId, int brandId);
     }
 }
