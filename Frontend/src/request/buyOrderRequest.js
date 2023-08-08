@@ -75,3 +75,14 @@ export const updatePriceOrderItem = async (dataItem) => {
     throw error;
   }
 };
+export const updateStatusOrder = async (dataItem) => {
+  try {
+    const { id, status } = dataItem;
+    const { data } = await axios.put(
+      `${apiUrl}/api/purchase/order/status/${id}?status=${status}`
+    );
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

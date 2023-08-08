@@ -12,6 +12,7 @@ import {
 import { getBuyOrderRequest } from "../redux/newOrder";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
+import { updateStatusOrder } from "../request/buyOrderRequest";
 
 function AddProductToBuyOrderContainer(props) {
   const navigate = useNavigate();
@@ -65,13 +66,17 @@ function AddProductToBuyOrderContainer(props) {
       confirmButtonText: "Confirmar",
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire(
-          "Orden confirmada",
-          "Tu orden se ha confirmado correctamente",
-          "success"
-        ).then(() => {
-          navigate("/");
-        });
+        updateStatusOrder({ id: actualOrder.data.id, status: "Confirm" }).then(
+          () => {
+            Swal.fire(
+              "Orden confirmada",
+              "Tu orden se ha confirmado correctamente",
+              "success"
+            ).then(() => {
+              navigate("/");
+            });
+          }
+        );
       }
     });
   };
