@@ -3,7 +3,7 @@ import styles from "./newBuyOrder.module.css";
 import SelectLink from "../../commonds/selectLink/SelectLink";
 import AddProductToBuyOrderContainer from "../../containers/AddProductToBuyOrderContainer";
 import FormSelectProveedorContainer from "../../containers/FormSelectProveedorContainer";
-import FindBuyOrderContainer from "../../containers/FindBuyOrderContainer";
+// import FindBuyOrderContainer from "../../containers/FindBuyOrderContainer";
 
 function NewBuyOrder() {
   const [viewActive, setViewActive] = useState("General");
@@ -12,7 +12,7 @@ function NewBuyOrder() {
       <h6 className={styles.formTitle}>Crear orden de compra</h6>
       <SelectLink
         view={viewActive}
-        order={["General", "Productos", "Finalizar"]}
+        order={["General", "Productos"]}
       />
       {viewActive == "General" ? (
         <FormSelectProveedorContainer
@@ -22,9 +22,9 @@ function NewBuyOrder() {
       {viewActive == "Productos" ? (
         <AddProductToBuyOrderContainer setView={setViewActive} />
       ) : null}
-      {viewActive == "Finalizar" ? (
+      {/* {viewActive == "Finalizar" ? (
         <FindBuyOrderContainer setView={setViewActive} />
-      ) : null}
+      ) : null} */}
     </div>
   );
 }

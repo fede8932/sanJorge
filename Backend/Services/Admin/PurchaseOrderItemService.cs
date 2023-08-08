@@ -85,13 +85,13 @@ namespace Repuestos_San_jorge.Services.Admin
             }
         }
 
-        public async Task<string> DeleteItemToOrder(int id) // Eliminar item
+        public async Task<ICollection<PurchaseOrderItem>> DeleteItemToOrder(int id) // Eliminar item
         {
             try
             {
                 var orderItem = await _dbContext.PurchaseOrderItems
-                    .Include(PurchaseOrderItems => PurchaseOrderItems.purchaseOrder)
-                    .FirstOrDefaultAsync(PurchaseOrderItems => PurchaseOrderItems.id == id);
+                    .Include(item => item.purchaseOrder)
+                    .FirstOrDefaultAsync(item => item.id == id);
                 if (orderItem == null)
                 {
                     throw new ArgumentNullException(
@@ -114,7 +114,17 @@ namespace Repuestos_San_jorge.Services.Admin
                 _dbContext.PurchaseOrderItems.Remove(orderItem);
                 _dbContext.PurchaseOrders.Update(order);
                 await _dbContext.SaveChangesAsync();
-                return "Eliminado";
+                var orderItems = await _dbContext.PurchaseOrderItems
+                    .Include(item => item.product)
+                    .Include(item => item.brand)
+                    .ThenInclude(b => b.brandProducts)
+                    .ThenInclude(bp => bp.price)
+                    .Include(item => item.brand)
+                    .ThenInclude(b => b.brandProducts)
+                    .ThenInclude(bp => bp.stock)
+                    .Where(i => i.purchaseOrderId == order.id)
+                    .ToListAsync();
+                return orderItems;
             }
             catch
             {
@@ -137,12 +147,14 @@ namespace Repuestos_San_jorge.Services.Admin
             return orderItems;
         }
 
-        public async Task<string> UpdateCantToOrderItem(int id, int cantidad)
+        public async Task<PurchaseOrderItem> UpdateCantToOrderItem(int id, int cantidad)
         {
             try
             {
                 var orderItem = await _dbContext.PurchaseOrderItems
-                    .Include(PurchaseOrderItems => PurchaseOrderItems.purchaseOrder)
+                    .Include(item => item.purchaseOrder)
+                    .Include(item => item.brand)
+                    .Include(item => item.product)
                     .FirstOrDefaultAsync(PurchaseOrderItems => PurchaseOrderItems.id == id);
                 if (orderItem == null)
                 {
@@ -169,7 +181,7 @@ namespace Repuestos_San_jorge.Services.Admin
                     _dbContext.PurchaseOrderItems.Update(orderItem);
                     _dbContext.PurchaseOrders.Update(order);
                     await _dbContext.SaveChangesAsync();
-                    return "Cantidad actualizada";
+                    return orderItem;
                 }
                 else
                 {
@@ -182,12 +194,14 @@ namespace Repuestos_San_jorge.Services.Admin
             }
         }
 
-        public async Task<string> UpdatePriceToOrderItem(int id, float price)
+        public async Task<PurchaseOrderItem> UpdatePriceToOrderItem(int id, float price)
         {
             try
             {
                 var orderItem = await _dbContext.PurchaseOrderItems
-                    .Include(PurchaseOrderItems => PurchaseOrderItems.purchaseOrder)
+                    .Include(item => item.purchaseOrder)
+                    .Include(item => item.brand)
+                    .Include(item => item.product)
                     .FirstOrDefaultAsync(PurchaseOrderItems => PurchaseOrderItems.id == id);
                 if (orderItem == null)
                 {
@@ -214,7 +228,7 @@ namespace Repuestos_San_jorge.Services.Admin
                     _dbContext.PurchaseOrderItems.Update(orderItem);
                     _dbContext.PurchaseOrders.Update(order);
                     await _dbContext.SaveChangesAsync();
-                    return "Cantidad actualizada";
+                    return orderItem;
                 }
                 else
                 {
@@ -236,9 +250,9 @@ namespace Repuestos_San_jorge.Services.Admin
             int brandId,
             int cantidad
         );
-        Task<string> DeleteItemToOrder(int id);
+        Task<ICollection<PurchaseOrderItem>> DeleteItemToOrder(int id);
         Task<ICollection<PurchaseOrderItem>> GetItemByOrder(int id);
-        Task<string> UpdateCantToOrderItem(int id, int cantidad);
-        Task<string> UpdatePriceToOrderItem(int id, float price);
+        Task<PurchaseOrderItem> UpdateCantToOrderItem(int id, int cantidad);
+        Task<PurchaseOrderItem> UpdatePriceToOrderItem(int id, float price);
     }
 }

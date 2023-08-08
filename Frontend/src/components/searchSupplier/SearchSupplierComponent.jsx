@@ -59,6 +59,7 @@ function SearchSupplierComponent(props) {
                 "Razón Social",
                 "CUIT",
                 "C. Corriente",
+                "Saldo",
                 "Estado",
                 "Acciones",
               ]}

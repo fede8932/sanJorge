@@ -7,7 +7,7 @@ import { UpdateClientsRequest } from "../redux/searchClient";
 
 function EditClientViewContainer(props) {
   const { client, close } = props;
-  const { loading } = useSelector((state) => state.searchSellers);
+  const { loading } = useSelector((state) => state.searchClients);
   const sellers = useSelector((state) => state.seller);
   const methods = useForm();
   const dispatch = useDispatch();

@@ -3,6 +3,7 @@ import RoleTableComponent from "../components/roleTable/RoleTableComponent";
 import { UpdateStatusSellerRequest } from "../redux/searchSeller";
 import { useDispatch, useSelector } from "react-redux";
 import { UpdateStatusClientRequest } from "../redux/searchClient";
+import { UpdateStatusSupplierRequest } from "../redux/searchSupplier";
 
 function RoleTableContainer(props) {
   const dispatch = useDispatch()
@@ -12,7 +13,10 @@ function RoleTableContainer(props) {
   const changeClientStatus = (id) => {
     dispatch(UpdateStatusClientRequest(id))
   }
-  return <RoleTableComponent {...props} statusSellerToogle={changeSellerStatus} statusClienToogle={changeClientStatus} />;
+  const changeSupplierStatus = (id) => {
+    dispatch(UpdateStatusSupplierRequest(id))
+  }
+  return <RoleTableComponent {...props} statusSellerToogle={changeSellerStatus} statusClienToogle={changeClientStatus} statusSupplierToogle={changeSupplierStatus} />;
 }
 
 export default RoleTableContainer;

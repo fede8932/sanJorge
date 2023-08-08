@@ -94,7 +94,7 @@ namespace Repuestos_San_jorge.Controllers.Admin
         }
 
         [HttpPut("update/{id}")]
-        public async Task<ActionResult<IEnumerable<Seller>>> UpdateSupplier(
+        public async Task<ActionResult<Supplier>> UpdateSupplier(
             int id,
             [FromBody] UpdateSupplierDto data
         )
@@ -102,6 +102,21 @@ namespace Repuestos_San_jorge.Controllers.Admin
             try
             {
                 var result = await _supplierService.UpdateSupplierAsync(id, data);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
+
+        [HttpPut("update/status/{id}")]
+        public async Task<ActionResult<Supplier>> UpdateStatusSupplier(int id)
+        {
+            try
+            {
+                var result = await _supplierService.UpdateStatusSupplierAsync(id);
                 return Ok(result);
             }
             catch (Exception ex)

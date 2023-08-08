@@ -6,6 +6,7 @@ import AddProductViewModalContainer from "../../containers/AddProductViewModalCo
 import IconButonUsersTable from "../../commonds/iconButtonUsersTable/IconButonUsersTable";
 import EditUserViewContainer from "../../containers/EditUserViewContainer";
 import EditClientViewContainer from "../../containers/EditClientViewContainer";
+import EditSupplierViewContainer from "../../containers/EditSupplierViewContainer";
 
 const MyVerticallyCenteredModal = (props) => {
   const { title, type, data, size } = props;
@@ -29,6 +30,7 @@ const MyVerticallyCenteredModal = (props) => {
         {type == "add" ? <AddProductViewModalContainer /> : null}
         {type == "updateSeller" ? <EditUserViewContainer seller={data} close={props.onHide}/> : null}
         {type == "updateClient" ? <EditClientViewContainer client={data} close={props.onHide}/> : null}
+        {type == "updateSupplier" ? <EditSupplierViewContainer supplier={data} close={props.onHide}/> : null}
       </Modal.Body>
       {/* {type == "update" ? null : (
         <Modal.Footer>

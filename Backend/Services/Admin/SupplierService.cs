@@ -92,11 +92,77 @@ namespace Repuestos_San_jorge.Services.Admin
             }
         }
 
-        public async Task<string> UpdateSupplierAsync(int id, UpdateSupplierDto data) // editar proveedor
+        // public async Task<string> UpdateSupplierAsync(int id, UpdateSupplierDto data) // editar proveedor
+        // {
+        //     try
+        //     {
+        //         var supplier = await _dbContext.Suppliers.SingleOrDefaultAsync(
+        //             supplier => supplier.id == id
+        //         );
+        //         if (supplier == null)
+        //         {
+        //             throw new ArgumentNullException(
+        //                 nameof(supplier),
+        //                 "El proveedor no puede ser null"
+        //             );
+        //         }
+        //         var dataUpdate = new Dictionary<string, object>();
+        //         foreach (var propiedad in data.GetType().GetProperties())
+        //         {
+        //             string nombrePropiedad = propiedad.Name;
+        //             var valorPropiedad = propiedad.GetValue(data);
+        //             if (valorPropiedad != null)
+        //             {
+        //                 dataUpdate.Add(nombrePropiedad, valorPropiedad);
+        //             }
+        //         }
+        //         _dbContext.Entry(supplier).CurrentValues.SetValues(dataUpdate);
+        //         await _dbContext.SaveChangesAsync();
+        //         return "Datos de proveedor actualizados";
+        //     }
+        //     catch
+        //     {
+        //         throw;
+        //     }
+        // }
+                
+        public async Task<Supplier> UpdateSupplierAsync(int id, UpdateSupplierDto data) 
         {
             try
             {
-                var supplier = await _dbContext.Suppliers.SingleOrDefaultAsync(
+                var proveedor = await _dbContext.Suppliers
+                    .Include(c => c.currentAcount)
+                    .SingleOrDefaultAsync(s => s.id == id);
+                if (proveedor == null)
+                {
+                    throw new ArgumentNullException(
+                        nameof(proveedor),
+                        "El proveedor no puede ser null"
+                    );
+                }
+                proveedor.email = data.email;
+                proveedor.altura = data.altura;
+                proveedor.calle = data.calle;
+                proveedor.localidad = data.localidad;
+                proveedor.codigoPostal = data.codigoPostal;
+                proveedor.telefono = data.telefono;
+                proveedor.comentarios = data.comentarios;
+                _dbContext.Entry(proveedor).State = EntityState.Modified;
+                await _dbContext.SaveChangesAsync();
+                return proveedor;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<Supplier> UpdateStatusSupplierAsync(int id)
+        {
+            try{
+                var supplier = await _dbContext.Suppliers
+                .Include(s => s.currentAcount)
+                .SingleOrDefaultAsync(
                     supplier => supplier.id == id
                 );
                 if (supplier == null)
@@ -106,19 +172,10 @@ namespace Repuestos_San_jorge.Services.Admin
                         "El proveedor no puede ser null"
                     );
                 }
-                var dataUpdate = new Dictionary<string, object>();
-                foreach (var propiedad in data.GetType().GetProperties())
-                {
-                    string nombrePropiedad = propiedad.Name;
-                    var valorPropiedad = propiedad.GetValue(data);
-                    if (valorPropiedad != null)
-                    {
-                        dataUpdate.Add(nombrePropiedad, valorPropiedad);
-                    }
-                }
-                _dbContext.Entry(supplier).CurrentValues.SetValues(dataUpdate);
+                supplier.status = !supplier.status;
+                _dbContext.Entry(supplier).State = EntityState.Modified;
                 await _dbContext.SaveChangesAsync();
-                return "Datos de proveedor actualizados";
+                return supplier;
             }
             catch
             {
@@ -185,7 +242,8 @@ namespace Repuestos_San_jorge.Services.Admin
     {
         Task<int> CreateSupplierAsync(Supplier supplier);
         Task<IEnumerable<Supplier>> GetSuppliersAsync();
-        Task<string> UpdateSupplierAsync(int id, UpdateSupplierDto data);
+        Task<Supplier> UpdateSupplierAsync(int id, UpdateSupplierDto data);
+        Task<Supplier> UpdateStatusSupplierAsync(int id);
         Task<IEnumerable<Supplier>> GetSuppliersByDataAsync(string text);
         Task<string> DeleteSupplierAsync(int id);
         Task<Supplier> SupplierAsync(string razonSocial);

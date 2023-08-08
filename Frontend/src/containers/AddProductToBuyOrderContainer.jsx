@@ -6,11 +6,15 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addOrderItemsRequest,
   deleteOrderItemsRequest,
+  updateCantItemsRequest,
+  updatePriceItemsRequest,
 } from "../redux/addOrderItems";
 import { getBuyOrderRequest } from "../redux/newOrder";
-import { updateOrderItem, updatePriceOrderItem } from "../request/buyOrderRequest";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router";
 
 function AddProductToBuyOrderContainer(props) {
+  const navigate = useNavigate();
   const actualOrder = useSelector((state) => state.newBuyOrder);
   const listOrderItems = useSelector((state) => state.listOrderItems);
   const methods = useForm();
@@ -36,28 +40,40 @@ function AddProductToBuyOrderContainer(props) {
     console.log("anda", product, productPages, actualOrder);
   };
   const deleteOrder = (dataOrder) => {
-    console.log(dataOrder);
     dispatch(deleteOrderItemsRequest(dataOrder)).then(() => {
       dispatch(getBuyOrderRequest(actualOrder.data.id));
     });
   };
   const updateCantOrderItem = async (dataOrderItem) => {
-    try {
-      const respuesta = await updateOrderItem(dataOrderItem);
+    dispatch(updateCantItemsRequest(dataOrderItem)).then(() => {
       dispatch(getBuyOrderRequest(actualOrder.data.id));
-      console.log(respuesta)
-    } catch (e) {
-      console.log(e);
-    }
+    });
   };
   const updatePrecOrderItem = async (dataOrderItem) => {
-    try {
-      const respuesta = await updatePriceOrderItem(dataOrderItem);
+    dispatch(updatePriceItemsRequest(dataOrderItem)).then(() => {
       dispatch(getBuyOrderRequest(actualOrder.data.id));
-      console.log(respuesta)
-    } catch (e) {
-      console.log(e);
-    }
+    });
+  };
+  const confirmOrder = () => {
+    Swal.fire({
+      title: "Confirmar orden?",
+      text: "Ya no podrás modificarla",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Confirmar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire(
+          "Orden confirmada",
+          "Tu orden se ha confirmado correctamente",
+          "success"
+        ).then(() => {
+          navigate("/");
+        });
+      }
+    });
   };
   return (
     <AddProductToOrder
@@ -72,6 +88,7 @@ function AddProductToBuyOrderContainer(props) {
       fnPrUpdate={updatePrecOrderItem}
       listOrder={listOrderItems.data}
       order={actualOrder}
+      fnEnd={confirmOrder}
     />
   );
 }

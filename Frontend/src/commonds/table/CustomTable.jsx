@@ -5,7 +5,17 @@ import IconButton from "../../commonds/iconButton/IconButon";
 import TableInput from "../tableInput/TableInput";
 
 const CustomTable = (props) => {
-  let { colum, products, color, fnInfo, fnAdd, fnDelete, fnUpdate, fnPrUpdate, type } = props;
+  let {
+    colum,
+    products,
+    color,
+    fnInfo,
+    fnAdd,
+    fnDelete,
+    fnUpdate,
+    fnPrUpdate,
+    type,
+  } = props;
   return (
     <Table color={color} key={color}>
       <Table.Header>
@@ -64,7 +74,7 @@ const CustomTable = (props) => {
                   <TableInput
                     type="number"
                     step="0.01"
-                    defValue={p.brand.brandProducts[0].price.price}
+                    defValue={p.buyPrice}
                     fn={fnPrUpdate}
                     dataItem={{ id: p.id }}
                   />
@@ -72,6 +82,7 @@ const CustomTable = (props) => {
               </Table.Cell>
               <Table.Cell>
                 <TableInput
+                  key={i}
                   type="number"
                   step="1"
                   defValue={p.amount}
@@ -79,12 +90,11 @@ const CustomTable = (props) => {
                   dataItem={{ id: p.id }}
                 />
               </Table.Cell>
-              <Table.Cell>{`$ ${
-                p.amount * p.brand.brandProducts[0].price.price
-              }`}</Table.Cell>
+              <Table.Cell>{`$ ${p.amount * p.buyPrice}`}</Table.Cell>
               <Table.Cell>
                 <div className={styles.butContainer}>
                   <IconButton
+                    key={i}
                     type="delete"
                     icon="fa-regular fa-trash-can"
                     iconInitialStyle="iconStyleRed"

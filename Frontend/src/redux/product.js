@@ -33,7 +33,6 @@ const productSlice = createSlice({
     },
     [productCreateRequest.fulfilled]: (state, action) => {
       state.loading = false;
-      state.data = action.payload;
     },
     [searchProductRequest.pending]: (state, action) => {
       state.loading = true;

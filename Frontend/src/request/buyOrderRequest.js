@@ -38,12 +38,9 @@ export const addOrderItem = async (dataOrder) => {
 };
 export const deleteOrderItem = async (dataOrder) => {
   try {
-    const { orderItemId, orderItems } = dataOrder;
-    await axios.delete(`${apiUrl}/api/purchase/order/items/${orderItemId}`);
-    const newOrderItems = orderItems.filter(
-      (orderItem) => orderItem.id != orderItemId
-    );
-    return newOrderItems;
+    const { orderItemId } = dataOrder;
+    const { data } = await axios.delete(`${apiUrl}/api/purchase/order/items/${orderItemId}`);
+    return data;
   } catch (error) {
     throw error;
   }
@@ -59,10 +56,10 @@ export const getBuyOrder = async (id) => {
 export const updateOrderItem = async (dataItem) => {
   try {
     const { id, editCamp } = dataItem;
-    await axios.put(
+    const { data } = await axios.put(
       `${apiUrl}/api/purchase/order/items/${id}?cantidad=${editCamp}`
     );
-    return "Actualizado";
+    return data;
   } catch (error) {
     throw error;
   }
@@ -70,10 +67,10 @@ export const updateOrderItem = async (dataItem) => {
 export const updatePriceOrderItem = async (dataItem) => {
   try {
     const { id, editCamp } = dataItem;
-    await axios.put(
+    const { data } = await axios.put(
       `${apiUrl}/api/purchase/order/items/price/${id}?price=${editCamp}`
     );
-    return "Actualizado";
+    return data;
   } catch (error) {
     throw error;
   }

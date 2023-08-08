@@ -19,6 +19,7 @@ function AddProductToOrder(props) {
     fnPrUpdate,
     listOrder,
     order,
+    fnEnd
   } = props;
   return (
     <FormProvider {...methods}>
@@ -152,7 +153,7 @@ function AddProductToOrder(props) {
             className={`${styles.buttonStyle} ${styles.buttonStyleNext}`}
             variant="primary"
             onClick={() => {
-              setView("Finalizar");
+              fnEnd();
             }}
           >
             Siguiente

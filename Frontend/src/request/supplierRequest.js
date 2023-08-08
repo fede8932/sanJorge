@@ -60,3 +60,22 @@ export const addSupplierToTable = async (datos) => {
 export const resetSupplierToTable = async () => {
   return [];
 };
+
+export const updateSupplierStatusRequest = async (id) => {
+  try {
+    const { data } = await axios.put(`${apiUrl}/api/supplier/update/status/${id}`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const updateSupplierRequest = async (dataEdit) => {
+  try {
+    const { id, ...sendInfo } = dataEdit
+    const { data } = await axios.put(`${apiUrl}/api/supplier/update/${id}`, sendInfo);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
