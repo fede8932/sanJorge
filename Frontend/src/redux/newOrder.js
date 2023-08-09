@@ -13,6 +13,14 @@ export const getBuyOrderRequest = createAsyncThunk(
   "ORDER_GET",
   buyOrderRequest.getBuyOrder
 );
+export const getSellOrderLocalRequest = createAsyncThunk(
+  "ORDER_GET_LOCAL",
+  buyOrderRequest.getSellOrderLocal
+);
+export const deleteSellOrder = createAsyncThunk(
+  "DELETE_ORDER",
+  buyOrderRequest.deleteSellOrder
+);
 
 const newBuyOrderSlice = createSlice({
   name: "newOrder",
@@ -39,6 +47,17 @@ const newBuyOrderSlice = createSlice({
     [getBuyOrderRequest.fulfilled]: (state, action) => {
       state.loading = false;
       state.data = action.payload;
+    },
+    [deleteSellOrder.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [deleteSellOrder.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
+    [deleteSellOrder.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.data = {};
     },
   },
 });

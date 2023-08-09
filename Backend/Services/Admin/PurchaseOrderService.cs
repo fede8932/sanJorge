@@ -24,7 +24,7 @@ namespace Repuestos_San_jorge.Services.Admin
                 var supplier = await _dbContext.Suppliers.SingleOrDefaultAsync(
                     supplier => supplier.razonSocial == supplierName
                 );
-                if (supplier == null)
+                if (supplier == null && supplierName != "nosupplier")
                 {
                     throw new ArgumentNullException(
                         nameof(supplier),
@@ -35,9 +35,19 @@ namespace Repuestos_San_jorge.Services.Admin
                 {
                     date = DateTime.UtcNow,
                     total = 0,
-                    supplierId = supplier.id,
-                    supplier = supplier
                 };
+                if (supplierName != "nosupplier")
+                {
+                    purchaseOrder.supplierId = supplier.id;
+                    purchaseOrder.supplier = supplier;
+                    purchaseOrder.type = PurchaseOrderType.Buy;
+                    purchaseOrder.efective = true;
+                }
+                else
+                {
+                    purchaseOrder.type = PurchaseOrderType.Sell;
+                    purchaseOrder.efective = false;
+                }
                 _dbContext.PurchaseOrders.Add(purchaseOrder);
                 await _dbContext.SaveChangesAsync();
                 return purchaseOrder;
@@ -90,16 +100,17 @@ namespace Repuestos_San_jorge.Services.Admin
                         "No existe la orden en los registros"
                     );
                 }
+                System.Console.WriteLine(order.status);
                 if (
                     order.status != PurchaseOrderStatusType.Confirm
                     && order.status != PurchaseOrderStatusType.Recived
                 )
                 {
-                    throw new Exception("No se puede eliminar esta orden");
+                    _dbContext.PurchaseOrders.Remove(order);
+                    await _dbContext.SaveChangesAsync();
+                    return "Orden eliminada";
                 }
-                _dbContext.PurchaseOrders.Remove(order);
-                await _dbContext.SaveChangesAsync();
-                return "Orden eliminada";
+                throw new Exception("No se puede eliminar esta orden");
             }
             catch
             {

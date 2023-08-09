@@ -62,5 +62,7 @@ namespace Repuestos_San_jorge.Models
         public CurrentAcount? currentAcount { get; set; }
 
         public ICollection<CustomerDiscount>? customerDiscounts { get; set; }
+        
+        public ICollection<PurchaseOrder>? purchaseOrders { get; set; }
     }
 }

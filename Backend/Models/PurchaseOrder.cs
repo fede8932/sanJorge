@@ -18,12 +18,24 @@ namespace Repuestos_San_jorge.Models
         public PurchaseOrderStatusType status { get; set; }
 
         [Required]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public PurchaseOrderType type { get; set; }
+
+        [Required]
         public float total { get; set; }
+
+        [Required]
+        public bool efective { get; set; }
 
         public int? supplierId { get; set; }
 
         [ForeignKey("supplierId")]
         public Supplier? supplier { get; set; }
+
+        public int? clientId { get; set; }
+
+        [ForeignKey("clientId")]
+        public Client? client { get; set; }
 
         public ICollection<PurchaseOrderItem>? purchaseOrderItems { get; set; }
 

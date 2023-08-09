@@ -44,6 +44,10 @@ namespace Repuestos_San_jorge.Data
                 .Property(purchaseOrder => purchaseOrder.status)
                 .HasConversion<string>();
             modelBuilder
+                .Entity<PurchaseOrder>()
+                .Property(purchaseOrder => purchaseOrder.type)
+                .HasConversion<string>();
+            modelBuilder
                 .Entity<Voucher>()
                 .Property(voucher => voucher.type)
                 .HasConversion<string>();
@@ -180,6 +184,11 @@ namespace Repuestos_San_jorge.Data
                 .HasOne(purchaseOrder => purchaseOrder.supplier)
                 .WithMany(supplier => supplier.purchaseOrders)
                 .HasForeignKey(purchaseOrder => purchaseOrder.supplierId);
+            modelBuilder
+                .Entity<PurchaseOrder>()
+                .HasOne(purchaseOrder => purchaseOrder.client)
+                .WithMany(client => client.purchaseOrders)
+                .HasForeignKey(purchaseOrder => purchaseOrder.clientId);
             modelBuilder
                 .Entity<PurchaseOrder>()
                 .HasOne(purchaseOrder => purchaseOrder.Voucher)

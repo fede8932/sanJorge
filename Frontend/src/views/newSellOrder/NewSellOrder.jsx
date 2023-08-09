@@ -7,7 +7,6 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { useNavigate } from "react-router";
 import CustomInput from "../../commonds/input/CustomInput";
-import ClientAcordion from "../../commonds/clientAcordion/ClientAcordion";
 import FormSelectClientContainer from "../../containers/FormSelectClientContainer";
 import AddProductToSellOrderContainer from "../../containers/AddProductToSellOrderContainer";
 
@@ -22,12 +21,12 @@ function NewSellOrder() {
         view={viewActive}
         order={["Productos", "Cliente"]}
       />
-      {viewActive == "Cliente" ? (
+      {/* {viewActive == "Cliente" ? (
         <FormSelectClientContainer
           proveedores={arrayPrueba}
           setView={setViewActive}
         />
-      ) : null}
+      ) : null} */}
       {viewActive == "Productos" ? (
         <AddProductToSellOrderContainer setView={setViewActive} />
       ) : null}

@@ -1,285 +1,164 @@
 import React from "react";
 import styles from "./addProduct.module.css";
+import Button from "react-bootstrap/esm/Button";
+import Spinner from "react-bootstrap/esm/Spinner";
+import CustomInput from "../../commonds/input/CustomInput";
+import CustomTable from "../../commonds/table/CustomTable";
+import { FormProvider } from "react-hook-form";
 
 function AddProductToSellOrder(props) {
-  const { setView } = props;
-  const navigate = useNavigate();
+  const {
+    setView,
+    methods,
+    onSubmit,
+    productPages,
+    fnAdd,
+    fnInfo,
+    fnDelete,
+    fnUpdate,
+    fnPrUpdate,
+    listOrder,
+    order,
+    cancel,
+  } = props;
   return (
-    <div className={styles.addProductContainer}>
-      <div className={styles.addProdSubContainer}>
-        <div className={styles.searchContainer}>
-          <span className={styles.subTitle}>Buscador de productos</span>
-          <div className={styles.searchTableContainer}>
-            <div className={styles.inputSearchContainer}>
-              <CustomInput
-                type="text"
-                width="long"
-                placeholder="Artículo"
-                icon="fa-solid fa-magnifying-glass"
-              />
+    <FormProvider {...methods}>
+      <form className={styles.addProductContainer}>
+        <div className={styles.addProdSubContainer}>
+          <div className={styles.searchContainer}>
+            <span className={styles.subTitle}>Buscador de productos</span>
+            <div className={styles.searchTableContainer}>
+              <div className={styles.inputSearchContainer}>
+                <CustomInput
+                  name="dataSearch"
+                  type="text"
+                  width="medium"
+                  placeholder="Artículo"
+                  icon="fa-solid fa-magnifying-glass"
+                  validate={{ required: true }}
+                />
+                <Button
+                  onClick={methods.handleSubmit(onSubmit)}
+                  style={{
+                    backgroundColor: "#673ab7",
+                    border: "1px solid #673ab7",
+                    height: "47px",
+                    marginLeft: "20px",
+                    width: "100px",
+                  }}
+                >
+                  {!productPages.loading ? (
+                    "Buscar"
+                  ) : (
+                    <Spinner animation="border" variant="light" size="sm" />
+                  )}
+                </Button>
+              </div>
+              <div className={styles.tableProdContainer}>
+                <CustomTable
+                  type="search"
+                  color="blue"
+                  products={productPages.data}
+                  fnAdd={fnAdd}
+                  fnInfo={fnInfo}
+                  colum={[
+                    { title: "Artículo", width: "40%" },
+                    { title: "Marca", width: "20%" },
+                    { title: "Precio Uni", width: "20%" },
+                    { title: "Stock", width: "10%" },
+                    { title: "Acción", width: "10%" },
+                  ]}
+                />
+              </div>
             </div>
-            <div className={styles.tableProdContainer}>
-              <table className="table">
-                <thead className="table-primary">
-                  <tr>
-                    <th scope="col" className={styles.colArtWidth}>
-                      Artículo
-                    </th>
-                    <th scope="col">Marca</th>
-                    <th scope="col">Stock</th>
-                    <th scope="col">Precio</th>
-                    <th scope="col" className={styles.colActWidth}>
-                      Acción
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Mark</td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <td>Jacob</td>
-                    <td>Mark</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <td>@fat</td>
-                    <td>@twitter</td>
-                    <td>Mark</td>
-                    <td>@fat</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <td>@fat</td>
-                    <td>@twitter</td>
-                    <td>Mark</td>
-                    <td>@fat</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <td>@fat</td>
-                    <td>@twitter</td>
-                    <td>Mark</td>
-                    <td>@fat</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <td>@fat</td>
-                    <td>@twitter</td>
-                    <td>Mark</td>
-                    <td>@fat</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <td>@fat</td>
-                    <td>@twitter</td>
-                    <td>Mark</td>
-                    <td>@fat</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <td>@fat</td>
-                    <td>@twitter</td>
-                    <td>@fat</td>
-                    <td>Mark</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <td>@fat</td>
-                    <td>@twitter</td>
-                    <td>@fat</td>
-                    <td>Mark</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <td>@fat</td>
-                    <td>@twitter</td>
-                    <td>Mark</td>
-                    <td>@fat</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <td>@fat</td>
-                    <td>@twitter</td>
-                    <td>Mark</td>
-                    <td>@fat</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <td>@fat</td>
-                    <td>@twitter</td>
-                    <td>Mark</td>
-                    <td>@fat</td>
-                    <td>@mdo</td>
-                  </tr>
-                </tbody>
-              </table>
+          </div>
+          <div className={styles.resumenContainer}>
+            <div className={styles.resume}>
+              <span className={styles.subTitle}>Detalles de presupuesto</span>
+              <div className={styles.prodToOrderContainer}>
+                <div className={styles.infoProvContainer}>
+                  <span className={styles.labelInfoProv}>
+                    IVA:
+                    <span className={styles.textInfoProv}>Final
+                    </span>
+                  </span>
+                  <span className={styles.labelInfoProv}>
+                    Punto de venta:
+                    <span className={styles.textInfoProv}>San jorge
+                    </span>
+                  </span>
+                  <span className={styles.labelInfoProv}>
+                    Nº de presupuesto:
+                    <span className={styles.textInfoProv}>0001-0001</span>
+                  </span>
+                </div>
+                <div className={styles.infoProvContainer}>
+                  <div className={styles.infoCostoCont}>
+                    <h6 className={styles.precioLabel}>Subtotal:</h6>
+                    <span
+                      className={styles.precioText}
+                    >{`$ ${order.data.total}`}</span>
+                  </div>
+                  <div className={styles.infoCostoCont}>
+                    <h6 className={styles.precioLabel}>IVA:</h6>
+                    <span className={styles.precioText}>{`$ ${(
+                      order.data.total * 0.21
+                    ).toFixed(2)}`}</span>
+                  </div>
+                  <div className={styles.infoCostoCont}>
+                    <h6 className={styles.precioLabel}>Total:</h6>
+                    <span className={styles.precioText}>{`$ ${(
+                      order.data.total * 1.21
+                    ).toFixed(2)}`}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className={styles.listContainer}>
+              <span className={styles.subTitle}>Productos en presupuesto</span>
+              <div className={styles.prodToOrderContainer}>
+                <CustomTable
+                  type="list"
+                  fnDelete={fnDelete}
+                  color="teal"
+                  products={listOrder}
+                  fnUpdate={fnUpdate}
+                  fnPrUpdate={fnPrUpdate}
+                  colum={[
+                    { title: "Artículo", width: "35%" },
+                    { title: "Marca", width: "20%" },
+                    { title: "Precio Uni", width: "15%" },
+                    { title: "Cantidad", width: "10%" },
+                    { title: "Subtotal", width: "10%" },
+                    { title: "Acción", width: "10%" },
+                  ]}
+                />
+              </div>
             </div>
           </div>
         </div>
-        <div className={styles.listContainer}>
-          <span className={styles.subTitle}>Detalle de orden</span>
-          <div></div>
-          <div className={styles.prodToOrderContainer}>
-            <table className="table">
-              <thead className="table-success">
-                <tr>
-                  <th scope="col" className={styles.colArtWidthDos}>
-                    Artículo
-                  </th>
-                  <th scope="col">Stock</th>
-                  <th scope="col">Precio</th>
-                  <th scope="col">Cantidad</th>
-                  <th scope="col" className={styles.colActWidthDos}>
-                    Acción
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Mark</td>
-                  <td>Otto</td>
-                  <td>@mdo</td>
-                  <td>@mdo</td>
-                  <td>@mdo</td>
-                </tr>
-                <tr>
-                  <td>Jacob</td>
-                  <td>Thornton</td>
-                  <td>@fat</td>
-                  <td>@mdo</td>
-                  <td>@mdo</td>
-                </tr>
-                <tr>
-                  <td>@fat</td>
-                  <td>@twitter</td>
-                  <td>@fat</td>
-                  <td>@mdo</td>
-                  <td>@mdo</td>
-                </tr>
-                <tr>
-                  <td>@fat</td>
-                  <td>@twitter</td>
-                  <td>@fat</td>
-                  <td>@mdo</td>
-                  <td>@mdo</td>
-                </tr>
-                <tr>
-                  <td>@fat</td>
-                  <td>@twitter</td>
-                  <td>@fat</td>
-                  <td>@mdo</td>
-                  <td>@mdo</td>
-                </tr>
-                <tr>
-                  <td>@fat</td>
-                  <td>@twitter</td>
-                  <td>@fat</td>
-                  <td>@mdo</td>
-                  <td>@mdo</td>
-                </tr>
-                <tr>
-                  <td>@fat</td>
-                  <td>@twitter</td>
-                  <td>@fat</td>
-                  <td>@mdo</td>
-                  <td>@mdo</td>
-                </tr>
-                <tr>
-                  <td>@fat</td>
-                  <td>@twitter</td>
-                  <td>@fat</td>
-                  <td>@mdo</td>
-                  <td>@mdo</td>
-                </tr>
-                <tr>
-                  <td>@fat</td>
-                  <td>@twitter</td>
-                  <td>@fat</td>
-                  <td>@mdo</td>
-                  <td>@mdo</td>
-                </tr>
-                <tr>
-                  <td>@fat</td>
-                  <td>@twitter</td>
-                  <td>@fat</td>
-                  <td>@mdo</td>
-                  <td>@mdo</td>
-                </tr>
-                <tr>
-                  <td>@fat</td>
-                  <td>@twitter</td>
-                  <td>@fat</td>
-                  <td>@mdo</td>
-                  <td>@mdo</td>
-                </tr>
-                <tr>
-                  <td>@fat</td>
-                  <td>@twitter</td>
-                  <td>@fat</td>
-                  <td>@mdo</td>
-                  <td>@mdo</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div className={styles.detalle}>
-            <div className={styles.dataContainer}>
-              <Container style={{ margin: "0" }}>
-                <Row className={styles.filas}>
-                  <Col className={styles.colUno}>
-                    <span className={styles.titleInfo}>
-                      Subtotal:
-                      <span className={styles.info}>$10000.00</span>
-                    </span>
-                  </Col>
-                  <Col className={styles.colDos}>
-                    <span className={styles.titleInfo}>
-                      IVA:
-                      <span className={styles.info}>$2100.00</span>
-                    </span>
-                  </Col>
-                  <Col className={styles.colTres}>
-                    <span className={styles.titleInfo}>
-                      Total:
-                      <span className={`${styles.info} ${styles.statusTrue}`}>
-                        $12100.00
-                      </span>
-                    </span>
-                  </Col>
-                </Row>
-              </Container>
-            </div>
-          </div>
+        <div className={styles.buttonContainer}>
+          <Button
+            className={`${styles.buttonStyle} ${styles.buttonStyleBack}`}
+            variant="danger"
+            onClick={() => {
+              cancel(order.data.id)
+            }}
+          >
+            Cancelar
+          </Button>
+          <Button
+            className={`${styles.buttonStyle} ${styles.buttonStyleNext}`}
+            variant="primary"
+            onClick={() => {
+              setView("Cliente")
+            }}
+          >
+            Siguiente
+          </Button>
         </div>
-      </div>
-      <div className={styles.buttonContainer}>
-        <Button
-          className={`${styles.buttonStyle} ${styles.buttonStyleBack}`}
-          variant="danger"
-          onClick={() => {
-            navigate("/");
-          }}
-        >
-          Cancelar
-        </Button>
-        <Button
-          className={`${styles.buttonStyle} ${styles.buttonStyleNext}`}
-          variant="primary"
-          onClick={() => {
-            setView("Cliente");
-          }}
-        >
-          Siguiente
-        </Button>
-      </div>
-    </div>
+      </form>
+    </FormProvider>
   );
 }
 

@@ -87,7 +87,7 @@ namespace Repuestos_San_jorge.Controllers.Admin
         }
 
         [HttpDelete("delete/{id}")]
-        public async Task<ActionResult<IEnumerable<Seller>>> DeleteSeller(int id)
+        public async Task<ActionResult<string>> DeleteOrder(int id)
         {
             try
             {

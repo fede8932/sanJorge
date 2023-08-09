@@ -45,7 +45,7 @@
   flex-direction: column;
   border: 1px solid #eaeaea;
   border-radius: 14px;
-  height: calc(100vh - 330px);
+  height: 600px;
 }
 .tableContainer {
   width: 100%;
@@ -56,6 +56,10 @@
   flex-direction: column;
   border: 1px solid #eaeaea;
   border-radius: 14px;
+}
+.tableProdContainerPrinc {
+  display: flex;
+  justify-content: space-between;
 }
 .subTitle {
   margin-top: -11px;
@@ -171,46 +175,60 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: calc(100vh - 276px);
+  height: calc(100vh - 266px);
   width: 100%;
 }
-.addProdSubContainer {
+.addProdSubContainer{
   display: flex;
-  height: 100%;
   justify-content: space-between;
 }
 .searchContainer {
-  width: 35%;
-  height: 96%;
+  width: 44%;
   padding: 0px 16px;
   display: flex;
   flex-direction: column;
   border: 1px solid #eaeaea;
   border-radius: 14px;
+  height: 600px;
 }
 .listContainer {
-  width: 64%;
-  height: 96%;
+  width: 100%;
   padding: 0px 16px;
   display: flex;
   flex-direction: column;
   border: 1px solid #eaeaea;
   border-radius: 14px;
+  height: 465px;
+  margin-bottom: 20px;
+}
+.resume {
+  width: 100%;
+  padding: 0px 16px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #eaeaea;
+  border-radius: 14px;
+  height: 115px;
+  margin-bottom: 20px;
+}
+.resumenContainer {
+  width: 55%;
 }
 .searchTableContainer {
   width: 100%;
   height: 90%;
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 .inputSearchContainer {
-  width: 97%;
+  display: flex;
+  width: 100%;
+  justify-content: center;
 }
 .tableProdContainer {
-  width: 97%;
-  padding: 0px 5px;
-  height: 100%;
+  width: 100%;
+  padding: 0px 10px;
+  height: 450px;
   overflow-y: auto;
 }
 .tableProdContainer::-webkit-scrollbar {
@@ -228,6 +246,11 @@
 .tableProdContainer::-webkit-scrollbar-thumb:hover {
   background-color: #e7e5ec;
 }
+.pagContainer {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
 .colArtWidth {
   width: 50%;
 }
@@ -236,11 +259,11 @@
 }
 .prodToOrderContainer {
   width: 100%;
-  padding: 0px 5px;
-  height: 80%;
-  overflow-y: auto;
+  padding: 0px 15px;
+  height: 250px;
+  /* overflow-y: auto; */
 }
-.prodToOrderContainer::-webkit-scrollbar {
+/*.prodToOrderContainer::-webkit-scrollbar {
   width: 4px;
   border-radius: 2px;
 }
@@ -254,12 +277,7 @@
 
 .prodToOrderContainer::-webkit-scrollbar-thumb:hover {
   background-color: #e7e5ec;
-}
-.detalle {
-  height: 15%;
-  margin-top: 18px;
-  padding: 8px;
-}
+} */
 .colArtWidthDos {
   width: 45%;
 }
@@ -274,15 +292,6 @@
   height: 30px;
   align-items: center;
   margin-bottom: 20px;
-}
-.finListContainer {
-  width: 100%;
-  height: calc(100vh - 350px);
-  padding: 0px 16px;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #eaeaea;
-  border-radius: 14px;
 }
 .finToOrderContainer {
   width: 100%;
@@ -304,4 +313,30 @@
 
 .finToOrderContainer::-webkit-scrollbar-thumb:hover {
   background-color: #e7e5ec;
+}
+.infoProvContainer {
+  display: flex;
+  justify-content: space-between;
+}
+.labelInfoProv {
+  font-size: 14px;
+  font-weight: 800;
+}
+.textInfoProv {
+  font-size: 14px;
+  margin-left: 5px;
+  font-weight: 500;
+}
+.infoCostoCont {
+  margin-top: 25px;
+  display: flex;
+}
+.precioLabel {
+  font-size: 15px;
+  font-weight: 800;
+}
+.precioText {
+  margin-left: 5px;
+  font-size: 14px;
+  font-weight: 500;
 }
