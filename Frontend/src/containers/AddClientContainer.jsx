@@ -6,17 +6,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { clientCreateRequest } from "../redux/client";
 import { getSellersRequest } from "../redux/seller";
 import { resetSupplierToTable } from "../redux/tableItems";
+import LoadingSpinner from "../commonds/loading/LoadingSpinner";
 
 function AddClientContainer(props) {
   const createClientStatus = useSelector((state) => state.client.loading);
+  const sellers = useSelector((state) => state.seller);
   const tItems = useSelector((state) => state.tableItems.data);
   const methods = useForm();
   const dispatch = useDispatch();
   const addClient = (data) => {
     const request = {
       Client: data,
-      CustomerDiscounts: tItems
-    }
+      CustomerDiscounts: tItems,
+    };
     dispatch(clientCreateRequest(request))
       .then((res) => {
         if (res.error) {
@@ -35,7 +37,7 @@ function AddClientContainer(props) {
           timer: 1500,
         });
         methods.reset();
-        dispatch(resetSupplierToTable())
+        dispatch(resetSupplierToTable());
       })
       .catch((err) => {
         console.log(err);
@@ -47,16 +49,23 @@ function AddClientContainer(props) {
         });
       });
   };
-  useEffect(()=>{
-    dispatch(getSellersRequest())
-  },[])
+  useEffect(() => {
+    dispatch(getSellersRequest());
+  }, []);
   return (
-    <AddClientComponent
-      {...props}
-      onSubmit={addClient}
-      status={createClientStatus}
-      methods={methods}
-    />
+    <>
+      {sellers.loading ? (
+        <LoadingSpinner loading={sellers.loading} />
+      ) : (
+        <AddClientComponent
+          {...props}
+          onSubmit={addClient}
+          status={createClientStatus}
+          methods={methods}
+          sellers={sellers.data}
+        />
+      )}
+    </>
   );
 }
 

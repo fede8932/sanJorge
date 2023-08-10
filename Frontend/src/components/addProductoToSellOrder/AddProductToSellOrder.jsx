@@ -23,7 +23,7 @@ function AddProductToSellOrder(props) {
   } = props;
   return (
     <FormProvider {...methods}>
-      <form className={styles.addProductContainer}>
+      <form className={styles.addProductContainer} onSubmit={methods.handleSubmit(onSubmit)}>
         <div className={styles.addProdSubContainer}>
           <div className={styles.searchContainer}>
             <span className={styles.subTitle}>Buscador de productos</span>
@@ -38,7 +38,7 @@ function AddProductToSellOrder(props) {
                   validate={{ required: true }}
                 />
                 <Button
-                  onClick={methods.handleSubmit(onSubmit)}
+                  type="submit"
                   style={{
                     backgroundColor: "#673ab7",
                     border: "1px solid #673ab7",
@@ -125,11 +125,11 @@ function AddProductToSellOrder(props) {
                   fnUpdate={fnUpdate}
                   fnPrUpdate={fnPrUpdate}
                   colum={[
-                    { title: "Artículo", width: "35%" },
+                    { title: "Artículo", width: "25%" },
                     { title: "Marca", width: "20%" },
-                    { title: "Precio Uni", width: "15%" },
-                    { title: "Cantidad", width: "10%" },
-                    { title: "Subtotal", width: "10%" },
+                    { title: "Precio Uni", width: "17%" },
+                    { title: "Cantidad", width: "12%" },
+                    { title: "Subtotal", width: "16%" },
                     { title: "Acción", width: "10%" },
                   ]}
                 />

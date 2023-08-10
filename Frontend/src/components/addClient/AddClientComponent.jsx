@@ -9,8 +9,7 @@ import Spinner from "react-bootstrap/esm/Spinner";
 import { useSelector } from "react-redux";
 
 function AddClientComponent(props) {
-  const { onSubmit, status, methods } = props;
-  const sellers = useSelector((state) => state.seller.data);
+  const { onSubmit, status, methods, sellers } = props;
   return (
     <div className={styles.formContainer}>
       <FormProvider {...methods}>

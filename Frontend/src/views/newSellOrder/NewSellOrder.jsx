@@ -11,7 +11,7 @@ import FormSelectClientContainer from "../../containers/FormSelectClientContaine
 import AddProductToSellOrderContainer from "../../containers/AddProductToSellOrderContainer";
 
 function NewSellOrder() {
-  const [viewActive, setViewActive] = useState("Productos");
+  const [viewActive, setViewActive] = useState("Cliente");
   const arrayPrueba = ["Damian Cano", "Juan Martinez", "Sofia Altamirano"]; //los que esten asociados no deben aparecer
 
   return (
@@ -21,14 +21,14 @@ function NewSellOrder() {
         view={viewActive}
         order={["Productos", "Cliente"]}
       />
-      {/* {viewActive == "Cliente" ? (
+      {viewActive == "Productos" ? (
+        <AddProductToSellOrderContainer setView={setViewActive} />
+      ) : null}
+      {viewActive == "Cliente" ? (
         <FormSelectClientContainer
           proveedores={arrayPrueba}
           setView={setViewActive}
         />
-      ) : null} */}
-      {viewActive == "Productos" ? (
-        <AddProductToSellOrderContainer setView={setViewActive} />
       ) : null}
     </div>
   );

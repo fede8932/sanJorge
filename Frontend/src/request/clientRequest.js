@@ -53,6 +53,17 @@ export const getClientsByData = async (dataSearch) => {
   }
 };
 
+export const getClientByData = async (dataSearch) => {
+  try {
+    const { data } = await axios.get(
+      `${apiUrl}/api/client/dataclient?text=${dataSearch}`
+    );
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const updateClientById = async (dataUpdate) => {
   try {
     const { id, ...infoUpdate } = dataUpdate;

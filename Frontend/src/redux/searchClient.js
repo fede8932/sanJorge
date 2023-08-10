@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as clientRequest from "../request/clientRequest"
 import * as userRequest from "../request/userRequest";
-const sellerState = {
+const clientState = {
   loading: false,
   data: [],
   error: "",
@@ -10,8 +10,12 @@ export const getClientssByTextRequest = createAsyncThunk(
   "GET_CLIENTS",
   clientRequest.getClientsByData
 );
+export const getClientByTextRequest = createAsyncThunk(
+  "GET_CLIENT",
+  clientRequest.getClientByData
+);
 export const UpdateClientsRequest = createAsyncThunk(
-  "UPDATE_SELLER",
+  "UPDATE_CLIENT",
   clientRequest.updateClientById
 );
 export const UpdateStatusClientRequest = createAsyncThunk(
@@ -21,7 +25,7 @@ export const UpdateStatusClientRequest = createAsyncThunk(
 
 const clientsSlice = createSlice({
   name: "clients",
-  initialState: sellerState,
+  initialState: clientState,
   extraReducers: {
     [getClientssByTextRequest.pending]: (state, action) => {
       state.loading = true;
@@ -33,6 +37,17 @@ const clientsSlice = createSlice({
     [getClientssByTextRequest.fulfilled]: (state, action) => {
       state.loading = false;
       state.data = action.payload;
+    },
+    [getClientByTextRequest.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [getClientByTextRequest.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
+    [getClientByTextRequest.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.data = [action.payload];
     },
     [UpdateStatusClientRequest.pending]: (state, action) => {
       state.loading = false;

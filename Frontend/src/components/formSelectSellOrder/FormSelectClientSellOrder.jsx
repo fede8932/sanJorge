@@ -1,16 +1,18 @@
 import React from "react";
 import styles from "./formSelect.module.css";
+import ClientAcordion from "../../commonds/clientAcordion/ClientAcordion"
+import Button from "react-bootstrap/esm/Button";
 
 function FormSelectClientSellOrder(props) {
-  const { proveedores, setView } = props;
+  const { proveedores, setView, searchClient, client } = props;
   return (
-    <form className={styles.formContainer}>
+    <div className={styles.formContainer}>
       <div className={styles.buttonSubFormContainer}>
         <div className={styles.subFormContainer}>
           <div className={styles.inputContainer}>
             <span className={styles.subTitle}>Datos de cliente</span>
             <div>
-              <ClientAcordion />
+              <ClientAcordion searchClient={searchClient} client={client} />
             </div>
           </div>
         </div>
@@ -34,7 +36,7 @@ function FormSelectClientSellOrder(props) {
           </Button>
         </div>
       </div>
-    </form>
+    </div>
   );
 }
 

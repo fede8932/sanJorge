@@ -121,6 +121,25 @@ namespace Repuestos_San_jorge.Services.Admin
             }
         }
 
+        public async Task<Client> GetClientByDataAsync(string text) // Listar Clientes
+        {
+            try
+            {
+                var client = await _dbContext.Clients
+                    .Where(s => s.cuit.Contains(text) || s.razonSocial.Contains(text))
+                    .Include(s => s.user)
+                    .Include(s => s.currentAcount)
+                    .Include(s => s.seller)
+                    .ThenInclude(ss => ss.user)
+                    .FirstOrDefaultAsync();
+                return client;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public async Task<string> DeleteClientAsync(int id) // Eliminar Cliente
         {
             try
@@ -349,6 +368,7 @@ namespace Repuestos_San_jorge.Services.Admin
         Task<string> CreateClientAsync(Client client, CustomerDiscountDto[] customerDiscounts);
         Task<IEnumerable<Client>> GetClientsAsync();
         Task<IEnumerable<Client>> GetClientsByDataAsync(string text);
+        Task<Client> GetClientByDataAsync(string text);
         Task<Client> UpdateClientAsync(int id, UpdateClientDto data);
         Task<string> DeleteClientAsync(int id);
         Task<string> AddClientDiscountAsync(CustomerDiscount customerDiscount);

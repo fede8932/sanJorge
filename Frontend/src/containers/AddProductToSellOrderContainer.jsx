@@ -2,8 +2,9 @@ import React, { useEffect } from "react";
 import AddProductToSellOrder from "../components/addProductoToSellOrder/AddProductToSellOrder";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { searchProductRequest } from "../redux/product";
-import { deleteSellOrder, newBuyOrderRequest } from "../redux/newOrder";
+import { searchProductsRequest } from "../redux/product";
+import { deleteSellOrder, getBuyOrderRequest, newBuyOrderRequest } from "../redux/newOrder";
+import { addOrderItemsRequest, deleteOrderItemsRequest, updateCantItemsRequest } from "../redux/addOrderItems";
 import { useNavigate } from "react-router";
 import Swal from "sweetalert2";
 
@@ -15,8 +16,7 @@ function AddProductToSellOrderContainer(props) {
   const listOrderItems = useSelector((state) => state.listOrderItems);
   const dispatch = useDispatch();
   const searchProd = (data) => {
-    data.supplierId = actualOrder.data.supplierId;
-    dispatch(searchProductRequest(data));
+    dispatch(searchProductsRequest(data.dataSearch));
   };
   const addProductToOrder = (brandProduct) => {
     const { product, brand } = brandProduct;

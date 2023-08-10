@@ -7,14 +7,14 @@ import { getClientssByTextRequest } from "../redux/searchClient"
 function SearchClientContainer(props) {
   const methods = useForm();
   const dispatch = useDispatch();
-  const searchSeller = (text) => {
+  const searchClient = (text) => {
     dispatch(getClientssByTextRequest(text.campo));
   };
   const clients = useSelector((state) => state.searchClients);
   return (
     <SearchClientComponent
       methods={methods}
-      onSubmit={searchSeller}
+      onSubmit={searchClient}
       list={clients}
     />
   );

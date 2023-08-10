@@ -5,9 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { getSupplierRequest } from "../redux/supplier";
 import { brandCreateRequest } from "../redux/brand";
 import Swal from "sweetalert2";
+import LoadingSpinner from "../commonds/loading/LoadingSpinner";
 
 function AddBrandContainer(props) {
-  const { data } = useSelector((state) => state.supplier);
+  const suppliers = useSelector((state) => state.supplier);
   const { loading } = useSelector((state) => state.brand);
   const dispatch = useDispatch();
   const methods = useForm();
@@ -45,13 +46,19 @@ function AddBrandContainer(props) {
     dispatch(getSupplierRequest());
   }, []);
   return (
-    <AddBrandComponent
-      methods={methods}
-      onSubmit={addBrand}
-      {...props}
-      suppliers={data}
-      status={loading}
-    />
+    <>
+      {suppliers.loading ? (
+        <LoadingSpinner loading={suppliers.loading} />
+      ) : (
+        <AddBrandComponent
+          methods={methods}
+          onSubmit={addBrand}
+          {...props}
+          suppliers={suppliers.data}
+          status={loading}
+        />
+      )}
+    </>
   );
 }
 
