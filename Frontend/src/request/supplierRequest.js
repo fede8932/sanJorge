@@ -79,3 +79,21 @@ export const updateSupplierRequest = async (dataEdit) => {
     throw error;
   }
 }
+
+export const addRepresentativeRequest = async (dataRepresentative) => {
+  try {
+    const { data } = await axios.post(`${apiUrl}/api/representative`, dataRepresentative);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const deleteRepSupplierRequest = async (id) => {
+  try {
+    const { data } = await axios.put(`${apiUrl}/api/representative/delete/${id}`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}

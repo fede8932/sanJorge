@@ -108,6 +108,12 @@ function SideBarComponent(props) {
                   fnNavigate("search/supplier");
                 },
               },
+              {
+                textButton: "Representantes",
+                fn: () => {
+                  fnNavigate("search/supplier/representative");
+                },
+              },
             ],
           }}
         />

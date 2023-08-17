@@ -59,6 +59,7 @@ namespace Repuestos_San_jorge.Services.Admin
                 var suppliers = await _dbContext.Suppliers
                     .Where(s => s.cuit.Contains(text) || s.razonSocial.Contains(text))
                     .Include(s => s.currentAcount)
+                    .Include(s => s.representative)
                     .ToListAsync();
                 return suppliers;
             }
@@ -140,6 +141,8 @@ namespace Repuestos_San_jorge.Services.Admin
                         "El proveedor no puede ser null"
                     );
                 }
+                proveedor.razonSocial = data.razonSocial;
+                proveedor.cuit = data.cuit;
                 proveedor.email = data.email;
                 proveedor.altura = data.altura;
                 proveedor.calle = data.calle;

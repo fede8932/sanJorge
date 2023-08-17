@@ -109,6 +109,8 @@ namespace Repuestos_San_jorge.Services.Admin
         public async Task<IEnumerable<Brand>> GetBrandByDataAsync(string data)
         {
             var filteredBrands = await _dbContext.Brands
+                .Include(b => b.brandSuppliers)
+                .ThenInclude(bs => bs.supplier)
                 .Where(b => b.name.Contains(data) || b.code.Contains(data))
                 .ToListAsync();
             return filteredBrands;

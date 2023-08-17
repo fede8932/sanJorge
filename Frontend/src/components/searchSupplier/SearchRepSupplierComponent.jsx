@@ -1,13 +1,13 @@
 import React from "react";
-import styles from "./searchBrand.module.css";
-import LongTableContainer from "../../containers/LongTableContainer";
+import styles from "./searchRepSupplier.module.css";
+import Button from "react-bootstrap/esm/Button";
 import CustomInput from "../../commonds/input/CustomInput";
-import Button from "react-bootstrap/Button";
 import { FormProvider } from "react-hook-form";
 import Spinner from "react-bootstrap/esm/Spinner";
+import RoleTableContainer from "../../containers/RoleTableContainer";
 
-function SearchBrandComponent(props) {
-  const { onSubmit, methods, brands, status } = props;
+function SearchRepSupplierComponent(props) {
+  const { methods, onSubmit, list } = props;
   return (
     <FormProvider {...methods}>
       <form
@@ -17,13 +17,18 @@ function SearchBrandComponent(props) {
         <div className={styles.subFormContainer}>
           <div className={styles.inputContainer}>
             <span className={styles.subTitle}>Campos de filtrado</span>
-            <div className={styles.searchContainer}>
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+              }}
+            >
               <CustomInput
-                name="brandCode"
+                name="campo"
                 type="text"
                 width="extraMedium"
-                placeholder="Código de la marca"
-                icon="fas fa-hashtag"
+                placeholder="Ingrese el cuit o razón social del proveedor"
+                icon="fa-solid fa-magnifying-glass"
                 validate={{ required: true }}
               />
               <Button
@@ -31,12 +36,12 @@ function SearchBrandComponent(props) {
                 style={{
                   backgroundColor: "#673ab7",
                   border: "1px solid #673ab7",
-                  height: "47px",
+                  height: "48px",
                   width: "100px",
                   marginLeft: "10px",
                 }}
               >
-                {!status ? (
+                {!list.loading ? (
                   "Buscar"
                 ) : (
                   <Spinner animation="border" variant="light" size="sm" />
@@ -46,16 +51,19 @@ function SearchBrandComponent(props) {
           </div>
         </div>
         <div className={styles.tableContainer}>
-          <span className={styles.subTitle}>Detalle de productos</span>
+          <span className={styles.subTitle}>Detalle de representantes</span>
           <div>
-            <LongTableContainer
+            <RoleTableContainer
               colum={[
-                { title: "Código", ancho: {width: "10%"}}, 
-                { title: "Nombre", ancho: {width: "10%"}},
-                { title: "Proveedor", ancho: {width: "10%"}},
-                { title: "Acciones", ancho: {width: "10%"}},]}
-              data={brands}
-              type="brand"
+                "Nombre",
+                "Proveedor",
+                "Email",
+                "Teléfono",
+                "Estado",
+                "Acciones",
+              ]}
+              data={list.data}
+              type="repSupplier"
             />
           </div>
         </div>
@@ -64,4 +72,4 @@ function SearchBrandComponent(props) {
   );
 }
 
-export default SearchBrandComponent;
+export default SearchRepSupplierComponent;

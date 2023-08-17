@@ -207,5 +207,28 @@ namespace Repuestos_San_jorge.Controllers.Admin
                 return StatusCode(500, "Ocurrió un error interno en el servidor.");
             }
         }
+
+        [HttpPut("status/client/{purchaseOrderId}")]
+        public async Task<IActionResult> UpdateClientOrderStatus(
+            int purchaseOrderId,
+            [FromQuery] PurchaseOrderStatusType status,
+            [FromQuery] int clientId
+        )
+        {
+            try
+            {
+                var result = await _purchaseOrderService.UpdateClientStatusOrdersAsync(
+                    clientId,
+                    purchaseOrderId,
+                    status
+                );
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
     }
 }

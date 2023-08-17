@@ -10,7 +10,7 @@ function EditUserViewContainer(props) {
   const methods = useForm();
   const dispatch = useDispatch();
   const updateSeller = (data) => {
-    const { cuil, name, lastName, ...sellerData } = data;
+    const { ...sellerData } = data;
     sellerData.altura = Number(sellerData.altura);
     sellerData.codigoPostal = Number(sellerData.codigoPostal);
     sellerData.comisionBase = Number(sellerData.comisionBase);

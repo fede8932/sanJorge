@@ -67,7 +67,7 @@ namespace Repuestos_San_jorge.Services.Admin
                 .ToListAsync();
         }
 
-        public async Task<string> DeleteRepresentativeAsync(int id) // Eliminar representante
+        public async Task<Representative> DeleteRepresentativeAsync(int id) // Eliminar representante
         {
             try
             {
@@ -81,9 +81,9 @@ namespace Repuestos_San_jorge.Services.Admin
                         "El representante no puede ser null"
                     );
                 }
-                representative.status = false;
+                representative.status = !representative.status;
                 await _dbContext.SaveChangesAsync();
-                return "Representante desactivado";
+                return representative;
             }
             catch
             {
@@ -132,6 +132,6 @@ namespace Repuestos_San_jorge.Services.Admin
         Task<IEnumerable<Representative>> GetRepresentativesAsync();
         Task<IEnumerable<Representative>> GetRepresentativesBySupplierAsync(string supplierRazonSocial);
         Task<string> UpdateRepresentativeAsync(int id, UpdateRepresentativeDto data);
-        Task<string> DeleteRepresentativeAsync(int id);
+        Task<Representative> DeleteRepresentativeAsync(int id);
     }
 }

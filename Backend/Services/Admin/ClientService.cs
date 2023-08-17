@@ -228,6 +228,16 @@ namespace Repuestos_San_jorge.Services.Admin
                         "El vendedor no puede ser null"
                     );
                 }
+                if (cliente.user == null)
+                {
+                    throw new ArgumentNullException(
+                        nameof(cliente.user),
+                        "El vendedor no puede ser null"
+                    );
+                }
+                cliente.user.name = data.name;
+                cliente.user.lastName = data.lastName;
+                cliente.cuit = data.cuit;
                 cliente.user.email = data.email;
                 cliente.altura = data.altura;
                 cliente.calle = data.calle;

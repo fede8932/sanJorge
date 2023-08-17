@@ -5,7 +5,12 @@ import { Label } from "semantic-ui-react";
 import IconButonUsersTable from "../../commonds/iconButtonUsersTable/IconButonUsersTable";
 
 function RoleTableComponent(props) {
-  const { data, colum, type, statusSellerToogle, statusClienToogle, statusSupplierToogle } = props;
+  const {
+    data,
+    colum,
+    type,
+    statusToogle,
+  } = props;
   return (
     <div className={styles.container}>
       <table className={`table ${styles.table}`}>
@@ -60,7 +65,7 @@ function RoleTableComponent(props) {
                     >
                       <IconButonUsersTable
                         fn={() => {
-                          statusSellerToogle(obj.user.id);
+                          statusToogle(obj.user.id, "seller");
                         }}
                         icon={
                           !obj.user.status
@@ -121,7 +126,7 @@ function RoleTableComponent(props) {
                     >
                       <IconButonUsersTable
                         fn={() => {
-                          statusClienToogle(obj.user.id);
+                          statusToogle(obj.user.id, "client");
                         }}
                         icon={
                           !obj.user.status
@@ -167,12 +172,27 @@ function RoleTableComponent(props) {
                     }}
                   >
                     <ActionModalContainer
-                    title="Información del proveedor"
+                      title="Información del proveedor"
                       size="xl"
                       data={obj}
                       type="updateSupplier"
                       icon="fa-regular fa-pen-to-square"
                     />
+                    <div
+                      style={{
+                        margin: "0px 0px 0px 8px",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <ActionModalContainer
+                        size="lg"
+                        data={obj}
+                        title="Agregar representante"
+                        type="updateRepresSupplier"
+                        icon="fa-regular fa-address-book"
+                      />
+                    </div>
                     <div
                       style={{
                         margin: "1px 0px 0px 8px",
@@ -182,7 +202,7 @@ function RoleTableComponent(props) {
                     >
                       <IconButonUsersTable
                         fn={() => {
-                          statusSupplierToogle(obj.id);
+                          statusToogle(obj.id, "supplier");
                         }}
                         icon={
                           !obj.status
@@ -198,6 +218,67 @@ function RoleTableComponent(props) {
                 </td>
               </tr>
             ))
+          ) : (
+            <></>
+          )}{type == "repSupplier" ? (
+            data.map((obj) =>
+              obj.representative.map((rep, i) => (
+                <tr key={i}>
+                  <td>{`${rep.name} ${rep.apellido}`.slice(0, 20)}</td>
+                  <td>{obj.razonSocial}</td>
+                  <td>{rep.email}</td>
+                  <td>{rep.telefono}</td>
+                  <td>
+                    {rep.status ? (
+                      <Label color="green" horizontal>
+                        Activo
+                      </Label>
+                    ) : (
+                      <Label color="red" horizontal>
+                        Inactivo
+                      </Label>
+                    )}
+                  </td>
+                  <td>
+                    <div
+                      style={{
+                        display: "flex",
+                        width: "130px",
+                      }}
+                    >
+                      <ActionModalContainer
+                        title="Información del representante"
+                        size="lg"
+                        data={obj}
+                        type="updateSupplier"
+                        icon="fa-regular fa-pen-to-square"
+                      />
+                      <div
+                        style={{
+                          margin: "1px 0px 0px 8px",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <IconButonUsersTable
+                          fn={() => {
+                            statusToogle(rep.id, "repSupplier");
+                          }}
+                          icon={
+                            !obj.status
+                              ? "fa-solid fa-check"
+                              : "fa-solid fa-xmark"
+                          }
+                          iconInitialStyle={
+                            !obj.status ? "iconStyleGreen" : "iconStyleRed"
+                          }
+                        />
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )
           ) : (
             <></>
           )}

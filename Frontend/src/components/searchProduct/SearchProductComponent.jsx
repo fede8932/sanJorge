@@ -55,12 +55,14 @@ function SearchProductComponent(props) {
           <div>
             <LongTableContainer
               colum={[
-                "Artículo",
-                "Precio de lista",
-                "Precio de venta",
-                "Marca",
-                "Stock",
-                "Acciones",
+                { title: "Artículo", ancho: {width: "10%"}},
+                { title: "Descripción", ancho: {width: "30%"}},
+                { title: "Marca", ancho: {width: "10%"}},
+                { title: "Precio de lista", ancho: {width: "10%"}},
+                { title: "Precio de venta", ancho: {width: "10%"}},
+                { title: "Precio con IVA", ancho: {width: "10%"}},
+                { title: "Stock", ancho: {width: "10%"}},
+                { title: "Acciones", ancho: {width: "10%"}},
               ]}
               data={products.data}
               type="product"

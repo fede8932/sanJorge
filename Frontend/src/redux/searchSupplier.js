@@ -1,5 +1,5 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import * as supplierRequest from "../request/supplierRequest"
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import * as supplierRequest from "../request/supplierRequest";
 const sellerState = {
   loading: false,
   data: [],
@@ -16,6 +16,10 @@ export const UpdateStatusSupplierRequest = createAsyncThunk(
 export const UpdateSuppliersRequest = createAsyncThunk(
   "UPDATE_SUPPLIER",
   supplierRequest.updateSupplierRequest
+);
+export const DeleteRepSupplierRequest = createAsyncThunk(
+  "DELETE_REPSUPPLIER",
+  supplierRequest.deleteRepSupplierRequest
 );
 
 const suppliersSlice = createSlice({
@@ -62,6 +66,25 @@ const suppliersSlice = createSlice({
         if (supplier.id === action.payload.id) {
           supplier = action.payload;
         }
+        return supplier;
+      });
+      state.loading = false;
+      state.data = newStateData;
+    },
+    [DeleteRepSupplierRequest.pending]: (state, action) => {
+      state.loading = false;
+    },
+    [DeleteRepSupplierRequest.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
+    [DeleteRepSupplierRequest.fulfilled]: (state, action) => {
+      const newStateData = state.data.map((supplier) => {
+        const newSupplierData = supplier.representative.map((sr) => {
+          if (sr.id === action.payload.id) return action.payload;
+          return sr;
+        });
+        supplier.representative = newSupplierData;
         return supplier;
       });
       state.loading = false;

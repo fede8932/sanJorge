@@ -2,6 +2,8 @@ namespace Repuestos_San_jorge.Dto.Admin
 {
     public class UpdateSupplierDto
     {
+        public string razonSocial { get; set; }
+        public string cuit { get; set; }
         public string calle { get; set; }
         public int altura { get; set; }
         public string localidad { get; set; }

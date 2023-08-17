@@ -13,6 +13,10 @@ export const getSupplierRequest = createAsyncThunk(
   "SUPPLIER_LIST",
   supplierRequest.getSuppliers
 );
+export const addRepresentativeRequest = createAsyncThunk(
+  "ADD_REP",
+  supplierRequest.addRepresentativeRequest
+);
 
 const supplierSlice = createSlice({
   name: "supplier",
@@ -38,6 +42,16 @@ const supplierSlice = createSlice({
     [getSupplierRequest.fulfilled]: (state, action) => {
       state.loading = false;
       state.data = action.payload;
+    },
+    [addRepresentativeRequest.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [addRepresentativeRequest.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
+    [addRepresentativeRequest.fulfilled]: (state, action) => {
+      state.loading = false;
     },
   },
 });

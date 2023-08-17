@@ -62,6 +62,7 @@ function App() {
                     <Route path="search/seller" element={<SearchSeller />} />
                     <Route path="search/client" element={<SearchClient />} />
                     <Route path="search/supplier" element={<SearchSupplier />} />
+                    <Route path="search/supplier/representative" element={<SearchSupplier />} />
                   </Routes>
                 </div>
               </div>

@@ -67,7 +67,6 @@ export const getClientByData = async (dataSearch) => {
 export const updateClientById = async (dataUpdate) => {
   try {
     const { id, ...infoUpdate } = dataUpdate;
-    console.log("mando esto: ", infoUpdate);
     const { data } = await axios.put(
       `${apiUrl}/api/client/update/${id}`,
       infoUpdate

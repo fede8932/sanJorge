@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./editUserView.module.css";
 import Button from "react-bootstrap/esm/Button";
 import CustomInput from "../../commonds/putInput/CustomInput";
 import { FormProvider } from "react-hook-form";
 import Spinner from "react-bootstrap/esm/Spinner";
+import Form from "react-bootstrap/Form";
 
 function EditUserViewComponent(props) {
   const { seller, update, methods, loading } = props;
+  const [readOnly, setReadOnly] = useState(true);
   return (
     <div className={styles.editContainer}>
       <div className={styles.dataContainer}>
@@ -22,6 +24,14 @@ function EditUserViewComponent(props) {
             className={styles.dataUser}
           >{`${seller.user.name} ${seller.user.lastName}`}</span>
         </span>
+        <Form.Check // prettier-ignore
+          type="switch"
+          id="custom-switch"
+          label="Editar"
+          onChange={() => {
+            setReadOnly(!readOnly);
+          }}
+        />
       </div>
       <FormProvider {...methods}>
         <form
@@ -32,28 +42,29 @@ function EditUserViewComponent(props) {
             <div className={styles.leftInputContainer}>
               <span className={styles.inputLabel}>Nombre</span>
               <CustomInput
-                readOnly={true}
+                readOnly={readOnly}
                 name="name"
                 type="text"
                 width="large"
                 placeholder="Nombre"
                 icon="fa-solid fa-id-card"
-                validate={{ required: false }}
+                validate={{ required: true }}
                 defaultValue={seller.user.name}
               />
               <span className={styles.inputLabel}>Apellido</span>
               <CustomInput
-                readOnly={true}
+                readOnly={readOnly}
                 name="lastName"
                 type="text"
                 width="large"
                 placeholder="Apellido"
                 icon="fa-solid fa-id-card"
-                validate={{ required: false }}
+                validate={{ required: true }}
                 defaultValue={seller.user.lastName}
               />
               <span className={styles.inputLabel}>Email</span>
               <CustomInput
+                readOnly={readOnly}
                 name="email"
                 type="email"
                 width="large"
@@ -70,17 +81,18 @@ function EditUserViewComponent(props) {
               />
               <span className={styles.inputLabel}>CUIL</span>
               <CustomInput
-                readOnly={true}
+                readOnly={readOnly}
                 name="cuil"
                 type="text"
                 width="large"
                 placeholder="Cuil"
                 icon="fa-solid fa-id-card"
-                validate={{ required: false }}
+                validate={{ required: true }}
                 defaultValue={seller.cuil}
               />
               <span className={styles.inputLabel}>Localidad</span>
               <CustomInput
+                readOnly={readOnly}
                 name="localidad"
                 type="text"
                 width="large"
@@ -93,6 +105,7 @@ function EditUserViewComponent(props) {
             <div className={styles.rigthInputContainer}>
               <span className={styles.inputLabel}>Calle</span>
               <CustomInput
+                readOnly={readOnly}
                 name="calle"
                 type="text"
                 width="large"
@@ -111,6 +124,7 @@ function EditUserViewComponent(props) {
                 <div style={{ width: "50%", padding: "0px 5px 0px 0px" }}>
                   <span className={styles.inputLabel}>Altura</span>
                   <CustomInput
+                    readOnly={readOnly}
                     name="altura"
                     type="text"
                     width="complete"
@@ -123,6 +137,7 @@ function EditUserViewComponent(props) {
                 <div style={{ width: "50%", padding: "0px 0px 0px 5px" }}>
                   <span className={styles.inputLabel}>Código postal</span>
                   <CustomInput
+                    readOnly={readOnly}
                     name="codigoPostal"
                     type="text"
                     width="complete"
@@ -135,6 +150,7 @@ function EditUserViewComponent(props) {
               </div>
               <span className={styles.inputLabel}>Teléfono</span>
               <CustomInput
+                readOnly={readOnly}
                 name="telefono"
                 type="text"
                 width="large"
@@ -161,6 +177,7 @@ function EditUserViewComponent(props) {
                 <div style={{ width: "50%", padding: "0px 5px 0px 0px" }}>
                   <span className={styles.inputLabel}>Altura</span>
                   <CustomInput
+                    readOnly={readOnly}
                     name="comisionBase"
                     width="complete"
                     placeholder="Comisión base"
@@ -176,6 +193,7 @@ function EditUserViewComponent(props) {
                 <div style={{ width: "50%", padding: "0px 0px 0px 5px" }}>
                   <span className={styles.inputLabel}>Comisión oferta</span>
                   <CustomInput
+                    readOnly={readOnly}
                     name="comisionOferta"
                     width="complete"
                     placeholder="Comisión oferta"
@@ -194,6 +212,7 @@ function EditUserViewComponent(props) {
           <div className={styles.buttonContainer}>
             <div className={styles.buttonSubContainer}>
               <Button
+                disabled={readOnly}
                 type="submit"
                 style={{
                   backgroundColor: "#673ab7",

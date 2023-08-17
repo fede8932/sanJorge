@@ -178,6 +178,66 @@ namespace Repuestos_San_jorge.Services.Admin
                 throw;
             }
         }
+
+        public async Task<string> UpdateClientStatusOrdersAsync(
+            int clientId,
+            int purchaseOrderId,
+            PurchaseOrderStatusType status
+        ) // cambiar estado
+        {
+            try
+            {
+                var client = await _dbContext.Clients.SingleOrDefaultAsync(
+                    client => client.id == clientId
+                );
+                if (client == null)
+                {
+                    throw new ArgumentNullException(
+                        nameof(client),
+                        "No existe el cliente en los registros"
+                    );
+                }
+                var order = await _dbContext.PurchaseOrders.SingleOrDefaultAsync(
+                    order => order.id == purchaseOrderId
+                );
+                if (order == null)
+                {
+                    throw new ArgumentNullException(
+                        nameof(order),
+                        "No existe la orden en los registros"
+                    );
+                }
+                if (
+                    order.status == PurchaseOrderStatusType.Cancel
+                    || order.status == PurchaseOrderStatusType.Recived
+                )
+                {
+                    throw new ArgumentNullException(
+                        nameof(order),
+                        "El estado de la orden no se puede modificar"
+                    );
+                }
+                else if (
+                    order.status == PurchaseOrderStatusType.Confirm
+                    && status != PurchaseOrderStatusType.Recived
+                )
+                {
+                    throw new ArgumentNullException(
+                        nameof(order),
+                        "Una orden confirmada no puedo reabrirse o cancelarse"
+                    );
+                }
+                order.status = status;
+                order.client = client;
+                _dbContext.PurchaseOrders.Update(order);
+                await _dbContext.SaveChangesAsync();
+                return "Estado de orden actualizado";
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 
     public interface IPurchaseOrderService
@@ -191,6 +251,11 @@ namespace Repuestos_San_jorge.Services.Admin
             PurchaseOrderStatusType status,
             string? numRemito,
             Voucher? voucher
+        );
+        Task<string> UpdateClientStatusOrdersAsync(
+            int clientId,
+            int purchaseOrderId,
+            PurchaseOrderStatusType status
         );
     }
 }

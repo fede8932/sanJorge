@@ -1,10 +1,10 @@
 import React from "react";
 import styles from "./formSelect.module.css";
-import ClientAcordion from "../../commonds/clientAcordion/ClientAcordion"
+import ClientAcordion from "../../commonds/clientAcordion/ClientAcordion";
 import Button from "react-bootstrap/esm/Button";
 
 function FormSelectClientSellOrder(props) {
-  const { proveedores, setView, searchClient, client } = props;
+  const { setView, searchClient, client, confirmFn } = props;
   return (
     <div className={styles.formContainer}>
       <div className={styles.buttonSubFormContainer}>
@@ -27,12 +27,11 @@ function FormSelectClientSellOrder(props) {
             Atras
           </Button>
           <Button
+            disabled={client ? false : true}
             className={`${styles.buttonStyle} ${styles.buttonStyleNext}`}
-            onClick={() => {
-              setView("Finalizar");
-            }}
+            onClick={confirmFn}
           >
-            Siguiente
+            Confirmar
           </Button>
         </div>
       </div>

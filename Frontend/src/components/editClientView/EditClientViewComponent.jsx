@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./editClientView.module.css";
 import Button from "react-bootstrap/esm/Button";
 import CustomInput from "../../commonds/putInput/CustomInput";
 import { FormProvider } from "react-hook-form";
 import Spinner from "react-bootstrap/esm/Spinner";
 import CustomSelect from "../../commonds/select/CustomSelect";
+import Form from "react-bootstrap/Form";
 
 function EditClientViewComponent(props) {
   const { client, update, methods, loading, sellers } = props;
+  const [readOnly, setReadOnly] = useState(true);
   return (
     <div className={styles.editContainer}>
       <div className={styles.dataContainer}>
@@ -32,6 +34,14 @@ function EditClientViewComponent(props) {
         <span>
           IVA:<span className={styles.dataUser}>{client.iva}</span>
         </span>
+        <Form.Check // prettier-ignore
+          type="switch"
+          id="custom-switch"
+          label="Editar"
+          onChange={() => {
+            setReadOnly(!readOnly);
+          }}
+        />
       </div>
       <FormProvider {...methods}>
         <form
@@ -42,7 +52,7 @@ function EditClientViewComponent(props) {
             <div className={styles.leftInputContainer}>
               <span className={styles.inputLabel}>Nombre</span>
               <CustomInput
-                readOnly={true}
+                readOnly={readOnly}
                 name="name"
                 type="text"
                 width="large"
@@ -53,7 +63,7 @@ function EditClientViewComponent(props) {
               />
               <span className={styles.inputLabel}>Apellido</span>
               <CustomInput
-                readOnly={true}
+                readOnly={readOnly}
                 name="lastName"
                 type="text"
                 width="large"
@@ -64,6 +74,7 @@ function EditClientViewComponent(props) {
               />
               <span className={styles.inputLabel}>Email</span>
               <CustomInput
+                readOnly={readOnly}
                 name="email"
                 type="email"
                 width="large"
@@ -80,8 +91,8 @@ function EditClientViewComponent(props) {
               />
               <span className={styles.inputLabel}>CUIL</span>
               <CustomInput
-                readOnly={true}
-                name="cuil"
+                readOnly={readOnly}
+                name="cuit"
                 type="text"
                 width="large"
                 placeholder="Cuil"
@@ -91,6 +102,7 @@ function EditClientViewComponent(props) {
               />
               <span className={styles.inputLabel}>Localidad</span>
               <CustomInput
+                readOnly={readOnly}
                 name="localidad"
                 type="text"
                 width="large"
@@ -103,6 +115,7 @@ function EditClientViewComponent(props) {
             <div className={styles.rigthInputContainer}>
               <span className={styles.inputLabel}>Calle</span>
               <CustomInput
+                readOnly={readOnly}
                 name="calle"
                 type="text"
                 width="large"
@@ -121,6 +134,7 @@ function EditClientViewComponent(props) {
                 <div style={{ width: "50%", padding: "0px 5px 0px 0px" }}>
                   <span className={styles.inputLabel}>Altura</span>
                   <CustomInput
+                    readOnly={readOnly}
                     name="altura"
                     type="text"
                     width="complete"
@@ -133,6 +147,7 @@ function EditClientViewComponent(props) {
                 <div style={{ width: "50%", padding: "0px 0px 0px 5px" }}>
                   <span className={styles.inputLabel}>Código postal</span>
                   <CustomInput
+                    readOnly={readOnly}
                     name="codigoPostal"
                     type="text"
                     width="complete"
@@ -145,6 +160,7 @@ function EditClientViewComponent(props) {
               </div>
               <span className={styles.inputLabel}>Teléfono</span>
               <CustomInput
+                readOnly={readOnly}
                 name="telefono"
                 type="text"
                 width="large"
@@ -171,6 +187,7 @@ function EditClientViewComponent(props) {
                 <div style={{ width: "50%", padding: "0px 5px 0px 0px" }}>
                   <span className={styles.inputLabel}>Vendedor</span>
                   <CustomSelect
+                    readOnly={readOnly}
                     name="sellerId"
                     text="Seleccioná un vendedor"
                     arrayOptions={sellers}
@@ -201,6 +218,7 @@ function EditClientViewComponent(props) {
           <div className={styles.buttonContainer}>
             <div className={styles.buttonSubContainer}>
               <Button
+                disabled={readOnly}
                 type="submit"
                 style={{
                   backgroundColor: "#673ab7",

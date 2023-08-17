@@ -109,6 +109,17 @@ export const updateStatusOrder = async (dataItem) => {
     throw error;
   }
 };
+export const updateClientStatusOrder = async (dataItem) => {
+  try {
+    const { id, status, clientId } = dataItem;
+    const { data } = await axios.put(
+      `${apiUrl}/api/purchase/order/status/client/${id}?status=${status}&clientId=${clientId}`
+    );
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
 export const deleteSellOrder = async (orderId) => {
   try {
     const { data } = await axios.delete(

@@ -3,14 +3,18 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import EditSupplierViewComponent from "../components/editSupplierView/EditSupplierViewComponent";
 import { UpdateSuppliersRequest } from "../redux/searchSupplier";
+import EditRepresentativesViewComponent from "../components/editSupplierView/EditRepresentativesViewComponent";
+import { addRepresentativeRequest } from "../redux/supplier";
+import { message } from "antd";
 
 function EditSupplierViewContainer(props) {
-  const { supplier, close } = props;
+  const { supplier, close, template } = props;
   const { loading } = useSelector((state) => state.searchSuppliers);
+  const newRepLoading = useSelector((state) => state.supplier.loading);
   const methods = useForm();
   const dispatch = useDispatch();
-  const updateSupplier= (data) => {
-    const { cuit, razonSocial, ...supplierData } = data;
+  const updateSupplier = (data) => {
+    const { ...supplierData } = data;
     supplierData.altura = Number(supplierData.altura);
     supplierData.codigoPostal = Number(supplierData.codigoPostal);
     supplierData.id = supplier.id;
@@ -18,13 +22,31 @@ function EditSupplierViewContainer(props) {
       close();
     });
   };
+  const createRepresentative = (dataRep) => {
+    dataRep.supplierId = supplier.id;
+    dispatch(addRepresentativeRequest(dataRep)).then(() => {
+      close();
+      message.success("Registrado!", 2);
+    });
+  };
   return (
-    <EditSupplierViewComponent
-      {...props}
-      update={updateSupplier}
-      methods={methods}
-      loading={loading}
-    />
+    <>
+      {template == "supplier" ? (
+        <EditSupplierViewComponent
+          {...props}
+          update={updateSupplier}
+          methods={methods}
+          loading={loading}
+        />
+      ) : (
+        <EditRepresentativesViewComponent
+          {...props}
+          update={createRepresentative}
+          methods={methods}
+          loading={newRepLoading}
+        />
+      )}
+    </>
   );
 }
 

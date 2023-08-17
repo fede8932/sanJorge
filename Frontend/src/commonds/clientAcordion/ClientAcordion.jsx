@@ -9,8 +9,8 @@ import CustomSelect from "../select/CustomSelect";
 import { useForm, FormProvider } from "react-hook-form";
 
 function ClientAcordion({ searchClient, client }) {
-  console.log(client);
   const methods = useForm();
+  const methodsNoClient = useForm();
   return (
     <Accordion defaultActiveKey="0" flush>
       <Accordion.Item eventKey="0">
@@ -123,7 +123,8 @@ function ClientAcordion({ searchClient, client }) {
               >
                 <span className={styles.titleInfo}>
                   Comentarios:
-                  <span className={styles.info}>{client && client.comentarios}
+                  <span className={styles.info}>
+                    {client && client.comentarios}
                   </span>
                 </span>
               </div>
@@ -134,74 +135,121 @@ function ClientAcordion({ searchClient, client }) {
       <Accordion.Item eventKey="1">
         <Accordion.Header>Cliente sin registrar</Accordion.Header>
         <Accordion.Body>
-          {/* <div className={styles.acordionBodyContainer}>
-            <form className={styles.formContainer}>
-              <div className={styles.miniInputContainer}>
-                <CustomInput
-                  type="text"
-                  width="small"
-                  placeholder="Nombre"
-                  icon="fa-solid fa-id-card"
-                />
-                <CustomInput
-                  type="text"
-                  width="small"
-                  placeholder="Apellido"
-                  icon="fa-solid fa-id-card"
-                />
-              </div>
-              <div className={styles.miniInputContainer}>
-                <CustomInput
-                  type="text"
-                  width="small"
-                  placeholder="Razon social"
-                  icon="fa-solid fa-id-card"
-                />
-                <CustomInput
-                  type="text"
-                  width="small"
-                  placeholder="Cuit"
-                  icon="fa-solid fa-id-card"
-                />
-              </div>
-              <div className={styles.miniInputContainer}>
-                <CustomInput
-                  type="email"
-                  width="small"
-                  placeholder="Correo electrónico"
-                  icon="fa-regular fa-envelope"
-                />
-                <CustomInput
-                  type="text"
-                  width="small"
-                  placeholder="Teléfono"
-                  icon="fa-solid fa-phone"
-                />
-              </div>
-              <div className={styles.miniInputContainer}>
-                <CustomInput
-                  type="text"
-                  width="small"
-                  placeholder="Domicilio"
-                  icon="fa-solid fa-location-dot"
-                />
-                <CustomInput
-                  type="text"
-                  width="small"
-                  placeholder="Localidad"
-                  icon="fa-solid fa-location-dot"
-                />
-              </div>
-              <div className={styles.miniSelectContainer}>
-                <div className={styles.miniSelect}>
-                  <CustomSelect
-                    text="Seleccioná el tipo de factura"
-                    clientes={["Final", "Monotributo", "Inscripto"]}
+          <div className={styles.acordionBodyContainer}>
+            <FormProvider {...methodsNoClient}>
+              <form className={styles.formContainer} onSubmit={methodsNoClient.handleSubmit(()=>{console.log("ok")})}>
+                <div className={styles.miniInputContainer}>
+                  <CustomInput
+                    name="name"
+                    type="text"
+                    width="small"
+                    placeholder="Nombre"
+                    icon="fa-solid fa-id-card"
+                    validate={{ required: true, maxLength: 25 }}
+                  />
+                  <CustomInput
+                    name="lastName"
+                    type="text"
+                    width="small"
+                    placeholder="Apellido"
+                    icon="fa-solid fa-id-card"
+                    validate={{ required: true, maxLength: 25 }}
                   />
                 </div>
-              </div>
-            </form>
-          </div> */}
+                <div className={styles.miniInputContainer}>
+                  <CustomInput
+                    name="razonSocial"
+                    type="text"
+                    width="small"
+                    placeholder="Razon social"
+                    icon="fa-solid fa-id-card"
+                    validate={{ required: true, maxLength: 25 }}
+                  />
+                  <CustomInput
+                    name="cuit"
+                    type="text"
+                    width="small"
+                    placeholder="Cuil/Cuit"
+                    icon="fa-solid fa-id-card"
+                    validate={{
+                      required: true,
+                      pattern: {
+                        value: /^\d{2}-\d{8}-\d{1}$/,
+                        message: "El CUIT debe tener el formato 99-99999999-9",
+                      },
+                    }}
+                  />
+                </div>
+                <div className={styles.miniInputContainer}>
+                  <CustomInput
+                    name="email"
+                    type="email"
+                    width="small"
+                    placeholder="Correo electrónico"
+                    icon="fa-regular fa-envelope"
+                    validate={{
+                      required: true,
+                      pattern: {
+                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                        message: "Ingrese un correo electrónico válido",
+                      },
+                    }}
+                  />
+                  <CustomInput
+                    name="telefono"
+                    type="text"
+                    width="small"
+                    placeholder="Teléfono"
+                    icon="fa-solid fa-phone"
+                    validate={{
+                      required: true,
+                      validate: (value) => {
+                        const isValid = /^\d{8,10}$/.test(value);
+                        if (!isValid) {
+                          return "El número de teléfono debe tener entre 8 y 10 dígitos";
+                        }
+                      },
+                    }}
+                  />
+                </div>
+                <div className={styles.miniInputContainer}>
+                  <CustomInput
+                    name="calleAltura"
+                    type="text"
+                    width="small"
+                    placeholder="Domicilio"
+                    icon="fa-solid fa-location-dot"
+                    validate={{ required: true, maxLength: 25 }}
+                  />
+                  <CustomInput
+                    name="localidad"
+                    type="text"
+                    width="small"
+                    placeholder="Localidad"
+                    icon="fa-solid fa-location-dot"
+                    validate={{ required: true, maxLength: 25 }}
+                  />
+                </div>
+                <div className={styles.miniSelectContainer}>
+                  <div className={styles.miniSelect}>
+                    <CustomSelect
+                      name="iva"
+                      text="Seleccioná el tipo de factura"
+                      arrayOptions={[
+                        {
+                          value: "ResponsableInscripto",
+                          text: "ResponsableInscripto",
+                        },
+                        { value: "Monotributista", text: "Monotributista" },
+                        { value: "Final", text: "Final" },
+                      ]}
+                      validate={{ required: true }}
+                    />
+                  </div>
+                </div>
+              </form>
+            </FormProvider>
+          </div>
         </Accordion.Body>
       </Accordion.Item>
     </Accordion>

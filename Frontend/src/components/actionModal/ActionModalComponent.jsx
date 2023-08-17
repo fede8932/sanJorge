@@ -30,7 +30,8 @@ const MyVerticallyCenteredModal = (props) => {
         {type == "add" ? <AddProductViewModalContainer /> : null}
         {type == "updateSeller" ? <EditUserViewContainer seller={data} close={props.onHide}/> : null}
         {type == "updateClient" ? <EditClientViewContainer client={data} close={props.onHide}/> : null}
-        {type == "updateSupplier" ? <EditSupplierViewContainer supplier={data} close={props.onHide}/> : null}
+        {type == "updateSupplier" ? <EditSupplierViewContainer supplier={data} close={props.onHide} template="supplier" /> : null}
+        {type == "updateRepresSupplier" ? <EditSupplierViewContainer supplier={data} close={props.onHide} template="representative" /> : null}
       </Modal.Body>
       {/* {type == "update" ? null : (
         <Modal.Footer>
@@ -42,7 +43,7 @@ const MyVerticallyCenteredModal = (props) => {
 };
 
 function ActionModalComponent(props) {
-  const { icon, title, type, data, size } = props;
+  const { icon, title, type, data, size, iconColor } = props;
   const [modalShow, setModalShow] = React.useState(false);
 
   return (
@@ -50,7 +51,7 @@ function ActionModalComponent(props) {
       <IconButonUsersTable
         fn={() => setModalShow(true)}
         icon={icon}
-        iconInitialStyle="iconStyleBlue"
+        iconInitialStyle={iconColor ? iconColor : "iconStyleBlue"}
       />
       <MyVerticallyCenteredModal
         size={size}

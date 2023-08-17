@@ -65,8 +65,8 @@ namespace Repuestos_San_jorge.Controllers.Admin
             }
         }
 
-        [HttpDelete("delete/{id}")]
-        public async Task<ActionResult<IEnumerable<Representative>>> DeleteRepresentative(int id)
+        [HttpPut("delete/{id}")]
+        public async Task<ActionResult<Representative>> DeleteRepresentative(int id)
         {
             try
             {

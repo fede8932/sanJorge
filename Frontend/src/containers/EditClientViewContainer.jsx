@@ -12,7 +12,7 @@ function EditClientViewContainer(props) {
   const methods = useForm();
   const dispatch = useDispatch();
   const updateClient= (data) => {
-    const { cuil, name, lastName, iva, sellerId, ...clientData } = data;
+    const { iva, sellerId, ...clientData } = data;
     clientData.iva = iva != "" ? iva : client.iva
     clientData.sellerId = sellerId != "" ? Number(sellerId) : client.sellerId
     clientData.altura = Number(clientData.altura);

@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./editSupplierView.module.css";
 import Button from "react-bootstrap/esm/Button";
 import CustomInput from "../../commonds/putInput/CustomInput";
 import { FormProvider } from "react-hook-form";
 import Spinner from "react-bootstrap/esm/Spinner";
 import PutCustomTextArea from "../../commonds/putTextArea/PutCustomTextArea";
+import Form from "react-bootstrap/Form";
 
 function EditSupplierViewComponent(props) {
   const { supplier, update, methods, loading } = props;
+  const [readOnly, setReadOnly] = useState(true);
   return (
     <div className={styles.editContainer}>
       <div className={styles.dataContainer}>
@@ -21,6 +23,14 @@ function EditSupplierViewComponent(props) {
         <span>
           IVA:<span className={styles.dataUser}>No definido</span>
         </span>
+        <Form.Check // prettier-ignore
+          type="switch"
+          id="custom-switch"
+          label="Editar"
+          onChange={() => {
+            setReadOnly(!readOnly);
+          }}
+        />
       </div>
       <FormProvider {...methods}>
         <form
@@ -31,17 +41,18 @@ function EditSupplierViewComponent(props) {
             <div className={styles.leftInputContainer}>
               <span className={styles.inputLabel}>Razón Social</span>
               <CustomInput
-                readOnly={true}
+                readOnly={readOnly}
                 name="razonSocial"
                 type="text"
                 width="large"
                 placeholder="Nombre"
                 icon="fa-solid fa-id-card"
-                validate={{ required: false }}
+                validate={{ required: true }}
                 defaultValue={supplier.razonSocial}
               />
               <span className={styles.inputLabel}>Email</span>
               <CustomInput
+                readOnly={readOnly}
                 name="email"
                 type="email"
                 width="large"
@@ -58,17 +69,18 @@ function EditSupplierViewComponent(props) {
               />
               <span className={styles.inputLabel}>CUIT</span>
               <CustomInput
-                readOnly={true}
+                readOnly={readOnly}
                 name="cuit"
                 type="text"
                 width="large"
                 placeholder="Cuit"
                 icon="fa-solid fa-id-card"
-                validate={{ required: false }}
+                validate={{ required: true }}
                 defaultValue={supplier.cuit}
               />
               <span className={styles.inputLabel}>Localidad</span>
               <CustomInput
+                readOnly={readOnly}
                 name="localidad"
                 type="text"
                 width="large"
@@ -79,6 +91,7 @@ function EditSupplierViewComponent(props) {
               />
               <span className={styles.inputLabel}>Calle</span>
               <CustomInput
+                readOnly={readOnly}
                 name="calle"
                 type="text"
                 width="large"
@@ -99,6 +112,7 @@ function EditSupplierViewComponent(props) {
                 <div style={{ width: "50%", padding: "0px 5px 0px 0px" }}>
                   <span className={styles.inputLabel}>Altura</span>
                   <CustomInput
+                    readOnly={readOnly}
                     name="altura"
                     type="text"
                     width="complete"
@@ -111,6 +125,7 @@ function EditSupplierViewComponent(props) {
                 <div style={{ width: "50%", padding: "0px 0px 0px 5px" }}>
                   <span className={styles.inputLabel}>Código postal</span>
                   <CustomInput
+                    readOnly={readOnly}
                     name="codigoPostal"
                     type="text"
                     width="complete"
@@ -123,6 +138,7 @@ function EditSupplierViewComponent(props) {
               </div>
               <span className={styles.inputLabel}>Teléfono</span>
               <CustomInput
+                readOnly={readOnly}
                 name="telefono"
                 type="text"
                 width="large"
@@ -153,6 +169,7 @@ function EditSupplierViewComponent(props) {
           <div className={styles.buttonContainer}>
             <div className={styles.buttonSubContainer}>
               <Button
+                disabled={readOnly}
                 type="submit"
                 style={{
                   backgroundColor: "#673ab7",

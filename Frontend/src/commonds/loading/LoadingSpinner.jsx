@@ -1,6 +1,6 @@
 import React from "react";
 import {
-    RingSpinner,
+  CircleSpinner,
 } from "react-spinner-overlay";
 import styles from "./loadingSpinner.module.css";
 
@@ -9,7 +9,7 @@ const LoadingSpinner = (props) => {
   //loading es bool
   return (
     <div className={styles.loadingContainer}>
-      <RingSpinner
+      <CircleSpinner
         loading={loading}
         overlayColor="rgba(0,153,255,0.2)"
         color="#673AB7"
