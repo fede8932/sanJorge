@@ -37,7 +37,9 @@ export const getSuppliers = async () => {
 
 export const getInfoSuppliers = async (razonSocial) => {
   try {
-    const { data } = await axios.get(`${apiUrl}/api/supplier/supplier?razonSocial=${razonSocial}`);
+    const { data } = await axios.get(
+      `${apiUrl}/api/supplier/supplier?razonSocial=${razonSocial}`
+    );
     return data;
   } catch (error) {
     throw error;
@@ -46,7 +48,9 @@ export const getInfoSuppliers = async (razonSocial) => {
 
 export const getSuppliersByData = async (text) => {
   try {
-    const { data } = await axios.get(`${apiUrl}/api/supplier/data?text=${text}`);
+    const { data } = await axios.get(
+      `${apiUrl}/api/supplier/data?text=${text}`
+    );
     return data;
   } catch (error) {
     throw error;
@@ -63,37 +67,60 @@ export const resetSupplierToTable = async () => {
 
 export const updateSupplierStatusRequest = async (id) => {
   try {
-    const { data } = await axios.put(`${apiUrl}/api/supplier/update/status/${id}`);
+    const { data } = await axios.put(
+      `${apiUrl}/api/supplier/update/status/${id}`
+    );
     return data;
   } catch (error) {
     throw error;
   }
-}
+};
 
 export const updateSupplierRequest = async (dataEdit) => {
   try {
-    const { id, ...sendInfo } = dataEdit
-    const { data } = await axios.put(`${apiUrl}/api/supplier/update/${id}`, sendInfo);
+    const { id, ...sendInfo } = dataEdit;
+    const { data } = await axios.put(
+      `${apiUrl}/api/supplier/update/${id}`,
+      sendInfo
+    );
     return data;
   } catch (error) {
     throw error;
   }
-}
+};
 
 export const addRepresentativeRequest = async (dataRepresentative) => {
   try {
-    const { data } = await axios.post(`${apiUrl}/api/representative`, dataRepresentative);
+    const { data } = await axios.post(
+      `${apiUrl}/api/representative`,
+      dataRepresentative
+    );
     return data;
   } catch (error) {
     throw error;
   }
-}
+};
 
 export const deleteRepSupplierRequest = async (id) => {
   try {
-    const { data } = await axios.put(`${apiUrl}/api/representative/delete/${id}`);
+    const { data } = await axios.put(
+      `${apiUrl}/api/representative/delete/${id}`
+    );
     return data;
   } catch (error) {
     throw error;
   }
-}
+};
+
+export const updateRepSupplierRequest = async (newData) => {
+  const { id, ...updateData } = newData;
+  try {
+    const { data } = await axios.put(
+      `${apiUrl}/api/representative/update/${id}`,
+      updateData
+    );
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

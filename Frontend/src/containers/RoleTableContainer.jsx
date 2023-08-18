@@ -3,11 +3,17 @@ import RoleTableComponent from "../components/roleTable/RoleTableComponent";
 import { UpdateStatusSellerRequest } from "../redux/searchSeller";
 import { useDispatch } from "react-redux";
 import { UpdateStatusClientRequest } from "../redux/searchClient";
-import { DeleteRepSupplierRequest, UpdateStatusSupplierRequest } from "../redux/searchSupplier";
+import {
+  DeleteRepSupplierRequest,
+  UpdateStatusSupplierRequest,
+} from "../redux/searchSupplier";
+import { getMovementsByTextRequest } from "../redux/searchCurrentAcount";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router";
 
 function RoleTableContainer(props) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const alert = (id, type) => {
     const text =
       type !== "repSupplier"
@@ -68,7 +74,18 @@ function RoleTableContainer(props) {
       }
     });
   };
-  return <RoleTableComponent {...props} statusToogle={alert} />;
+  const viewAcount = (acountNumber) => {
+    dispatch(getMovementsByTextRequest({ text: acountNumber })).then(() => {
+      navigate("/search/acount");
+    });
+  };
+  return (
+    <RoleTableComponent
+      {...props}
+      statusToogle={alert}
+      viewAcount={viewAcount}
+    />
+  );
 }
 
 export default RoleTableContainer;

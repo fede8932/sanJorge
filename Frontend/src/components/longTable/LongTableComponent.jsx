@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./longTable.module.css";
 import ActionModalContainer from "../../containers/ActionModalContainer";
+import CustomPopup from "../../commonds/popup/CustomPopup";
 
 function LongTableComponent(props) {
   const { data, colum, type } = props;
@@ -24,7 +25,7 @@ function LongTableComponent(props) {
                   return (
                     <tr key={i}>
                       <td>{obj.article}</td>
-                      <td>{`${obj.description.substr(0, 19)}...`}</td>
+                      <td><CustomPopup content={obj.description}/></td>
                       <td>{brand.brand.name}</td>
                       <td>{`$ ${obj.brandProducts[i].price.price}`}</td>
                       <td>{`$ ${
@@ -45,12 +46,13 @@ function LongTableComponent(props) {
                           }}
                         >
                           <ActionModalContainer
-                            type="info"
-                            icon="fa-solid fa-circle-info"
+                            type="infoProduct"
+                            icon="fa-regular fa-images"
+                            size="lg"
                           />
                           <div
                             style={{
-                              margin: "1px 0px 0px 8px",
+                              margin: "0px 0px 0px 8px",
                               display: "flex",
                               alignItems: "center",
                             }}

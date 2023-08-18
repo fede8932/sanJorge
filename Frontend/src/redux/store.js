@@ -16,6 +16,7 @@ import addOrderItem from "./addOrderItems"
 import searchSellersReducer from "./searchSeller"
 import searchClientsReducer from "./searchClient"
 import searchSuppliersReducer from "./searchSupplier"
+import searchMovementsReducer from "./searchCurrentAcount"
 
 import userSlice from "./user";
 
@@ -38,7 +39,8 @@ const store = configureStore({
     listOrderItems: addOrderItem,
     searchSellers: searchSellersReducer,
     searchClients: searchClientsReducer,
-    searchSuppliers: searchSuppliersReducer
+    searchSuppliers: searchSuppliersReducer,
+    searchMovements: searchMovementsReducer,
   },
 });
 

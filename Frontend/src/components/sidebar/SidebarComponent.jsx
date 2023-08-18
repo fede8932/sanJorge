@@ -117,6 +117,20 @@ function SideBarComponent(props) {
             ],
           }}
         />
+        <CustomAcordion
+          props={{
+            textButton: "Movimientos",
+            icon01: "fa-solid fa-file-invoice-dollar",
+            items: [
+              {
+                textButton: "Cuentas corrientes",
+                fn: () => {
+                  fnNavigate("search/acount");
+                },
+              },
+            ],
+          }}
+        />
       </div>
       <Separador props={{ clase: "sideSeparador" }} />
       <div className={styles.section}>
@@ -189,7 +203,7 @@ function SideBarComponent(props) {
         <CustomAcordion
           props={{
             textButton: "Comprobantes",
-            icon01: "fa fa-dolly",
+            icon01: "fa-solid fa-file-invoice-dollar",
             items: [
               {
                 textButton: "Generar comprobante",
@@ -199,6 +213,26 @@ function SideBarComponent(props) {
               },
               {
                 textButton: "Buscar comprobantes",
+                fn: () => {
+                  console.log("02");
+                },
+              },
+            ],
+          }}
+        />
+        <CustomAcordion
+          props={{
+            textButton: "Picking",
+            icon01: "fa fa-dolly",
+            items: [
+              {
+                textButton: "Generar Orden de control",
+                fn: () => {
+                  console.log("01");
+                },
+              },
+              {
+                textButton: "Buscar Orden de control",
                 fn: () => {
                   console.log("02");
                 },

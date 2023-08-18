@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./editRepresView.module.css";
 import Button from "react-bootstrap/esm/Button";
-import CustomInput from "../../commonds/input/CustomInput";
+import CustomInput from "../../commonds/putInput/CustomInput";
 import { FormProvider } from "react-hook-form";
 import Spinner from "react-bootstrap/esm/Spinner";
-import CustomTextArea from "../../commonds/textarea/CustomTextArea";
+import CustomTextArea from "../../commonds/putTextArea/PutCustomTextArea";
+import Form from "react-bootstrap/Form";
 
 function EditRepresentativesViewComponent(props) {
-  const { supplier, methods, update, loading } = props;
+  const { supplier, methods, update, loading, path, repindex } = props;
+  const { representative } = supplier;
+  const [readOnly, setReadOnly] = useState(true);
   return (
     <div className={styles.editContainer}>
       <div className={styles.dataContainer}>
@@ -21,6 +24,16 @@ function EditRepresentativesViewComponent(props) {
         <span>
           IVA:<span className={styles.dataUser}>No definido</span>
         </span>
+        {path !== "/search/supplier" ? (
+          <Form.Check // prettier-ignore
+            type="switch"
+            id="custom-switch"
+            label="Editar"
+            onChange={() => {
+              setReadOnly(!readOnly);
+            }}
+          />
+        ) : null}
       </div>
       <FormProvider {...methods}>
         <form
@@ -31,24 +44,29 @@ function EditRepresentativesViewComponent(props) {
             <div className={styles.leftInputContainer}>
               <span className={styles.inputLabel}>Nombre</span>
               <CustomInput
+                readOnly={path === "/search/supplier" ? false : readOnly}
                 name="name"
                 type="text"
                 width="large"
                 placeholder="Nombre"
                 icon="fa-solid fa-id-card"
                 validate={{ required: true }}
+                defaultValue={path === "/search/supplier" ? null : representative[repindex].name}
               />
               <span className={styles.inputLabel}>Apellido</span>
               <CustomInput
+                readOnly={path === "/search/supplier" ? false : readOnly}
                 name="apellido"
                 type="text"
                 width="large"
                 placeholder="Apellido"
                 icon="fa-solid fa-id-card"
                 validate={{ required: true }}
+                defaultValue={path === "/search/supplier" ? null : representative[repindex].apellido}
               />
               <span className={styles.inputLabel}>Email</span>
               <CustomInput
+                readOnly={path === "/search/supplier" ? false : readOnly}
                 name="email"
                 type="email"
                 width="large"
@@ -61,9 +79,11 @@ function EditRepresentativesViewComponent(props) {
                     message: "Ingrese un correo electrónico válido",
                   },
                 }}
+                defaultValue={path === "/search/supplier" ? null : representative[repindex].email}
               />
               <span className={styles.inputLabel}>Teléfono</span>
               <CustomInput
+                readOnly={path === "/search/supplier" ? false : readOnly}
                 name="telefono"
                 type="text"
                 width="large"
@@ -78,22 +98,26 @@ function EditRepresentativesViewComponent(props) {
                     }
                   },
                 }}
+                defaultValue={path === "/search/supplier" ? null : representative[repindex].telefono}
               />
             </div>
             <div className={styles.rigthInputContainer}>
               <span className={styles.inputLabel}>Comentarios</span>
               <CustomTextArea
+                readOnly={path === "/search/supplier" ? false : readOnly}
                 name="comentarios"
                 width="medium"
                 placeholder="En este campo puedes ingresar descripciones... (Máximo 160 caracteres)"
                 type="textarea"
                 validate={{ required: false, maxLength: 160 }}
+                defaultValue={path === "/search/supplier" ? null : representative[repindex].comentarios}
               />
             </div>
           </div>
           <div className={styles.buttonContainer}>
             <div className={styles.buttonSubContainer}>
               <Button
+                disabled={path === "/search/supplier" ? false : readOnly}
                 type="submit"
                 style={{
                   backgroundColor: "#673ab7",
@@ -104,7 +128,7 @@ function EditRepresentativesViewComponent(props) {
                 }}
               >
                 {!loading ? (
-                  "Agregar"
+                  <>{path === "/search/supplier" ? "Agregar" : "Actualizar"}</>
                 ) : (
                   <Spinner animation="border" variant="light" size="sm" />
                 )}

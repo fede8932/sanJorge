@@ -1,13 +1,13 @@
 import React from "react";
-import styles from "./searchProduct.module.css";
+import styles from "./searchCurrentAcount.module.css";
 import Button from "react-bootstrap/esm/Button";
 import CustomInput from "../../commonds/input/CustomInput";
-import LongTableContainer from "../../containers/LongTableContainer";
 import { FormProvider } from "react-hook-form";
 import Spinner from "react-bootstrap/esm/Spinner";
+import RoleTableContainer from "../../containers/RoleTableContainer";
 
-function SearchProductComponent(props) {
-  const { onSubmit, products, methods } = props;
+function SearchCurrentAcount(props) {
+  const { methods, onSubmit, list } = props;
   return (
     <FormProvider {...methods}>
       <form
@@ -24,11 +24,11 @@ function SearchProductComponent(props) {
               }}
             >
               <CustomInput
-                name="campo"
+                name="text"
                 type="text"
                 width="extraMedium"
-                placeholder="Código de artículo / Nombre / Referencia"
-                icon="fas fa-hashtag"
+                placeholder="Ingrese el numero de cuenta o la razon social del titular"
+                icon="fa-solid fa-magnifying-glass"
                 validate={{ required: true }}
               />
               <Button
@@ -41,7 +41,7 @@ function SearchProductComponent(props) {
                   marginLeft: "10px",
                 }}
               >
-                {!products.loading ? (
+                {!list.loading ? (
                   "Buscar"
                 ) : (
                   <Spinner animation="border" variant="light" size="sm" />
@@ -51,21 +51,12 @@ function SearchProductComponent(props) {
           </div>
         </div>
         <div className={styles.tableContainer}>
-          <span className={styles.subTitle}>Detalle de productos</span>
+          <span className={styles.subTitle}>Detalle de movimientos</span>
           <div>
-            <LongTableContainer
-              colum={[
-                { title: "Artículo", ancho: {width: "10%"}},
-                { title: "Descripción", ancho: {width: "30%"}},
-                { title: "Marca", ancho: {width: "10%"}},
-                { title: "Costo", ancho: {width: "10%"}},
-                { title: "Precio de venta", ancho: {width: "10%"}},
-                { title: "Precio con IVA", ancho: {width: "10%"}},
-                { title: "Stock", ancho: {width: "10%"}},
-                { title: "Acciones", ancho: {width: "10%"}},
-              ]}
-              data={products.data}
-              type="product"
+            <RoleTableContainer
+              colum={["Fecha", "Titular", "Concepto", "Monto", "Acciones"]}
+              data={list.data}
+              type="acount"
             />
           </div>
         </div>
@@ -74,4 +65,4 @@ function SearchProductComponent(props) {
   );
 }
 
-export default SearchProductComponent;
+export default SearchCurrentAcount;

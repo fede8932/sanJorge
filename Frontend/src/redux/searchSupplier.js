@@ -21,6 +21,10 @@ export const DeleteRepSupplierRequest = createAsyncThunk(
   "DELETE_REPSUPPLIER",
   supplierRequest.deleteRepSupplierRequest
 );
+export const UpdateRepSupplierRequest = createAsyncThunk(
+  "UPDATE_REPSUPPLIER",
+  supplierRequest.updateRepSupplierRequest
+);
 
 const suppliersSlice = createSlice({
   name: "suppliers",
@@ -79,6 +83,25 @@ const suppliersSlice = createSlice({
       state.error = action.error.message;
     },
     [DeleteRepSupplierRequest.fulfilled]: (state, action) => {
+      const newStateData = state.data.map((supplier) => {
+        const newSupplierData = supplier.representative.map((sr) => {
+          if (sr.id === action.payload.id) return action.payload;
+          return sr;
+        });
+        supplier.representative = newSupplierData;
+        return supplier;
+      });
+      state.loading = false;
+      state.data = newStateData;
+    },
+    [UpdateRepSupplierRequest.pending]: (state, action) => {
+      state.loading = false;
+    },
+    [UpdateRepSupplierRequest.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
+    [UpdateRepSupplierRequest.fulfilled]: (state, action) => {
       const newStateData = state.data.map((supplier) => {
         const newSupplierData = supplier.representative.map((sr) => {
           if (sr.id === action.payload.id) return action.payload;

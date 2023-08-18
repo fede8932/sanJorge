@@ -41,10 +41,29 @@ namespace Repuestos_San_jorge.Services.Admin
                 throw;
             }
         }
+
+        public async Task<CurrentAcount> SearchMovements(string text) // Listar vendedores
+        {
+            try
+            {
+                var acount = await _dbContext.CurrentAcounts
+                    .Where(c => c.acountNumber == text)
+                    .Include(c => c.movements)
+                    .Include(c => c.client)
+                    .Include(c => c.supplier)
+                    .FirstOrDefaultAsync();
+                return acount;
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 
     public interface IMovementService
     {
         Task<string> CreateCreditNoteAsync(Movement movement);
+        Task<CurrentAcount> SearchMovements(string text);
     }
 }

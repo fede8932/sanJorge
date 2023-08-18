@@ -81,7 +81,7 @@ namespace Repuestos_San_jorge.Controllers.Admin
         }
 
         [HttpPut("update/{id}")]
-        public async Task<ActionResult<IEnumerable<Representative>>> UpdateRepresentative(
+        public async Task<ActionResult<Representative>> UpdateRepresentative(
             int id,
             [FromBody] UpdateRepresentativeDto data
         )

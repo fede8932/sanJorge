@@ -1,15 +1,14 @@
 import React from "react";
-import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import styles from "./actionModal.module.css";
 import AddProductViewModalContainer from "../../containers/AddProductViewModalContainer";
 import IconButonUsersTable from "../../commonds/iconButtonUsersTable/IconButonUsersTable";
 import EditUserViewContainer from "../../containers/EditUserViewContainer";
 import EditClientViewContainer from "../../containers/EditClientViewContainer";
 import EditSupplierViewContainer from "../../containers/EditSupplierViewContainer";
+import CustomCarrousel from "../../commonds/carrousel/CustomCarrousel";
 
 const MyVerticallyCenteredModal = (props) => {
-  const { title, type, data, size } = props;
+  const { title, type, data, size, repindex } = props;
   //size es: 'sm' | 'lg' | 'xl'
   return (
     <Modal
@@ -18,20 +17,42 @@ const MyVerticallyCenteredModal = (props) => {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <Modal.Header closeButton>
-        <Modal.Title
-          style={{ color: "#3C3C3C" }}
-          id="contained-modal-title-vcenter"
-        >
-          {title}
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
+      {type !== "infoProduct" ? (
+        <Modal.Header closeButton>
+          <Modal.Title
+            style={{ color: "#3C3C3C" }}
+            id="contained-modal-title-vcenter"
+          >
+            {title}
+          </Modal.Title>
+        </Modal.Header>
+      ) : (
+        <></>
+      )}
+      <Modal.Body style={type ==="infoProduct" ? {padding: "4px"} : {}}>
+        {type == "infoProduct" ? <CustomCarrousel/> : null}
         {type == "add" ? <AddProductViewModalContainer /> : null}
-        {type == "updateSeller" ? <EditUserViewContainer seller={data} close={props.onHide}/> : null}
-        {type == "updateClient" ? <EditClientViewContainer client={data} close={props.onHide}/> : null}
-        {type == "updateSupplier" ? <EditSupplierViewContainer supplier={data} close={props.onHide} template="supplier" /> : null}
-        {type == "updateRepresSupplier" ? <EditSupplierViewContainer supplier={data} close={props.onHide} template="representative" /> : null}
+        {type == "updateSeller" ? (
+          <EditUserViewContainer seller={data} close={props.onHide} />
+        ) : null}
+        {type == "updateClient" ? (
+          <EditClientViewContainer client={data} close={props.onHide} />
+        ) : null}
+        {type == "updateSupplier" ? (
+          <EditSupplierViewContainer
+            supplier={data}
+            close={props.onHide}
+            template="supplier"
+          />
+        ) : null}
+        {type == "updateRepresSupplier" ? (
+          <EditSupplierViewContainer
+            repindex={repindex}
+            supplier={data}
+            close={props.onHide}
+            template="representative"
+          />
+        ) : null}
       </Modal.Body>
       {/* {type == "update" ? null : (
         <Modal.Footer>
@@ -54,6 +75,7 @@ function ActionModalComponent(props) {
         iconInitialStyle={iconColor ? iconColor : "iconStyleBlue"}
       />
       <MyVerticallyCenteredModal
+        {...props}
         size={size}
         show={modalShow}
         onHide={() => setModalShow(false)}

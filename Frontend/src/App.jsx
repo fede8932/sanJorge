@@ -19,6 +19,7 @@ import NewSellOrder from "./views/newSellOrder/NewSellOrder";
 import SearchSeller from "./views/searchSeller/SearchSeller";
 import SearchClient from "./views/searchClient/SearchClient";
 import SearchSupplier from "./views/searchSupplier/SearchSupplier";
+import SearchCurrentAcount from "./views/searchCurrentAcount/SearchCurrentAcount";
 
 function App() {
   const isOpen = useSelector((state) => state.sidebar.isOpen);
@@ -63,6 +64,7 @@ function App() {
                     <Route path="search/client" element={<SearchClient />} />
                     <Route path="search/supplier" element={<SearchSupplier />} />
                     <Route path="search/supplier/representative" element={<SearchSupplier />} />
+                    <Route path="search/acount" element={<SearchCurrentAcount />} />
                   </Routes>
                 </div>
               </div>

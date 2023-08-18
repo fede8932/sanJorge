@@ -91,7 +91,7 @@ namespace Repuestos_San_jorge.Services.Admin
             }
         }
 
-        public async Task<string> UpdateRepresentativeAsync(int id, UpdateRepresentativeDto data) // editar representante
+        public async Task<Representative> UpdateRepresentativeAsync(int id, UpdateRepresentativeDto data) // editar representante
         {
             try
             {
@@ -117,7 +117,7 @@ namespace Repuestos_San_jorge.Services.Admin
                 }
                 _dbContext.Entry(representative).CurrentValues.SetValues(dataUpdate);
                 await _dbContext.SaveChangesAsync();
-                return "Datos de representante actualizados";
+                return representative;
             }
             catch
             {
@@ -131,7 +131,7 @@ namespace Repuestos_San_jorge.Services.Admin
         Task<string> CreateRepresentativeAsync(Representative representative);
         Task<IEnumerable<Representative>> GetRepresentativesAsync();
         Task<IEnumerable<Representative>> GetRepresentativesBySupplierAsync(string supplierRazonSocial);
-        Task<string> UpdateRepresentativeAsync(int id, UpdateRepresentativeDto data);
+        Task<Representative> UpdateRepresentativeAsync(int id, UpdateRepresentativeDto data);
         Task<Representative> DeleteRepresentativeAsync(int id);
     }
 }
