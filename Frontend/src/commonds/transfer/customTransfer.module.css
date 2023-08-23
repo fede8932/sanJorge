@@ -1,0 +1,26 @@
+.transferContainer{
+    display: flex;
+    width: 100%;
+    height: 450px;
+    border-radius: 5px;
+    padding: 2px;
+    justify-content: space-between;
+}
+.tableContainer{
+    height: 100%;
+    width: calc((100% - 55px)/2);
+}
+.buttonContainer{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 50px;
+}
+.button{
+    all: initial;
+}
+.iconStyle{
+    color: #D64B4B
+}

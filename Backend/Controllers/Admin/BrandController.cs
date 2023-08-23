@@ -115,12 +115,30 @@ namespace Repuestos_San_jorge.Controllers.Admin
         [HttpPost("add/proveedor")]
         public async Task<ActionResult> AddSupplier(
             [FromQuery] int brandId,
+            [FromBody] AddSupplierToBrand suppliers
+        )
+        {
+            try
+            {
+                var result = await _brandService.AddBrandSupplierAsync(brandId, suppliers);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
+
+        [HttpDelete("delete/proveedor")]
+        public async Task<ActionResult> DeleteSupplier(
+            [FromQuery] int brandId,
             [FromQuery] int supplierId
         )
         {
             try
             {
-                var result = await _brandService.AddBrandSupplierAsync(brandId, supplierId);
+                var result = await _brandService.DeleteBrandSupplierAsync(brandId, supplierId);
                 return Ok(result);
             }
             catch (Exception ex)

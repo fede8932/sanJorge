@@ -25,7 +25,9 @@ function LongTableComponent(props) {
                   return (
                     <tr key={i}>
                       <td>{obj.article}</td>
-                      <td><CustomPopup content={obj.description}/></td>
+                      <td>
+                        <CustomPopup content={obj.description} />
+                      </td>
                       <td>{brand.brand.name}</td>
                       <td>{`$ ${obj.brandProducts[i].price.price}`}</td>
                       <td>{`$ ${
@@ -71,8 +73,8 @@ function LongTableComponent(props) {
                   );
                 })
               )
-            : data.map((obj, i) =>
-                obj.brandSuppliers.map((bs) => (
+            : data.map((obj) =>
+                obj.brandSuppliers.map((bs, i) => (
                   <tr key={i}>
                     <td>{obj.code}</td>
                     <td>{obj.name}</td>
@@ -84,8 +86,11 @@ function LongTableComponent(props) {
                         }}
                       >
                         <ActionModalContainer
-                          type="info"
-                          icon="fa-solid fa-circle-info"
+                          type="brand"
+                          size="lg"
+                          title="Proveedores"
+                          icon="fa-solid fa-user-plus"
+                          data={obj}
                         />
                       </div>
                     </td>

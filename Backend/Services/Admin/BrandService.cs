@@ -74,13 +74,15 @@ namespace Repuestos_San_jorge.Services.Admin
             }
         }
 
-        public async Task<string> AddBrandSupplierAsync(int brandId, int supplierId) // agregar proveedor a marca
+        public async Task<Brand> AddBrandSupplierAsync(int brandId, AddSupplierToBrand suppliers) // agregar proveedor a marca
         {
             try
             {
-                var brand = await _dbContext.Brands.SingleOrDefaultAsync(
-                    brand => brand.id == brandId
-                );
+                var brand = await _dbContext.Brands
+                    .Include(b => b.brandSuppliers)
+                    .ThenInclude(bs => bs.supplier)
+                    .Where(brand => brand.id == brandId)
+                    .SingleOrDefaultAsync();
                 if (brand == null)
                 {
                     throw new ArgumentNullException(
@@ -88,17 +90,67 @@ namespace Repuestos_San_jorge.Services.Admin
                         "No existe marca en los registros"
                     );
                 }
-                var supplier = await _dbContext.Suppliers.SingleOrDefaultAsync(
-                    supplier => supplier.id == supplierId
-                );
-                if (supplier == null)
+
+                var supplierIds = suppliers.listSupplierId;
+                var existingSupplierIds = brand.brandSuppliers.Select(bs => bs.supplierId).ToList();
+                var newSupplierIds = supplierIds.Except(existingSupplierIds).ToList();
+
+                var existingSuppliers = await _dbContext.Suppliers
+                    .Where(s => newSupplierIds.Contains(s.id))
+                    .ToListAsync();
+
+                foreach (var supplier in existingSuppliers)
                 {
-                    throw new ArgumentNullException(nameof(brand), "No proveedor en los registros");
+                    var brandSupplier = new BrandSupplier { brand = brand, supplier = supplier };
+                    _dbContext.BrandSuppliers.Add(brandSupplier);
                 }
-                var brandSupplier = new BrandSupplier { brand = brand, supplier = supplier };
-                _dbContext.BrandSuppliers.Add(brandSupplier);
+                // var supplierIds = suppliers.listSupplierId;
+                // var existingSuppliers = await _dbContext.Suppliers
+                //     .Where(s => supplierIds.Contains(s.id))
+                //     .ToListAsync();
+                // foreach (var supplier in existingSuppliers)
+                // {
+                //     var brandSupplier = new BrandSupplier { brand = brand, supplier = supplier };
+                //     _dbContext.BrandSuppliers.Add(brandSupplier);
+                // }
                 await _dbContext.SaveChangesAsync();
-                return "Marca actualizada";
+                return brand;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<Brand> DeleteBrandSupplierAsync(int brandId, int supplierId)
+        {
+            try
+            {
+                var brand = await _dbContext.Brands
+                    .Include(b => b.brandSuppliers)
+                    .ThenInclude(bs => bs.supplier)
+                    .Where(brand => brand.id == brandId)
+                    .SingleOrDefaultAsync();
+                if (brand == null)
+                {
+                    throw new ArgumentNullException(
+                        nameof(brand),
+                        "No existe marca en los registros"
+                    );
+                }
+                if (brand.brandSuppliers.Count <= 1)
+                {
+                    throw new ArgumentNullException(
+                        nameof(brand.brandSuppliers),
+                        "No es posible eliminar proveedor"
+                    );
+                }
+                var recordsToDelete = _dbContext.BrandSuppliers
+                    .Where(bs => bs.supplierId == supplierId && bs.brandId == brandId)
+                    .ToList();
+                _dbContext.BrandSuppliers.RemoveRange(recordsToDelete);
+                await _dbContext.SaveChangesAsync();
+                return brand;
             }
             catch
             {
@@ -115,14 +167,14 @@ namespace Repuestos_San_jorge.Services.Admin
                 .ToListAsync();
             return filteredBrands;
         }
-    
+
         public async Task<IEnumerable<Brand>> GetBrandByRazonSocialAsync(string rs)
         {
             var filteredBrands = await _dbContext.Brands
-            .Include(b => b.brandSuppliers)
-            .ThenInclude(bs => bs.supplier)
-            .Where(b => b.brandSuppliers.Any(bs => bs.supplier.razonSocial == rs))
-            .ToListAsync();
+                .Include(b => b.brandSuppliers)
+                .ThenInclude(bs => bs.supplier)
+                .Where(b => b.brandSuppliers.Any(bs => bs.supplier.razonSocial == rs))
+                .ToListAsync();
             return filteredBrands;
         }
     }
@@ -133,7 +185,8 @@ namespace Repuestos_San_jorge.Services.Admin
         Task<IEnumerable<Brand>> GetBrandsAsync();
         Task<IEnumerable<Brand>> GetBrandByDataAsync(string data);
         Task<string> UpdateBrandAsync(int id, UpdateBrandDto data);
-        Task<string> AddBrandSupplierAsync(int brandId, int supplierId);
+        Task<Brand> AddBrandSupplierAsync(int brandId, AddSupplierToBrand suppliers);
+        Task<Brand> DeleteBrandSupplierAsync(int brandId, int supplierId);
         Task<IEnumerable<Brand>> GetBrandByRazonSocialAsync(string rs);
     }
 }

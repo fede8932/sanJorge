@@ -6,7 +6,7 @@ export const createBrand = async (brandData) => {
     const brandDate = {
       name: brandData.name,
       code: brandData.code,
-    }
+    };
     const { data } = await axios.get(
       `${apiUrl}/api/supplier/supplier?razonSocial=${brandData.supplierName}`
     );
@@ -38,7 +38,9 @@ export const getBrandsByData = async (text) => {
 };
 export const getBrandsBySupplier = async (rz) => {
   try {
-    const { data } = await axios.get(`${apiUrl}/api/brand/search/supplier?razonSocial=${rz}`);
+    const { data } = await axios.get(
+      `${apiUrl}/api/brand/search/supplier?razonSocial=${rz}`
+    );
     const brands = data.map((brand) => {
       return { text: brand.name, value: brand.id };
     });
@@ -47,4 +49,25 @@ export const getBrandsBySupplier = async (rz) => {
     throw error;
   }
 };
-
+export const addSupplierToBrand = async (infoBS) => {
+  try {
+    const { brandId, ...listSupplierId } = infoBS;
+    const { data } = await axios.post(
+      `${apiUrl}/api/brand/add/proveedor?brandId=${brandId}`,
+      listSupplierId
+    );
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const deleteSupplierToBrand = async (infoBS) => {
+  try {
+    const { brandId, supplierId } = infoBS;
+    const { data } = await axios.delete(
+      `${apiUrl}/api/brand/delete/proveedor?brandId=${brandId}&supplierId=${supplierId}`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

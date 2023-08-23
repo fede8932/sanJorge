@@ -23,7 +23,9 @@ const movementsSlice = createSlice({
     },
     [getMovementsByTextRequest.fulfilled]: (state, action) => {
       state.loading = false;
-      state.data = action.payload;
+      if (action.payload.movements) {
+        state.data = action.payload;
+      }
     },
   },
 });
