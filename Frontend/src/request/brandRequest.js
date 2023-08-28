@@ -65,9 +65,24 @@ export const deleteSupplierToBrand = async (infoBS) => {
   try {
     const { brandId, supplierId } = infoBS;
     const { data } = await axios.delete(
-      `${apiUrl}/api/brand/delete/proveedor?brandId=${brandId}&supplierId=${supplierId}`);
+      `${apiUrl}/api/brand/delete/proveedor?brandId=${brandId}&supplierId=${supplierId}`
+    );
     return data;
   } catch (error) {
     throw error;
   }
+};
+export const addBrandToTable = async (datos) => {
+  const { data } = await axios.post(`${apiUrl}/api/discounts`, datos);
+  return data.customerDiscounts;
+};
+export const delBrandToTable = async (ids) => {
+  const { brandId, clientId } = ids;
+  const { data } = await axios.delete(
+    `${apiUrl}/api/discounts/${brandId}/${clientId}`
+  );
+  return data.customerDiscounts;
+};
+export const resetBrandToTable = async () => {
+  return [];
 };

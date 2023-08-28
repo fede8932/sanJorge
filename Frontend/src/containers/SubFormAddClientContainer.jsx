@@ -1,27 +1,30 @@
-import React, { useEffect } from "react";
+import React from "react";
 import SubFormAddClientComponent from "../components/subFormAddClientComponent/SubFormAddClient";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { getSupplierRequest } from "../redux/supplier";
-import { addSupplierToTable } from "../redux/tableItems";
+import { addBrandToTable, delBrandToTable } from "../redux/tableItems";
 
 function SubFormAddClientContainer(props) {
-  const tItems = useSelector((state) => state.tableItems.data);
   const dispatch = useDispatch();
-  const supMethods = useForm();
-  const addSupplier = (data) => {
-    data.porcentaje = parseFloat(data.porcentaje);
-    dispatch(addSupplierToTable(data));
-    supMethods.reset();
+  const methods = useForm();
+  const tItems = useSelector((state) => state.tableItems.data);
+  const client = useSelector((state) => state.client.data);
+  const addBrand = (data) => {
+    data.porcentaje = parseFloat(data.porcentaje) / 100;
+    data.brandId = parseFloat(data.brandId);
+    data.clientId = client.id;
+    methods.reset();
+    dispatch(addBrandToTable(data));
   };
-  useEffect(() => {
-    dispatch(getSupplierRequest());
-  }, []);
+  const delBrand = (brandId, clientId) => {
+    const ids = { brandId: brandId, clientId: clientId };
+    dispatch(delBrandToTable(ids));
+  };
   return (
     <SubFormAddClientComponent
-      {...props}
-      supMethods={supMethods}
-      onSubmitSupplier={addSupplier}
+      delFn={delBrand}
+      methods={methods}
+      onSubmitBrand={addBrand}
       tableItems={tItems}
     />
   );

@@ -4,6 +4,7 @@ import logo from "../../assets/logo/logo.png";
 import CustomButton from "../../commonds/button/CustomButton";
 import CustomSearch from "../../commonds/search/CustomSearch";
 import CustomMenu from "../../commonds/menu/CustomMenu";
+import CustomDropdown from "../../commonds/dropdown/CustomDropdown";
 
 function NavbarComponent(props) {
   const { fnSidebar } = props;
@@ -25,7 +26,10 @@ function NavbarComponent(props) {
         />
       </div>
       <div className={styles.barContainer}>
-        <CustomSearch />
+        <div style={{ display: "flex", width: "950px", alignItems: "center"}}>
+          <CustomSearch />
+          <CustomDropdown />
+        </div>
         <div className={styles.perfilContainer}>
           <CustomButton
             props={{

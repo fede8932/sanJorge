@@ -3,9 +3,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 export const clientRegister = async (datos) => {
   try {
-    const client = datos.Client;
-    const discount = datos.CustomerDiscounts;
-    const { name, lastName, email, ...dataClient } = client;
+    const { name, lastName, email, ...dataClient } = datos;
     const dataUser = {
       name: name,
       lastName: lastName,
@@ -17,14 +15,11 @@ export const clientRegister = async (datos) => {
     dataClient.userId = userId.data;
     dataClient.altura = Number(dataClient.altura);
     dataClient.codigoPostal = Number(dataClient.codigoPostal);
-    console.log("dataClient", dataClient);
     const dataRequest = {
       Client: dataClient,
-      CustomerDiscounts: discount,
     };
-    console.log("dataClient", dataRequest);
-    await axios.post(`${apiUrl}/api/client`, dataRequest);
-    return "Registrado";
+    const client = await axios.post(`${apiUrl}/api/client`, dataRequest);
+    return client.data;
   } catch (error) {
     throw error;
   }

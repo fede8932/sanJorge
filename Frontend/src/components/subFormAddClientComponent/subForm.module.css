@@ -64,12 +64,13 @@
   border: 1px solid #eaeaea;
   border-radius: 14px;
   margin-top: 25px;
-  min-height: 300px;
+  min-height: 550px;
 }
 .divContainer {
   width: 100%;
   display: flex;
   justify-content: flex-start;
+  height: 500px;
 }
 .containerTable1 {
   width: 29%;
@@ -79,8 +80,8 @@
   align-items: end;
 }
 .containerTable2 {
-  width: 40%;
-  height: 260px;
+  width: 55%;
+  height: 500px;
   margin-left: 50px;
 }
 .selectButton {

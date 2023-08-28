@@ -9,7 +9,7 @@ namespace Repuestos_San_jorge.Models
         public int id { get; set; }
 
         [Required]
-        public float price { get; set; }
+        public float price { get; set; } // es el costo (precio de compra)
 
         [NotMapped]
         public float endPrice

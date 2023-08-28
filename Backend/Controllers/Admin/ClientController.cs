@@ -26,8 +26,8 @@ namespace Repuestos_San_jorge.Controllers.Admin
             try
             {
                 var result = await _clientService.CreateClientAsync(
-                    request.Client,
-                    request.CustomerDiscounts
+                    request.Client
+                    // request.CustomerDiscounts
                 );
                 return Ok(result);
             }
@@ -150,93 +150,93 @@ namespace Repuestos_San_jorge.Controllers.Admin
                 return StatusCode(500, "Ocurrió un error interno en el servidor.");
             }
         }
+        // se pasa a marca/descuento
+        // [HttpPost("discount")]
+        // public async Task<ActionResult> AddClientDiscount(
+        //     [FromBody] CustomerDiscount customerDiscount
+        // )
+        // {
+        //     try
+        //     {
+        //         var result = await _clientService.AddClientDiscountAsync(customerDiscount);
+        //         return Ok(result);
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         Console.WriteLine(ex);
+        //         return StatusCode(500, "Ocurrió un error interno en el servidor.");
+        //     }
+        // }
 
-        [HttpPost("discount")]
-        public async Task<ActionResult> AddClientDiscount(
-            [FromBody] CustomerDiscount customerDiscount
-        )
-        {
-            try
-            {
-                var result = await _clientService.AddClientDiscountAsync(customerDiscount);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                return StatusCode(500, "Ocurrió un error interno en el servidor.");
-            }
-        }
+        // [HttpGet("discount")]
+        // public async Task<ActionResult> GetClientDiscount(
+        //     [FromQuery] int clientId,
+        //     [FromQuery] int supplierId
+        // )
+        // {
+        //     try
+        //     {
+        //         var result = await _clientService.GetClientDiscountAsync(clientId, supplierId);
+        //         return Ok(result);
+        //     }
+        //     catch (ArgumentNullException ex)
+        //     {
+        //         Console.WriteLine(ex);
+        //         return StatusCode(200, ex.Message);
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         Console.WriteLine(ex);
+        //         return StatusCode(500, "Ocurrió un error interno en el servidor.");
+        //     }
+        // }
 
-        [HttpGet("discount")]
-        public async Task<ActionResult> GetClientDiscount(
-            [FromQuery] int clientId,
-            [FromQuery] int supplierId
-        )
-        {
-            try
-            {
-                var result = await _clientService.GetClientDiscountAsync(clientId, supplierId);
-                return Ok(result);
-            }
-            catch (ArgumentNullException ex)
-            {
-                Console.WriteLine(ex);
-                return StatusCode(200, ex.Message);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                return StatusCode(500, "Ocurrió un error interno en el servidor.");
-            }
-        }
+        // [HttpGet("discount/{clientId}")]
+        // public async Task<ActionResult> GetClientDiscountId([FromRoute] int clientId)
+        // {
+        //     try
+        //     {
+        //         var result = await _clientService.GetDiscountByClientAsync(clientId);
+        //         return Ok(result);
+        //     }
+        //     catch (ArgumentNullException ex)
+        //     {
+        //         Console.WriteLine(ex);
+        //         return StatusCode(200, ex.Message);
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         Console.WriteLine(ex);
+        //         return StatusCode(500, "Ocurrió un error interno en el servidor.");
+        //     }
+        // }
 
-        [HttpGet("discount/{clientId}")]
-        public async Task<ActionResult> GetClientDiscountId([FromRoute] int clientId)
-        {
-            try
-            {
-                var result = await _clientService.GetDiscountByClientAsync(clientId);
-                return Ok(result);
-            }
-            catch (ArgumentNullException ex)
-            {
-                Console.WriteLine(ex);
-                return StatusCode(200, ex.Message);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                return StatusCode(500, "Ocurrió un error interno en el servidor.");
-            }
-        }
-
-        [HttpPut("discount")]
-        public async Task<ActionResult> GetClientDiscount(
-            [FromQuery] int clientId,
-            [FromQuery] int supplierId,
-            [FromBody] UpdateCustomerDiscountDto data
-        )
-        {
-            try
-            {
-                var result = await _clientService.UpdateClientDiscountAsync(
-                    clientId,
-                    supplierId,
-                    data
-                );
-                return Ok(result);
-            }
-            catch (ArgumentNullException ex)
-            {
-                Console.WriteLine(ex);
-                return StatusCode(500, ex.Message);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                return StatusCode(500, "Ocurrió un error interno en el servidor.");
-            }
-        }
+        // [HttpPut("discount")]
+        // public async Task<ActionResult> GetClientDiscount(
+        //     [FromQuery] int clientId,
+        //     [FromQuery] int supplierId,
+        //     [FromBody] UpdateCustomerDiscountDto data
+        // )
+        // {
+        //     try
+        //     {
+        //         var result = await _clientService.UpdateClientDiscountAsync(
+        //             clientId,
+        //             supplierId,
+        //             data
+        //         );
+        //         return Ok(result);
+        //     }
+        //     catch (ArgumentNullException ex)
+        //     {
+        //         Console.WriteLine(ex);
+        //         return StatusCode(500, ex.Message);
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         Console.WriteLine(ex);
+        //         return StatusCode(500, "Ocurrió un error interno en el servidor.");
+        //     }
+        // }
     }
 }

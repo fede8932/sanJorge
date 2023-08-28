@@ -40,8 +40,6 @@ namespace Repuestos_San_jorge.Models
 
         public ICollection<Representative>? representative { get; set; }
 
-        public ICollection<CustomerDiscount>? customerDiscounts { get; set; }
-
         public ICollection<BrandSupplier>? brandSuppliers { get; set; }
         public ICollection<PurchaseOrder>? purchaseOrders { get; set; }
 

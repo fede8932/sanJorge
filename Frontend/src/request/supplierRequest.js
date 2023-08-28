@@ -66,14 +66,6 @@ export const getSuppliersByData = async (text) => {
   }
 };
 
-export const addSupplierToTable = async (datos) => {
-  return [datos];
-};
-
-export const resetSupplierToTable = async () => {
-  return [];
-};
-
 export const updateSupplierStatusRequest = async (id) => {
   try {
     const { data } = await axios.put(

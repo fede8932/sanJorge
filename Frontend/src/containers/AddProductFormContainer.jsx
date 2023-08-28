@@ -16,6 +16,10 @@ function AddProductFormContainer(props) {
   const brands = useSelector((state) => state.brand);
   const productStatus = useSelector((state) => state.product.loading);
   const addProduct = (data) => {
+    if (data.cantidad === "") {
+      data.cantidad = 0;
+    }
+    console.log(data);
     dispatch(productCreateRequest(data))
       .then((res) => {
         if (res.error) {

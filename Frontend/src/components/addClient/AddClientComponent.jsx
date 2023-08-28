@@ -3,10 +3,8 @@ import styles from "./addClient.module.css";
 import CustomInput from "../../commonds/input/CustomInput";
 import Button from "react-bootstrap/Button";
 import { FormProvider } from "react-hook-form";
-import SubFormAddClientContainer from "../../containers/SubFormAddClientContainer";
 import CustomSelect from "../../commonds/select/CustomSelect";
 import Spinner from "react-bootstrap/esm/Spinner";
-import { useSelector } from "react-redux";
 
 function AddClientComponent(props) {
   const { onSubmit, status, methods, sellers } = props;
@@ -187,23 +185,30 @@ function AddClientComponent(props) {
                     ]}
                     validate={{ required: true }}
                   />
+                  {/* <CustomInput
+                      name="base" //es descuento
+                      width="complete"
+                      placeholder="Comisión base"
+                      icon="fas fa-percentage"
+                      type="number"
+                      min="-100"
+                      max="100"
+                      step="1"
+                      validate={{ required: false }} /> */}
                 </div>
               </div>
             </div>
           </div>
         </form>
       </FormProvider>
-      <div className={styles.inputContainerLong}>
-        <span className={styles.subTitle}>Set descuentos</span>
-        <SubFormAddClientContainer />
-      </div>
       <Button
         onClick={methods.handleSubmit(onSubmit)}
         style={{
           backgroundColor: "#673ab7",
           border: "1px solid #673ab7",
           marginTop: "35px",
-          height: "48px",
+          height: "35px",
+          width: "80px"
         }}
       >
         {status ? (

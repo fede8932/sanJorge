@@ -14,10 +14,10 @@ namespace Repuestos_San_jorge.Models
         [StringLength(300)]
         public string? notas { get; set; }
 
-        public int supplierId { get; set; }
+        public int brandId { get; set; }
 
-        [ForeignKey("supplierId")]
-        public Supplier? supplier { get; set; }
+        [ForeignKey("brandId")]
+        public Brand? brand { get; set; }
 
         public int clientId { get; set; }
 

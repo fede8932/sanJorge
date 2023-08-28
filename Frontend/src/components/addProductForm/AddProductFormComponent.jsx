@@ -85,7 +85,7 @@ function AddProductFormComponent(props) {
                 name="listPrice"
                 type="text"
                 width="extraSmall"
-                placeholder="Precio de lista"
+                placeholder="Costo"
                 icon="fas fa-dollar-sign"
                 validate={{ required: true }}
               />
@@ -120,20 +120,12 @@ function AddProductFormComponent(props) {
               }}
             >
               <CustomInput
-                name="oferta"
-                type="text"
-                width="small"
-                placeholder="Oferta"
-                icon="fa-solid fa-tag"
-                validate={{ required: true }}
-              />
-              <CustomInput
                 name="cantidad"
                 type="text"
                 width="small"
                 placeholder="Cantidad"
                 icon="fas fa-sort-numeric-up"
-                validate={{ required: true }}
+                validate={{ required: false }}
               />
             </div>
             {/* <CustomInput

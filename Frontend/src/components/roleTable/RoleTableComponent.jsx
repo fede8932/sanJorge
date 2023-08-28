@@ -263,13 +263,6 @@ function RoleTableComponent(props) {
                         width: "130px",
                       }}
                     >
-                      <ActionModalContainer
-                        title="Información del representante"
-                        size="lg"
-                        data={obj}
-                        type="updateSupplier"
-                        icon="fa-regular fa-pen-to-square"
-                      />
                       <div
                         style={{
                           margin: "0px 0px 0px 8px",

@@ -8,19 +8,17 @@ import { FormProvider } from "react-hook-form";
 import { useSelector } from "react-redux";
 
 const FormClientSupplier = (props) => {
-  const { supMethods, onSubmitSupplier } = props;
-  const suppliers = useSelector((state) => state.supplier.data);
+  const { supMethods, onSubmitBrand } = props;
+  const brands = useSelector((state) => state.brand.data);
   return (
     <FormProvider {...supMethods}>
       <form className={styles.containerTable1}>
-        {suppliers && (
           <CustomSelect
-            name="supplierRazonSocial"
-            text="Seleccioná un proveedor"
-            arrayOptions={suppliers}
+            name="brandId"
+            text="Seleccioná una marca"
+            arrayOptions={brands}
             validate={{ required: true }}
           />
-        )}
         <CustomTextArea
           name="notas"
           width="large"
@@ -38,12 +36,12 @@ const FormClientSupplier = (props) => {
           <CustomInput
             name="porcentaje" //es descuento
             width="small"
-            placeholder="Descuento"
+            placeholder="Recargo"
             icon="fas fa-percentage"
             type="number"
             min="-100"
             max="100"
-            step="0.1"
+            step="1"
             validate={{ required: true }}
           />
           <Button
@@ -52,7 +50,7 @@ const FormClientSupplier = (props) => {
               backgroundColor: "#673ab7",
               border: "1px solid #673ab7",
             }}
-            onClick={supMethods.handleSubmit(onSubmitSupplier)}
+            onClick={supMethods.handleSubmit(onSubmitBrand)}
           >
             Agregar
           </Button>

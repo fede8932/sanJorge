@@ -6,6 +6,7 @@ export const getMovementsRequest = async (dataSearch) => {
     const { data } = await axios.get(
       `${apiUrl}/api/movement/${dataSearch.text}`
     );
+    console.log(data);
     return data;
   } catch (error) {
     throw error;

@@ -108,7 +108,7 @@ namespace Repuestos_San_jorge.Data
                 .Entity<CustomerDiscount>()
                 .HasKey(
                     customerDiscount =>
-                        new { customerDiscount.clientId, customerDiscount.supplierId }
+                        new { customerDiscount.clientId, customerDiscount.brandId }
                 );
             modelBuilder
                 .Entity<CustomerDiscount>()
@@ -117,9 +117,9 @@ namespace Repuestos_San_jorge.Data
                 .HasForeignKey(customerDiscount => customerDiscount.clientId);
             modelBuilder
                 .Entity<CustomerDiscount>()
-                .HasOne(customerDiscount => customerDiscount.supplier)
-                .WithMany(supplier => supplier.customerDiscounts)
-                .HasForeignKey(customerDiscount => customerDiscount.supplierId);
+                .HasOne(customerDiscount => customerDiscount.brand)
+                .WithMany(brand => brand.customerDiscounts)
+                .HasForeignKey(customerDiscount => customerDiscount.brandId);
             modelBuilder.Entity<Brand>().HasIndex(brand => brand.name).IsUnique();
             modelBuilder
                 .Entity<BrandSupplier>()

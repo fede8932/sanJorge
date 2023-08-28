@@ -1,51 +1,51 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import * as supplierRequest from "../request/supplierRequest";
+import * as brandRequest from "../request/brandRequest";
 const userState = {
   loading: false,
   data: [],
   error: "",
 };
-export const addSupplierToTable = createAsyncThunk(
-  "SUPPLIER_TABLE",
-  supplierRequest.addSupplierToTable
+export const addBrandToTable = createAsyncThunk(
+  "BRAND_TABLE_LIST",
+  brandRequest.addBrandToTable
+);
+export const delBrandToTable = createAsyncThunk(
+  "DEL_ITEM_BRAND_TABLE_LIST",
+  brandRequest.delBrandToTable
 );
 
-export const resetSupplierToTable = createAsyncThunk(
-  "SUPPLIER_TABLE",
-  supplierRequest.resetSupplierToTable
+export const resetBrandToTable = createAsyncThunk(
+  "RESET_BRAND_TABLE",
+  brandRequest.resetBrandToTable
 );
 
 const tableSlice = createSlice({
   name: "tableItems",
   initialState: userState,
   extraReducers: {
-    [addSupplierToTable.pending]: (state, action) => {
+    [addBrandToTable.pending]: (state, action) => {
       state.loading = true;
     },
-    [addSupplierToTable.rejected]: (state, action) => {
+    [addBrandToTable.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     },
-    [addSupplierToTable.fulfilled]: (state, action) => {
+    [addBrandToTable.fulfilled]: (state, action) => {
       state.loading = false;
-      if (state.data.length === 0) {
-        state.data = state.data.concat(action.payload);
-      } else {
-        const repetido = state.data.map((obj) => {
-          if (obj.supplierRazonSocial ===  action.payload[0].supplierRazonSocial) {
-            return true;
-          } else {
-            return false;
-          }
-        });
-        if (repetido.includes(true)) {
-          state.error = "Dato repetido";
-        } else {
-          state.data = state.data.concat(action.payload);
-        }
-      }
+      state.data= action.payload;
     },
-    [resetSupplierToTable.fulfilled]: (state, action) => {
+    [delBrandToTable.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [delBrandToTable.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
+    [delBrandToTable.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.data= action.payload;
+    },
+    [resetBrandToTable.fulfilled]: (state, action) => {
       state.loading = false;
       state.data = action.payload
     },
