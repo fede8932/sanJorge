@@ -9,26 +9,27 @@ const TableInput = (props) => {
   newDataItem.editCamp = inputValue;
   const handleInputChange = (event) => {
     if (event.target.value >= 0) {
-      setInputValue(event.target.value);
+      newDataItem.editCamp = event.target.value;
+      fn(newDataItem);
     }
   };
-  const handleInputBlur = async (event) => {
-    if (event.target.value <= 0) {
-      setBorderInput("inputBorderRed");
-    } else {
-      setBorderInput("inputBorderGrey");
-      await fn(newDataItem);
-    }
-  };
+  // const handleInputBlur = async (event) => {
+  //   if (event.target.value <= 0) {
+  //     setBorderInput("inputBorderRed");
+  //   } else {
+  //     setBorderInput("inputBorderGrey");
+  //     await fn(newDataItem);
+  //   }
+  // };
   return (
     <div className={`${styles[borderInput]} ${styles.inputContainer}`}>
       <input
         className={styles.inputStyle}
         type={type}
         step={step}
-        value={inputValue}
+        value={defValue}
         onChange={handleInputChange}
-        onBlur={handleInputBlur}
+        // onBlur={handleInputBlur}
       />
     </div>
   );

@@ -15,6 +15,7 @@ const CustomTable = (props) => {
     fnUpdate,
     fnPrUpdate,
     type,
+    objective,
   } = props;
   return (
     <Table color={color} key={color}>
@@ -73,7 +74,10 @@ const CustomTable = (props) => {
                 <Table.Cell>{p.product.article}</Table.Cell>
                 <Table.Cell>{p.brand.name}</Table.Cell>
                 <Table.Cell>
-                  {precio.price * (1 + precio.sellPercentage)}
+                  <span style={{display: "flex", alignItems: "center"}}>
+                    $
+                    {precio.price}
+                  </span>
                 </Table.Cell>
                 <Table.Cell>
                   <TableInput
@@ -85,14 +89,14 @@ const CustomTable = (props) => {
                     dataItem={{ id: p.id }}
                   />
                 </Table.Cell>
-                <Table.Cell>{`$ ${p.amount * precio.price * (1 + precio.sellPercentage)}`}</Table.Cell>
+                <Table.Cell>{`$ ${p.amount * precio.price}`}</Table.Cell>
                 <Table.Cell>
                   <div className={styles.butContainer}>
                     <IconButton
                       key={i}
                       type="delete"
                       icon="fa-regular fa-trash-can"
-                      iconInitialStyle="iconStyleRed"
+                      iconInitialStyle={"iconStyleRed"}
                       fn={fnDelete}
                       product={{ product: p, brand: p.brand }}
                     />

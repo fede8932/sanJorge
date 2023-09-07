@@ -19,7 +19,11 @@ function AddProductToOrder(props) {
     fnPrUpdate,
     listOrder,
     order,
-    fnEnd
+    orderAjust,
+    fnEnd,
+    path,
+    type,
+    goPath,
   } = props;
   return (
     <FormProvider {...methods}>
@@ -91,26 +95,42 @@ function AddProductToOrder(props) {
                   </span>
                   <span className={styles.labelInfoProv}>
                     Nº de compra:
-                    <span className={styles.textInfoProv}>0001-0001</span>
+                    <span className={styles.textInfoProv}>
+                      {order.data.numero}
+                    </span>
                   </span>
                 </div>
                 <div className={styles.infoProvContainer}>
+                  {type == "ajuste" ? (
+                    <div className={styles.infoCostoCont}>
+                      <h6 className={styles.precioLabel}>ID Ajuste:</h6>
+                      <span className={styles.precioText}>
+                        {orderAjust.data.id}
+                      </span>
+                    </div>
+                  ) : null}
                   <div className={styles.infoCostoCont}>
                     <h6 className={styles.precioLabel}>Subtotal:</h6>
-                    <span
-                      className={styles.precioText}
-                    >{`$ ${order.data.total}`}</span>
+                    <span className={styles.precioText}>{`$ ${
+                      type == "ajuste"
+                        ? orderAjust.data.subTotal
+                        : order.data.subTotal
+                    }`}</span>
                   </div>
                   <div className={styles.infoCostoCont}>
                     <h6 className={styles.precioLabel}>IVA:</h6>
                     <span className={styles.precioText}>{`$ ${
-                      (order.data.total * 0.21).toFixed(2)
+                      type == "ajuste"
+                        ? (orderAjust.data.subTotal * 0.21).toFixed(2)
+                        : (order.data.subTotal * 0.21).toFixed(2)
                     }`}</span>
                   </div>
                   <div className={styles.infoCostoCont}>
                     <h6 className={styles.precioLabel}>Total:</h6>
                     <span className={styles.precioText}>{`$ ${
-                      (order.data.total * 1.21).toFixed(2)
+                      type == "ajuste"
+                        ? orderAjust.data.total.toFixed(2)
+                        : order.data.total.toFixed(2)
                     }`}</span>
                   </div>
                 </div>
@@ -120,10 +140,15 @@ function AddProductToOrder(props) {
               <span className={styles.subTitle}>Productos en orden</span>
               <div className={styles.prodToOrderContainer}>
                 <CustomTable
+                  objective={type}
                   type="list"
                   fnDelete={fnDelete}
                   color="teal"
-                  products={listOrder}
+                  products={
+                    type !== "ajuste"
+                      ? listOrder
+                      : orderAjust.data.ajustOrderItems
+                  }
                   fnUpdate={fnUpdate}
                   fnPrUpdate={fnPrUpdate}
                   colum={[
@@ -140,23 +165,26 @@ function AddProductToOrder(props) {
           </div>
         </div>
         <div className={styles.buttonContainer}>
+          {path == "/edit/buy" ? null : (
+            <Button
+              className={`${styles.buttonStyle} ${styles.buttonStyleBack}`}
+              variant="danger"
+              onClick={() => {
+                !type == "ajuste" ? setView("General") : goPath("/search/buy");
+              }}
+            >
+              Atras
+            </Button>
+          )}
           <Button
-            className={`${styles.buttonStyle} ${styles.buttonStyleBack}`}
-            variant="danger"
-            onClick={() => {
-              setView("General");
-            }}
-          >
-            Atras
-          </Button>
-          <Button
+            disabled={order.data.subTotal <= 0 ? true : false}
             className={`${styles.buttonStyle} ${styles.buttonStyleNext}`}
             variant="primary"
             onClick={() => {
               fnEnd();
             }}
           >
-            Siguiente
+            Confirmar
           </Button>
         </div>
       </form>

@@ -11,6 +11,9 @@ namespace Repuestos_San_jorge.Models
         public int id { get; set; }
 
         [Required]
+        public string numero { get; set; }
+
+        [Required]
         public DateTime date { get; set; }
 
         [Required]
@@ -20,6 +23,12 @@ namespace Repuestos_San_jorge.Models
         [Required]
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public PurchaseOrderType type { get; set; }
+
+        [Required]
+        public float subTotal { get; set; }
+
+        [Required]
+        public float iva { get; set; }
 
         [Required]
         public float total { get; set; }
@@ -34,6 +43,8 @@ namespace Repuestos_San_jorge.Models
 
         public int? clientId { get; set; }
 
+        public OrderAjust? orderAjust { get; set; }
+
         [ForeignKey("clientId")]
         public Client? client { get; set; }
 
@@ -46,6 +57,7 @@ namespace Repuestos_San_jorge.Models
         public PurchaseOrder()
         {
             status = PurchaseOrderStatusType.Open;
+            numero = "";
         }
     }
 }

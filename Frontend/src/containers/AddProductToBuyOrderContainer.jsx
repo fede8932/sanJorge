@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import AddProductToOrder from "../components/addProductToOrder/AddProductToOrder";
 import { useForm } from "react-hook-form";
 import { searchProductRequest } from "../redux/product";
@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addOrderItemsRequest,
   deleteOrderItemsRequest,
+  getOrderItemsRequest,
   updateCantItemsRequest,
   updatePriceItemsRequest,
 } from "../redux/addOrderItems";
@@ -13,10 +14,22 @@ import { getBuyOrderRequest } from "../redux/newOrder";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
 import { updateStatusOrder } from "../request/buyOrderRequest";
+import { useLocation } from "react-router-dom";
+import {
+  addAjustItemsRequest,
+  deleteAjustItemsRequest,
+  updateCantAjustItemsRequest,
+  updatePriceAjustItemsRequest,
+} from "../redux/addAjustItems";
+import { getOrderAjust } from "../redux/orderAjust";
+import { updateStatusAjust } from "../request/orderAjustRequest";
 
 function AddProductToBuyOrderContainer(props) {
+  const { type } = props;
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const actualOrder = useSelector((state) => state.newBuyOrder);
+  const orderAjust = useSelector((state) => state.orderAjust);
   const listOrderItems = useSelector((state) => state.listOrderItems);
   const methods = useForm();
   const dispatch = useDispatch();
@@ -33,32 +46,59 @@ function AddProductToBuyOrderContainer(props) {
       orderId: actualOrder.data.id,
       cantidad: 1,
     };
-    dispatch(addOrderItemsRequest(objSend)).then(() => {
-      dispatch(getBuyOrderRequest(actualOrder.data.id));
-    });
+    if (type !== "ajuste") {
+      dispatch(addOrderItemsRequest(objSend)).then(() => {
+        dispatch(getBuyOrderRequest(actualOrder.data.id));
+      });
+    } else {
+      (objSend.orderId = orderAjust.data.id),
+        dispatch(addAjustItemsRequest(objSend)).then(() => {
+          dispatch(getOrderAjust(actualOrder.data.id));
+        });
+    }
   };
   const infoProduct = (product) => {
-    console.log("anda", product, productPages, actualOrder);
+    // console.log("anda", product, productPages, actualOrder);
   };
   const deleteOrder = (dataOrder) => {
-    dispatch(deleteOrderItemsRequest(dataOrder)).then(() => {
-      dispatch(getBuyOrderRequest(actualOrder.data.id));
-    });
+    if (type !== "ajuste") {
+      dispatch(deleteOrderItemsRequest(dataOrder)).then(() => {
+        dispatch(getBuyOrderRequest(actualOrder.data.id));
+      });
+    } else {
+      dispatch(deleteAjustItemsRequest(dataOrder)).then(() => {
+        dispatch(getOrderAjust(actualOrder.data.id));
+      });
+    }
   };
   const updateCantOrderItem = async (dataOrderItem) => {
-    dispatch(updateCantItemsRequest(dataOrderItem)).then(() => {
-      dispatch(getBuyOrderRequest(actualOrder.data.id));
-    });
+    if (type !== "ajuste") {
+      dispatch(updateCantItemsRequest(dataOrderItem)).then(() => {
+        dispatch(getBuyOrderRequest(actualOrder.data.id));
+      });
+    } else {
+      dispatch(updateCantAjustItemsRequest(dataOrderItem)).then(() => {
+        dispatch(getOrderAjust(actualOrder.data.id));
+      });
+    }
   };
   const updatePrecOrderItem = async (dataOrderItem) => {
-    dispatch(updatePriceItemsRequest(dataOrderItem)).then(() => {
-      dispatch(getBuyOrderRequest(actualOrder.data.id));
-    });
+    if (type !== "ajuste") {
+      dispatch(updatePriceItemsRequest(dataOrderItem)).then(() => {
+        dispatch(getBuyOrderRequest(actualOrder.data.id));
+      });
+    } else {
+      console.log(dataOrderItem);
+      dispatch(updatePriceAjustItemsRequest(dataOrderItem)).then(() => {
+        dispatch(getOrderAjust(actualOrder.data.id));
+      });
+    }
   };
   const confirmOrder = () => {
+    const question = type !== "ajuste" ? "orden" : "ajuste";
     Swal.fire({
-      title: "Confirmar orden?",
-      text: "Ya no podrás modificarla",
+      title: `Confirmar ${question}?`,
+      text: "Ya no se podrá modificar",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -66,8 +106,11 @@ function AddProductToBuyOrderContainer(props) {
       confirmButtonText: "Confirmar",
     }).then((result) => {
       if (result.isConfirmed) {
-        updateStatusOrder({ id: actualOrder.data.id, status: "Confirm" }).then(
-          () => {
+        if (type !== "ajuste") {
+          updateStatusOrder({
+            id: actualOrder.data.id,
+            status: "Confirm",
+          }).then(() => {
             Swal.fire(
               "Orden confirmada",
               "Tu orden se ha confirmado correctamente",
@@ -75,11 +118,28 @@ function AddProductToBuyOrderContainer(props) {
             ).then(() => {
               navigate("/");
             });
-          }
-        );
+          });
+        } else {
+          updateStatusAjust({ id: orderAjust.data.id, status: "Confirm" }).then(
+            () => {
+              Swal.fire(
+                "Orden confirmada",
+                "Tu orden se ha confirmado correctamente",
+                "success"
+              ).then(() => {
+                navigate("/search/buy");
+              });
+            }
+          );
+        }
       }
     });
   };
+  useEffect(() => {
+    if (type == "ajuste") {
+      dispatch(getOrderItemsRequest(actualOrder.data.id));
+    }
+  }, []);
   return (
     <AddProductToOrder
       {...props}
@@ -93,7 +153,10 @@ function AddProductToBuyOrderContainer(props) {
       fnPrUpdate={updatePrecOrderItem}
       listOrder={listOrderItems.data}
       order={actualOrder}
+      orderAjust={orderAjust}
       fnEnd={confirmOrder}
+      path={pathname}
+      goPath={useNavigate()}
     />
   );
 }

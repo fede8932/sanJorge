@@ -46,7 +46,6 @@ namespace Repuestos_San_jorge.Services.Admin
                 }
                 if (
                     order.status == PurchaseOrderStatusType.Open
-                    && brandProduct.stock.stock >= cantidad
                 )
                 {
                     var purchaseOrderItem = new PurchaseOrderItem
@@ -57,8 +56,10 @@ namespace Repuestos_San_jorge.Services.Admin
                         product = brandProduct.product,
                         brand = brandProduct.brand,
                     };
-                    order.total =
-                        order.total + (purchaseOrderItem.amount * purchaseOrderItem.buyPrice);
+                    order.subTotal =
+                        order.subTotal + (purchaseOrderItem.amount * purchaseOrderItem.buyPrice);
+                    order.iva = (float)(order.subTotal * 0.21);
+                    order.total = (float)(order.subTotal * 1.21);
                     _dbContext.PurchaseOrderItems.Add(purchaseOrderItem);
                     _dbContext.PurchaseOrders.Update(order);
                     await _dbContext.SaveChangesAsync();
@@ -71,6 +72,7 @@ namespace Repuestos_San_jorge.Services.Admin
                         .ThenInclude(b => b.brandProducts)
                         .ThenInclude(bp => bp.stock)
                         .Where(i => i.purchaseOrderId == order.id)
+                        .OrderBy(i => i.id)
                         .ToListAsync();
                     return orderItems;
                 }
@@ -110,7 +112,9 @@ namespace Repuestos_San_jorge.Services.Admin
                     );
                 }
                 var order = orderItem.purchaseOrder;
-                order.total = order.total - orderItem.buyPrice * orderItem.amount;
+                order.subTotal = order.subTotal - orderItem.buyPrice * orderItem.amount;
+                order.iva = (float)(order.subTotal * 0.21);
+                order.total = (float)(order.subTotal * 1.21);
                 _dbContext.PurchaseOrderItems.Remove(orderItem);
                 _dbContext.PurchaseOrders.Update(order);
                 await _dbContext.SaveChangesAsync();
@@ -123,6 +127,7 @@ namespace Repuestos_San_jorge.Services.Admin
                     .ThenInclude(b => b.brandProducts)
                     .ThenInclude(bp => bp.stock)
                     .Where(i => i.purchaseOrderId == order.id)
+                    .OrderBy(i => i.id)
                     .ToListAsync();
                 return orderItems;
             }
@@ -135,14 +140,15 @@ namespace Repuestos_San_jorge.Services.Admin
         public async Task<ICollection<PurchaseOrderItem>> GetItemByOrder(int id)
         {
             var orderItems = await _dbContext.PurchaseOrderItems
-                // .Include(item => item.product)
-                // .Include(item => item.brand)
-                // .ThenInclude(b => b.brandProducts)
-                // .ThenInclude(bp => bp.price)
-                // .Include(item => item.brand)
-                // .ThenInclude(b => b.brandProducts)
-                // .ThenInclude(bp => bp.stock)
+                .Include(item => item.product)
+                .Include(item => item.brand)
+                .ThenInclude(b => b.brandProducts)
+                .ThenInclude(bp => bp.price)
+                .Include(item => item.brand)
+                .ThenInclude(b => b.brandProducts)
+                .ThenInclude(bp => bp.stock)
                 .Where(i => i.purchaseOrderId == id)
+                .OrderBy(i => i.id)
                 .ToListAsync();
             return orderItems;
         }
@@ -176,7 +182,9 @@ namespace Repuestos_San_jorge.Services.Admin
                 if (orderItem.purchaseOrder?.status == PurchaseOrderStatusType.Open)
                 {
                     var order = orderItem.purchaseOrder;
-                    order.total = order.total + orderItem.buyPrice * (cantidad - orderItem.amount);
+                    order.subTotal = order.subTotal + orderItem.buyPrice * (cantidad - orderItem.amount);
+                    order.iva = (float)(order.subTotal * 0.21);
+                    order.total = (float)(order.subTotal * 1.21);
                     orderItem.amount = cantidad;
                     _dbContext.PurchaseOrderItems.Update(orderItem);
                     _dbContext.PurchaseOrders.Update(order);

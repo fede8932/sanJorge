@@ -34,7 +34,9 @@ namespace Repuestos_San_jorge.Services.Admin
                 var purchaseOrder = new PurchaseOrder
                 {
                     date = DateTime.UtcNow,
-                    total = 0,
+                    subTotal = 0,
+                    iva = 0,
+                    total = 0
                 };
                 if (supplierName != "nosupplier")
                 {
@@ -50,6 +52,11 @@ namespace Repuestos_San_jorge.Services.Admin
                 }
                 _dbContext.PurchaseOrders.Add(purchaseOrder);
                 await _dbContext.SaveChangesAsync();
+
+                // Generar el número de compra después de guardar
+                purchaseOrder.numero = $"OC-{purchaseOrder.id:D6}";
+
+                _dbContext.SaveChanges();
                 return purchaseOrder;
             }
             catch
@@ -70,6 +77,51 @@ namespace Repuestos_San_jorge.Services.Admin
             }
         }
 
+        public async Task<IEnumerable<PurchaseOrder>?> GetOrdersByTextAsync(
+            string text,
+            PurchaseOrderType type
+        )
+        {
+            if (type == PurchaseOrderType.Buy)
+            {
+                var supplier = await _dbContext.Suppliers
+                    .Include(s => s.purchaseOrders)
+                    .ThenInclude(po => po.controlOrder)
+                    .Include(s => s.purchaseOrders)
+                    .ThenInclude(po => po.Voucher)
+                    .Where(s => s.cuit.Contains(text) || s.razonSocial.Contains(text))
+                    .SingleOrDefaultAsync();
+                var sortedOrders = supplier.purchaseOrders.OrderByDescending(po => po.id); // Ordenar las órdenes por Id
+                return sortedOrders;
+            }
+            else
+            {
+                var client = await _dbContext.Clients
+                    .Include(s => s.purchaseOrders)
+                    .ThenInclude(po => po.controlOrder)
+                    .Include(s => s.purchaseOrders)
+                    .ThenInclude(po => po.Voucher)
+                    .Where(c => c.cuit.Contains(text) || c.razonSocial.Contains(text))
+                    .SingleOrDefaultAsync();
+                var sortedOrders = client.purchaseOrders.OrderBy(po => po.id); // Ordenar las órdenes por Id
+                return sortedOrders;
+            }
+        }
+
+        public async Task<IEnumerable<PurchaseOrder>?> GetOrdersByNumAsync(
+            string num,
+            PurchaseOrderType type
+        )
+        {
+            var purchaseOrders = await _dbContext.PurchaseOrders
+                .Include(po => po.supplier)
+                .Include(po => po.client)
+                .Where(po => po.type == type && po.numero.Contains(num))
+                .OrderBy(po => po.id)
+                .ToListAsync();
+            return purchaseOrders;
+        }
+
         public async Task<PurchaseOrder> GetOrderByIdAsync(int purchaseOrderId)
         {
             var order = await _dbContext.PurchaseOrders
@@ -85,7 +137,7 @@ namespace Repuestos_San_jorge.Services.Admin
             return order;
         }
 
-        public async Task<string> DeleteOrdersAsync(int purchaseOrderId) // eliminar orden
+        public async Task<int> DeleteOrdersAsync(int purchaseOrderId) // eliminar orden
         {
             try
             {
@@ -100,7 +152,6 @@ namespace Repuestos_San_jorge.Services.Admin
                         "No existe la orden en los registros"
                     );
                 }
-                System.Console.WriteLine(order.status);
                 if (
                     order.status != PurchaseOrderStatusType.Confirm
                     && order.status != PurchaseOrderStatusType.Recived
@@ -108,7 +159,7 @@ namespace Repuestos_San_jorge.Services.Admin
                 {
                     _dbContext.PurchaseOrders.Remove(order);
                     await _dbContext.SaveChangesAsync();
-                    return "Orden eliminada";
+                    return order.id;
                 }
                 throw new Exception("No se puede eliminar esta orden");
             }
@@ -118,7 +169,7 @@ namespace Repuestos_San_jorge.Services.Admin
             }
         }
 
-        public async Task<string> UpdateStatusOrdersAsync(
+        public async Task<PurchaseOrder> UpdateStatusOrdersAsync(
             int purchaseOrderId,
             PurchaseOrderStatusType status,
             string? numRemito,
@@ -127,9 +178,11 @@ namespace Repuestos_San_jorge.Services.Admin
         {
             try
             {
-                var order = await _dbContext.PurchaseOrders.SingleOrDefaultAsync(
-                    order => order.id == purchaseOrderId
-                );
+                var order = await _dbContext.PurchaseOrders
+                    .Include(po => po.controlOrder)
+                    .Include(po => po.Voucher)
+                    .Where(po => po.id == purchaseOrderId)
+                    .SingleOrDefaultAsync();
                 if (order == null)
                 {
                     throw new ArgumentNullException(
@@ -147,20 +200,27 @@ namespace Repuestos_San_jorge.Services.Admin
                         "El estado de la orden no se puede modificar"
                     );
                 }
-                else if (
-                    order.status == PurchaseOrderStatusType.Confirm
-                    && status != PurchaseOrderStatusType.Recived
-                )
-                {
-                    throw new ArgumentNullException(
-                        nameof(order),
-                        "Una orden confirmada no puedo reabrirse o cancelarse"
-                    );
-                }
-                order.status = status;
-                _dbContext.PurchaseOrders.Update(order);
+                // else if (
+                //     order.status == PurchaseOrderStatusType.Confirm && 
+                //     status != PurchaseOrderStatusType.Recived
+                // )
+                // {
+                //     throw new ArgumentNullException(
+                //         nameof(order),
+                //         "Una orden confirmada no puedo reabrirse o cancelarse"
+                //     );
+                // }
+                // order.status = status;
+                // _dbContext.PurchaseOrders.Update(order);
                 if (numRemito != null && voucher != null)
                 {
+                    decimal diferencia = (decimal)(order.total - voucher.total);
+                    if (Math.Abs((diferencia)) > 0.05m)
+                    {
+                        throw new Exception(
+                            "La diferencia entre el total de la orden y el total del voucher es mayor a 0.05"
+                        );
+                    }
                     ControlOrder controlOrder = new ControlOrder { numRemito = numRemito, };
                     voucher.numRemito = numRemito;
                     controlOrder.purchaseOrder = order;
@@ -170,8 +230,10 @@ namespace Repuestos_San_jorge.Services.Admin
                     _dbContext.ControlOrders.Add(controlOrder);
                     _dbContext.Vouchers.Add(voucher);
                 }
+                order.status = status;
+                _dbContext.PurchaseOrders.Update(order);
                 await _dbContext.SaveChangesAsync();
-                return "Estado de orden actualizado";
+                return order;
             }
             catch
             {
@@ -244,9 +306,11 @@ namespace Repuestos_San_jorge.Services.Admin
     {
         Task<PurchaseOrder> CreatePurchaseOrderAsync(string supplierName);
         Task<IEnumerable<PurchaseOrder>> GetOrdersAsync();
-        Task<string> DeleteOrdersAsync(int purchaseOrderId);
+        Task<IEnumerable<PurchaseOrder>> GetOrdersByTextAsync(string text, PurchaseOrderType type);
+        Task<IEnumerable<PurchaseOrder>> GetOrdersByNumAsync(string num, PurchaseOrderType type);
+        Task<int> DeleteOrdersAsync(int purchaseOrderId);
         Task<PurchaseOrder> GetOrderByIdAsync(int purchaseOrderId);
-        Task<string> UpdateStatusOrdersAsync(
+        Task<PurchaseOrder> UpdateStatusOrdersAsync(
             int purchaseOrderId,
             PurchaseOrderStatusType status,
             string? numRemito,

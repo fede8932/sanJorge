@@ -5,19 +5,15 @@ import AddProductToBuyOrderContainer from "../../containers/AddProductToBuyOrder
 import FormSelectProveedorContainer from "../../containers/FormSelectProveedorContainer";
 // import FindBuyOrderContainer from "../../containers/FindBuyOrderContainer";
 
-function NewBuyOrder() {
-  const [viewActive, setViewActive] = useState("General");
+function NewBuyOrder(props) {
+  const { initialView } = props;
+  const [viewActive, setViewActive] = useState(initialView);
   return (
     <div className={styles.addUserContainer}>
       <h6 className={styles.formTitle}>Crear orden de compra</h6>
-      <SelectLink
-        view={viewActive}
-        order={["General", "Productos"]}
-      />
+      <SelectLink view={viewActive} order={["General", "Productos"]} />
       {viewActive == "General" ? (
-        <FormSelectProveedorContainer
-          setView={setViewActive}
-        />
+        <FormSelectProveedorContainer setView={setViewActive} />
       ) : null}
       {viewActive == "Productos" ? (
         <AddProductToBuyOrderContainer setView={setViewActive} />

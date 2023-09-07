@@ -30,6 +30,8 @@ namespace Repuestos_San_jorge.Data
         public DbSet<ControlOrder> ControlOrders => Set<ControlOrder>();
         public DbSet<Voucher> Vouchers => Set<Voucher>();
         public DbSet<Price> Prices => Set<Price>();
+        public DbSet<OrderAjust> OrderAjusts => Set<OrderAjust>();
+        public DbSet<AjustOrderItem> AjustOrderItems => Set<AjustOrderItem>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -50,6 +52,14 @@ namespace Repuestos_San_jorge.Data
             modelBuilder
                 .Entity<Voucher>()
                 .Property(voucher => voucher.type)
+                .HasConversion<string>();
+            modelBuilder
+                .Entity<Voucher>()
+                .Property(voucher => voucher.code)
+                .HasConversion<string>();
+            modelBuilder
+                .Entity<OrderAjust>()
+                .Property(orderAjust => orderAjust.status)
                 .HasConversion<string>();
 
             // Restricciones
@@ -209,6 +219,25 @@ namespace Repuestos_San_jorge.Data
                 .HasMany(pointOfSale => pointOfSale.locations)
                 .WithOne(location => location.pointOfSale)
                 .HasForeignKey(location => location.pointOfSaleId);
+            modelBuilder.Entity<PurchaseOrder>()
+                .HasOne(purchaseOrder => purchaseOrder.orderAjust)
+                .WithOne(orderAjust => orderAjust.purchaseOrder)
+                .HasForeignKey<OrderAjust>(orderAjust => orderAjust.orderId);
+            modelBuilder
+                .Entity<AjustOrderItem>()
+                .HasOne(ajustOrderItem => ajustOrderItem.orderAjust)
+                .WithMany(ajustOrder => ajustOrder.ajustOrderItems)
+                .HasForeignKey(ajustOrderItem => ajustOrderItem.orderAjustId);
+            modelBuilder
+                .Entity<AjustOrderItem>()
+                .HasOne(ajustOrderItem => ajustOrderItem.brand)
+                .WithMany(brand => brand.ajustOrderItems)
+                .HasForeignKey(ajustOrderItem => ajustOrderItem.brandId);
+            modelBuilder
+                .Entity<AjustOrderItem>()
+                .HasOne(ajustOrderItem => ajustOrderItem.product)
+                .WithMany(product => product.ajustOrderItems)
+                .HasForeignKey(ajustOrderItem => ajustOrderItem.productId);
         }
     }
 }

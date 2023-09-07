@@ -3,7 +3,8 @@ import styles from "./iconButon.module.css";
 import { useSelector } from "react-redux";
 
 const IconButton = (props) => {
-  const { icon, iconInitialStyle, fn, product, type } = props;
+  const { icon, iconInitialStyle, fn, product, type, objetive } = props;
+
   const listProduct = useSelector((state) => state.listOrderItems);
   const data = {
     orderItemId: product.product.id,
@@ -11,6 +12,7 @@ const IconButton = (props) => {
   };
   return (
     <button
+      disabled={objetive ? true : false}
       onClick={(event) => {
         event.preventDefault();
         type == "delete" ? fn(data) : fn(product);

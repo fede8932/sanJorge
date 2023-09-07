@@ -5,6 +5,7 @@ namespace Repuestos_San_jorge.Dto.Enums
         Open,
         Confirm,
         Cancel,
-        Recived
+        Recived,
+        Ajusted
     }
 }

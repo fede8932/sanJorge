@@ -169,7 +169,7 @@ function SideBarComponent(props) {
               {
                 textButton: "Buscar orden de compra",
                 fn: () => {
-                  console.log("02");
+                  fnNavigate("/search/buy");
                 },
               },
             ],

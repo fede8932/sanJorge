@@ -76,6 +76,16 @@ export const getSellOrderLocal = async (id) => {
     throw error;
   }
 };
+export const getOrderItems = async (orderId) => {
+  try {
+    const { data } = await axios.get(
+      `${apiUrl}/api/purchase/order/items/${orderId}`
+    );
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
 export const updateOrderItem = async (dataItem) => {
   try {
     const { id, editCamp } = dataItem;
@@ -124,6 +134,52 @@ export const deleteSellOrder = async (orderId) => {
   try {
     const { data } = await axios.delete(
       `${apiUrl}/api/purchase/order/delete/${orderId}`
+    );
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const searchGeneralOrder = async (dataItem) => {
+  try {
+    const { text, type } = dataItem;
+    const resultByNumber = await axios.get(
+      `${apiUrl}/api/purchase/order/search/orders?text=${text}&type=${type}&column=numero`
+    );
+    const resultByText = await axios.get(
+      `${apiUrl}/api/purchase/order/search/orders?text=${text}&type=${type}&column=sn`
+    );
+    const combinedArray = resultByNumber.data.concat(resultByText.data);
+    return combinedArray;
+  } catch (error) {
+    throw error;
+  }
+};
+export const deleteOrder = async (orderId) => {
+  try {
+    const { data } = await axios.delete(
+      `${apiUrl}/api/purchase/order/delete/${orderId}`
+    );
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const cancelOrder = async (sendInfo) => {
+  try {
+    const { orderId, status } = sendInfo;
+    const { data } = await axios.put(
+      `${apiUrl}/api/purchase/order/status/${orderId}?remito=${null}&status=${status}`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const updateStatusOrderConfirm = async (sendInfo) => {
+  try {
+    const { orderId, status, remito, factura } = sendInfo;
+    const { data } = await axios.put(
+      `${apiUrl}/api/purchase/order/status/${orderId}?numRemito=${remito}&status=${status}`, factura
     );
     return data;
   } catch (error) {

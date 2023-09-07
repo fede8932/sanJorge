@@ -27,3 +27,19 @@
 .container::-webkit-scrollbar-thumb:hover {
   background-color: #e7e5ec;
 }
+
+.iconButton{
+    all: unset;
+}
+.blueIcon{
+  color: #2185d0;
+}
+.greyIcon{
+  color: grey;
+}
+.redIcon{
+  color: #D64B4B;
+}
+.greenIcon{
+  color: #1ABC9C;
+}

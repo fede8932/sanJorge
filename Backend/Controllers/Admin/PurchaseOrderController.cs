@@ -86,6 +86,28 @@ namespace Repuestos_San_jorge.Controllers.Admin
             }
         }
 
+        [HttpGet("search/orders")]
+        public async Task<ActionResult<IEnumerable<PurchaseOrder>>> GetOrdersByText([FromQuery] string text, [FromQuery] PurchaseOrderType type, [FromQuery] string column)
+        {
+            try
+            {
+                IEnumerable<PurchaseOrder> result;
+                if(column == "numero")
+                {
+                    result = await _purchaseOrderService.GetOrdersByNumAsync(text, type);
+                }else
+                {
+                    result = await _purchaseOrderService.GetOrdersByTextAsync(text, type);
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Ocurrió un error interno en el servidor.");
+            }
+        }
+
         [HttpDelete("delete/{id}")]
         public async Task<ActionResult<string>> DeleteOrder(int id)
         {

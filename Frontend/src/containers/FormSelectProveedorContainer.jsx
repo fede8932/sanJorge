@@ -6,6 +6,7 @@ import { getSupplierRequest } from "../redux/supplier";
 import { getRepresentRequest } from "../redux/representative";
 import { getInfoSupplierRequest } from "../redux/infoSupplier";
 import { newBuyOrderRequest } from "../redux/newOrder";
+import { getOrderItemsRequest } from "../redux/addOrderItems";
 
 function FormSelectProveedorContainer(props) {
   const { setView } = props;
@@ -24,7 +25,9 @@ function FormSelectProveedorContainer(props) {
   };
   const next = (data) => {
     dispatch(newBuyOrderRequest(data)).then(() => {
-      setView("Productos");
+      dispatch(getOrderItemsRequest(newOrderState.data.id)).then(()=>{
+        setView("Productos");
+      })
     });
   };
   useEffect(() => {

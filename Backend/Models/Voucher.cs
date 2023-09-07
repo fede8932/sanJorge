@@ -27,6 +27,10 @@ namespace Repuestos_San_jorge.Models
         public ComprobanteType type { get; set; }
 
         [Required]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public ComprobanteCode code { get; set; }
+
+        [Required]
         public float subtotal { get; set; }
 
         [Required]

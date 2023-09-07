@@ -5,6 +5,10 @@ const userState = {
   data: [],
   error: "",
 };
+export const getOrderItemsRequest = createAsyncThunk(
+  "GET_ITEMS_BY_ORDER",
+  buyOrderRequest.getOrderItems
+);
 export const addOrderItemsRequest = createAsyncThunk(
   "ADD_ITEM",
   buyOrderRequest.addOrderItem
@@ -26,6 +30,17 @@ const newOrderItem = createSlice({
   name: "newOrderItem",
   initialState: userState,
   extraReducers: {
+    [getOrderItemsRequest.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [getOrderItemsRequest.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
+    [getOrderItemsRequest.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.data = action.payload;
+    },
     [addOrderItemsRequest.pending]: (state, action) => {
       state.loading = true;
     },

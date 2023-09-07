@@ -20,6 +20,9 @@ import SearchSeller from "./views/searchSeller/SearchSeller";
 import SearchClient from "./views/searchClient/SearchClient";
 import SearchSupplier from "./views/searchSupplier/SearchSupplier";
 import SearchCurrentAcount from "./views/searchCurrentAcount/SearchCurrentAcount";
+import SearchBuyOrder from "./views/searchOrder/SearchBuyOrder";
+import AddFactView from "./views/addFact/AddFactView";
+import OrderAjust from "./views/orderAjust/OrderAjust";
 
 function App() {
   const isOpen = useSelector((state) => state.sidebar.isOpen);
@@ -58,13 +61,17 @@ function App() {
                     <Route path="add/product" element={<AddProduct />} />
                     <Route path="search/product" element={<SearchProduct />} />
                     <Route path="search/brand" element={<SearchBrand />} />
-                    <Route path="new/buy" element={<NewBuyOrder />} />
+                    <Route path="new/buy" element={<NewBuyOrder initialView="General" />} />
+                    <Route path="edit/buy" element={<NewBuyOrder initialView="Productos" />} />
                     <Route path="new/sell" element={<NewSellOrder />} />
                     <Route path="search/seller" element={<SearchSeller />} />
                     <Route path="search/client" element={<SearchClient />} />
                     <Route path="search/supplier" element={<SearchSupplier />} />
                     <Route path="search/supplier/representative" element={<SearchSupplier />} />
                     <Route path="search/acount" element={<SearchCurrentAcount />} />
+                    <Route path="search/buy" element={<SearchBuyOrder />} />
+                    <Route path="search/buy/addfac" element={<AddFactView />} />
+                    <Route path="buy/orden/ajuste" element={<OrderAjust />} />
                   </Routes>
                 </div>
               </div>

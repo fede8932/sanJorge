@@ -2,9 +2,15 @@ import React from "react";
 import styles from "./longTable.module.css";
 import ActionModalContainer from "../../containers/ActionModalContainer";
 import CustomPopup from "../../commonds/popup/CustomPopup";
+import { Label } from "semantic-ui-react";
+import {
+  dateConverter,
+  formatNumberWithLeadingZeros,
+  redondearADosDecimales,
+} from "../../utils";
 
 function LongTableComponent(props) {
-  const { data, colum, type } = props;
+  const { data, colum, type, setBuyOrder, deleteOrder, reception, cancelOrder } = props;
   return (
     <div className={styles.container}>
       <table className={`table ${styles.table}`}>
@@ -73,7 +79,9 @@ function LongTableComponent(props) {
                   );
                 })
               )
-            : data.map((obj) =>
+            : null}
+          {type == "brand"
+            ? data.map((obj) =>
                 obj.brandSuppliers.map((bs, i) => (
                   <tr key={i}>
                     <td>{obj.code}</td>
@@ -96,7 +104,143 @@ function LongTableComponent(props) {
                     </td>
                   </tr>
                 ))
-              )}
+              )
+            : null}
+          {type == "orders"
+            ? data.map((obj, i) => (
+                <tr key={i}>
+                  <td>{dateConverter(obj.date)}</td>
+                  <td>{obj.numero}</td>
+                  <td>{obj.supplier.razonSocial}</td>
+                  <td>{`$ ${redondearADosDecimales(obj.subTotal)}`}</td>
+                  <td>{`$ ${redondearADosDecimales(obj.subTotal * 1.21)}`}</td>
+                  <td style={{ padding: "2px" }}>
+                    {obj.status == "Open" ? (
+                      <Label color="yellow" style={{width:"75px", display: "flex", alignItems: "center", justifyContent: "center"}}>Abierta</Label>
+                    ) : null}
+                    {obj.status == "Confirm" ? (
+                      <Label color="green" style={{width:"75px", display: "flex", alignItems: "center", justifyContent: "center"}}>Confirmada</Label>
+                    ) : null}
+                    {obj.status == "Ajusted" ? (
+                      <Label color="teal" style={{width:"75px", display: "flex", alignItems: "center", justifyContent: "center"}}>Ajustada</Label>
+                    ) : null}
+                    {obj.status == "Cancel" ? (
+                      <Label color="red" style={{width:"75px", display: "flex", alignItems: "center", justifyContent: "center"}}>Cancelada</Label>
+                    ) : null}
+                    {obj.status == "Recived" ? (
+                      <Label color="blue" style={{width:"75px", display: "flex", alignItems: "center", justifyContent: "center"}}>Recibido</Label>
+                    ) : null}
+                  </td>
+                  <td>{obj.voucher ? obj.voucher.numComprobante : null}</td>
+                  <td>
+                    {obj.controlOrder
+                      ? formatNumberWithLeadingZeros(obj.controlOrder.id, 6)
+                      : null}
+                  </td>
+                  <td>
+                    <div
+                      style={{
+                        display: "flex",
+                      }}
+                    >
+                      <button
+                        className={styles.iconButton}
+                        disabled={obj.status == "Open" ? false : true}
+                        onClick={() => {
+                          console.log("click");
+                        }}
+                        type="button"
+                      >
+                        <i
+                          className={`fa-solid fa-circle-info fa-lg ${styles.blueIcon}`}
+                        ></i>
+                      </button>
+                      <button
+                        style={{ margin: "1px 0px 0px 7px" }}
+                        className={styles.iconButton}
+                        disabled={obj.status == "Open" ? false : true}
+                        onClick={() => {
+                          setBuyOrder(obj.id);
+                        }}
+                        type="button"
+                      >
+                        <i
+                          className={`fa-regular fa-pen-to-square fa-lg ${
+                            obj.status == "Open"
+                              ? styles.blueIcon
+                              : styles.greyIcon
+                          }`}
+                        ></i>
+                      </button>
+                      <button
+                        style={{ margin: "1px 0px 0px 7px" }}
+                        className={styles.iconButton}
+                        disabled={
+                          obj.status == "Open" || obj.status == "Confirm" || obj.status == "Ajusted"
+                            ? false
+                            : true
+                        }
+                        onClick={() => {
+                          if (obj.status == "Open") {
+                            deleteOrder(obj.id);
+                          } else {
+                            cancelOrder(obj.id)
+                          }
+                        }}
+                        type="button"
+                      >
+                        <i
+                          className={`fa-solid fa-xmark fa-xl ${
+                            obj.status == "Open" || obj.status == "Confirm" || obj.status == "Ajusted"
+                              ? styles.redIcon
+                              : styles.greyIcon
+                          }`}
+                        ></i>
+                      </button>
+                      <button
+                        style={{ margin: "1px 0px 0px 7px" }}
+                        className={styles.iconButton}
+                        disabled={obj.status == "Confirm" || obj.status == "Ajusted" ? false : true}
+                        onClick={() => {
+                          reception(obj.id);
+                        }}
+                        type="button"
+                      >
+                        <i
+                          className={`fa-regular fa-circle-check fa-lg ${
+                            obj.status == "Confirm" || obj.status == "Ajusted"
+                              ? styles.blueIcon
+                              : styles.greyIcon
+                          }`}
+                        ></i>
+                      </button>
+                      {/* <button
+                        style={{margin: "1px 0px 0px 7px"}}
+                        className={styles.iconButton}
+                        disabled={obj.status == "Confirm" ? false : true}
+                        onClick={()=>{ reception(obj.id) }}
+                        type="button"
+                      >
+                        <i
+                          className={`fa-solid fa-file-invoice fa-lg ${
+                            obj.status == "Confirm"
+                              ? styles.greenIcon
+                              : styles.greyIcon
+                          }`}
+                        ></i>
+                      </button> */}
+                      {/* <ActionModalContainer
+                        type="brand"
+                        size="lg"
+                        title="Proveedores"
+                        icon="fa-regular fa-pen-to-square"
+                        data={obj}
+                      /> */}
+                    </div>
+                  </td>
+                </tr>
+              ))
+            : null}
         </tbody>
       </table>
     </div>
