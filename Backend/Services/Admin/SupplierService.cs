@@ -52,16 +52,65 @@ namespace Repuestos_San_jorge.Services.Admin
             }
         }
 
-        public async Task<IEnumerable<Supplier>> GetSuppliersByDataAsync(string text) // Listar proveedores
+        public async Task<SearchSuppliersDto> GetSuppliersByDataAsync(
+            string text,
+            int page,
+            int pageSize,
+            string orderByColumn
+        ) // Listar proveedores
         {
             try
             {
-                var suppliers = await _dbContext.Suppliers
-                    .Where(s => s.cuit.Contains(text) || s.razonSocial.Contains(text))
-                    .Include(s => s.currentAcount)
-                    .Include(s => s.representative)
-                    .ToListAsync();
-                return suppliers;
+                // var suppliers = await _dbContext.Suppliers
+                //     .Where(s => s.cuit.Contains(text) || s.razonSocial.Contains(text))
+                //     .Include(s => s.currentAcount)
+                //     .Include(s => s.representative)
+                //     .ToListAsync();
+                // return suppliers;
+                IQueryable<Supplier> query;
+
+                if (text == "null")
+                {
+                    // Si el texto está vacío, devuelve todos los vendedores
+                    query = _dbContext.Suppliers
+                        .Include(s => s.currentAcount)
+                        .Include(s => s.representative);
+                }
+                else
+                {
+                    query = _dbContext.Suppliers
+                        .Include(s => s.currentAcount)
+                        .Include(s => s.representative)
+                        .Where(s => s.cuit.Contains(text) || s.razonSocial.Contains(text));
+                }
+                int totalRows = await query.CountAsync();
+                if (!string.IsNullOrEmpty(orderByColumn))
+                {
+                    switch (orderByColumn.ToLower())
+                    {
+                        case "id":
+                            query = query.OrderByDescending(s => s.id);
+                            break;
+                        // Agrega más casos según las columnas por las que desees ordenar
+                        default:
+                            // Si la columna especificada no es válida, puedes manejarlo según tus necesidades.
+                            break;
+                    }
+                }
+                query = query.Skip((page - 1) * pageSize).Take(pageSize);
+
+                var suppliers = await query.ToListAsync();
+
+                int totalPages = (int)Math.Ceiling((double)totalRows / pageSize);
+
+                SearchSuppliersDto dataSearch = new SearchSuppliersDto
+                {
+                    suppliers = suppliers,
+                    totalRows = totalRows,
+                    totalPages = totalPages
+                };
+
+                return dataSearch;
             }
             catch
             {
@@ -126,8 +175,8 @@ namespace Repuestos_San_jorge.Services.Admin
         //         throw;
         //     }
         // }
-                
-        public async Task<Supplier> UpdateSupplierAsync(int id, UpdateSupplierDto data) 
+
+        public async Task<Supplier> UpdateSupplierAsync(int id, UpdateSupplierDto data)
         {
             try
             {
@@ -162,12 +211,11 @@ namespace Repuestos_San_jorge.Services.Admin
 
         public async Task<Supplier> UpdateStatusSupplierAsync(int id)
         {
-            try{
+            try
+            {
                 var supplier = await _dbContext.Suppliers
-                .Include(s => s.currentAcount)
-                .SingleOrDefaultAsync(
-                    supplier => supplier.id == id
-                );
+                    .Include(s => s.currentAcount)
+                    .SingleOrDefaultAsync(supplier => supplier.id == id);
                 if (supplier == null)
                 {
                     throw new ArgumentNullException(
@@ -247,7 +295,12 @@ namespace Repuestos_San_jorge.Services.Admin
         Task<IEnumerable<Supplier>> GetSuppliersAsync();
         Task<Supplier> UpdateSupplierAsync(int id, UpdateSupplierDto data);
         Task<Supplier> UpdateStatusSupplierAsync(int id);
-        Task<IEnumerable<Supplier>> GetSuppliersByDataAsync(string text);
+        Task<SearchSuppliersDto> GetSuppliersByDataAsync(
+            string text,
+            int page,
+            int pageSize,
+            string orderByColumn
+        );
         Task<string> DeleteSupplierAsync(int id);
         Task<Supplier> SupplierAsync(string razonSocial);
         Task<string> AddBrandToSupplierAsync(int supplierId, int brandId);

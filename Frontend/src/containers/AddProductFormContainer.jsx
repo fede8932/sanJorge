@@ -19,7 +19,6 @@ function AddProductFormContainer(props) {
     if (data.cantidad === "") {
       data.cantidad = 0;
     }
-    console.log(data);
     dispatch(productCreateRequest(data))
       .then((res) => {
         if (res.error) {

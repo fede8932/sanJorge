@@ -175,7 +175,7 @@ function EditUserViewComponent(props) {
                 }}
               >
                 <div style={{ width: "50%", padding: "0px 5px 0px 0px" }}>
-                  <span className={styles.inputLabel}>Altura</span>
+                  <span className={styles.inputLabel}>Comisión base</span>
                   <CustomInput
                     readOnly={readOnly}
                     name="comisionBase"
@@ -185,9 +185,9 @@ function EditUserViewComponent(props) {
                     type="number"
                     min="0"
                     max="15"
-                    step="0.1"
+                    step="1"
                     validate={{ required: true }}
-                    defaultValue={seller.comisionBase}
+                    defaultValue={seller.comisionBase*100}
                   />
                 </div>
                 <div style={{ width: "50%", padding: "0px 0px 0px 5px" }}>
@@ -201,9 +201,9 @@ function EditUserViewComponent(props) {
                     type="number"
                     min="0"
                     max="15"
-                    step="0.1"
+                    step="1"
                     validate={{ required: true }}
-                    defaultValue={seller.comisionOferta}
+                    defaultValue={seller.comisionOferta*100}
                   />
                 </div>
               </div>

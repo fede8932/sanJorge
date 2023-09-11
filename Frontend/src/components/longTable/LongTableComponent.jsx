@@ -10,7 +10,16 @@ import {
 } from "../../utils";
 
 function LongTableComponent(props) {
-  const { data, colum, type, setBuyOrder, deleteOrder, reception, cancelOrder } = props;
+  const {
+    data,
+    colum,
+    type,
+    setBuyOrder,
+    deleteOrder,
+    reception,
+    cancelOrder,
+  } = props;
+  console.log(data);
   return (
     <div className={styles.container}>
       <table className={`table ${styles.table}`}>
@@ -116,19 +125,69 @@ function LongTableComponent(props) {
                   <td>{`$ ${redondearADosDecimales(obj.subTotal * 1.21)}`}</td>
                   <td style={{ padding: "2px" }}>
                     {obj.status == "Open" ? (
-                      <Label color="yellow" style={{width:"75px", display: "flex", alignItems: "center", justifyContent: "center"}}>Abierta</Label>
+                      <Label
+                        color="yellow"
+                        style={{
+                          width: "75px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        Abierta
+                      </Label>
                     ) : null}
                     {obj.status == "Confirm" ? (
-                      <Label color="green" style={{width:"75px", display: "flex", alignItems: "center", justifyContent: "center"}}>Confirmada</Label>
+                      <Label
+                        color="green"
+                        style={{
+                          width: "75px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        Confirmada
+                      </Label>
                     ) : null}
                     {obj.status == "Ajusted" ? (
-                      <Label color="teal" style={{width:"75px", display: "flex", alignItems: "center", justifyContent: "center"}}>Ajustada</Label>
+                      <Label
+                        color="teal"
+                        style={{
+                          width: "75px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        Ajustada
+                      </Label>
                     ) : null}
                     {obj.status == "Cancel" ? (
-                      <Label color="red" style={{width:"75px", display: "flex", alignItems: "center", justifyContent: "center"}}>Cancelada</Label>
+                      <Label
+                        color="red"
+                        style={{
+                          width: "75px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        Cancelada
+                      </Label>
                     ) : null}
                     {obj.status == "Recived" ? (
-                      <Label color="blue" style={{width:"75px", display: "flex", alignItems: "center", justifyContent: "center"}}>Recibido</Label>
+                      <Label
+                        color="blue"
+                        style={{
+                          width: "75px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        Recibido
+                      </Label>
                     ) : null}
                   </td>
                   <td>{obj.voucher ? obj.voucher.numComprobante : null}</td>
@@ -176,7 +235,9 @@ function LongTableComponent(props) {
                         style={{ margin: "1px 0px 0px 7px" }}
                         className={styles.iconButton}
                         disabled={
-                          obj.status == "Open" || obj.status == "Confirm" || obj.status == "Ajusted"
+                          obj.status == "Open" ||
+                          obj.status == "Confirm" ||
+                          obj.status == "Ajusted"
                             ? false
                             : true
                         }
@@ -184,14 +245,16 @@ function LongTableComponent(props) {
                           if (obj.status == "Open") {
                             deleteOrder(obj.id);
                           } else {
-                            cancelOrder(obj.id)
+                            cancelOrder(obj.id);
                           }
                         }}
                         type="button"
                       >
                         <i
                           className={`fa-solid fa-xmark fa-xl ${
-                            obj.status == "Open" || obj.status == "Confirm" || obj.status == "Ajusted"
+                            obj.status == "Open" ||
+                            obj.status == "Confirm" ||
+                            obj.status == "Ajusted"
                               ? styles.redIcon
                               : styles.greyIcon
                           }`}
@@ -200,7 +263,11 @@ function LongTableComponent(props) {
                       <button
                         style={{ margin: "1px 0px 0px 7px" }}
                         className={styles.iconButton}
-                        disabled={obj.status == "Confirm" || obj.status == "Ajusted" ? false : true}
+                        disabled={
+                          obj.status == "Confirm" || obj.status == "Ajusted"
+                            ? false
+                            : true
+                        }
                         onClick={() => {
                           reception(obj.id);
                         }}

@@ -181,6 +181,7 @@ namespace Repuestos_San_jorge.Services.Admin
                 var order = await _dbContext.PurchaseOrders
                     .Include(po => po.controlOrder)
                     .Include(po => po.Voucher)
+                    .Include(po => po.supplier)
                     .Where(po => po.id == purchaseOrderId)
                     .SingleOrDefaultAsync();
                 if (order == null)

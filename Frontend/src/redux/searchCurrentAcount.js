@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import * as currentRequest from "../request/currentAcountRequest";
 const movementsState = {
   loading: false,
-  data: { movements: [] },
+  data: { movements: [], totalRows: 0, totalPages: 1 },
   error: "",
 };
 export const getMovementsByTextRequest = createAsyncThunk(

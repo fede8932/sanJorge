@@ -23,7 +23,7 @@ namespace Repuestos_San_jorge.Services.Admin
 
         public async Task<Client> CreateClientAsync(
             Client client
-            // CustomerDiscountDto[] customerDiscounts
+        // CustomerDiscountDto[] customerDiscounts
         ) // crear cliente(seguir despues de seller)
         {
             try
@@ -102,18 +102,90 @@ namespace Repuestos_San_jorge.Services.Admin
             }
         }
 
-        public async Task<IEnumerable<Client>> GetClientsByDataAsync(string text) // Listar Clientes
+        // public async Task<IEnumerable<Client>> GetClientsByDataAsync(string text) // Listar Clientes
+        // {
+        //     try
+        //     {
+        //         var clients = await _dbContext.Clients
+        //             .Where(s => s.cuit.Contains(text) || s.razonSocial.Contains(text))
+        //             .Include(s => s.user)
+        //             .Include(s => s.currentAcount)
+        //             .Include(s => s.seller)
+        //             .ThenInclude(ss => ss.user)
+        //             .ToListAsync();
+        //         return clients;
+        //     }
+        //     catch
+        //     {
+        //         throw;
+        //     }
+        // }
+
+        public async Task<SearchClientsDto> GetClientsByDataAsync(
+            string text,
+            int page,
+            int pageSize,
+            string orderByColumn
+        )
         {
             try
             {
-                var clients = await _dbContext.Clients
-                    .Where(s => s.cuit.Contains(text) || s.razonSocial.Contains(text))
-                    .Include(s => s.user)
-                    .Include(s => s.currentAcount)
-                    .Include(s => s.seller)
-                    .ThenInclude(ss => ss.user)
-                    .ToListAsync();
-                return clients;
+                IQueryable<Client> query;
+
+                if (text == "null")
+                {
+                    // Si el texto está vacío, devuelve todos los vendedores
+                    query = _dbContext.Clients
+                        .Include(s => s.user)
+                        .Include(s => s.currentAcount)
+                        .Include(s => s.seller)
+                        .ThenInclude(ss => ss.user);
+                }
+                else
+                {
+                    query = _dbContext.Clients
+                        .Include(s => s.user)
+                        .Include(s => s.currentAcount)
+                        .Include(s => s.seller)
+                        .ThenInclude(ss => ss.user)
+                        .Where(c => c.cuit.Contains(text) || c.razonSocial.Contains(text));
+                }
+
+                int totalRows = await query.CountAsync();
+
+                // Ordenar por la columna especificada de manera descendente
+                if (!string.IsNullOrEmpty(orderByColumn))
+                {
+                    switch (orderByColumn.ToLower())
+                    {
+                        case "id":
+                            query = query.OrderByDescending(s => s.id);
+                            break;
+                        // Agrega más casos según las columnas por las que desees ordenar
+                        default:
+                            // Si la columna especificada no es válida, puedes manejarlo según tus necesidades.
+                            break;
+                    }
+                }
+
+                // Aplicar paginación
+                query = query.Skip((page - 1) * pageSize).Take(pageSize);
+
+                // Incluir la entidad User
+                query = query.Include(s => s.user);
+
+                var clients = await query.ToListAsync();
+
+                int totalPages = (int)Math.Ceiling((double)totalRows / pageSize);
+
+                SearchClientsDto dataSearch = new SearchClientsDto
+                {
+                    clients = clients,
+                    totalRows = totalRows,
+                    totalPages = totalPages
+                };
+
+                return dataSearch;
             }
             catch
             {
@@ -256,7 +328,7 @@ namespace Repuestos_San_jorge.Services.Admin
             }
         }
 
-//se pasa este servicio a marca
+        //se pasa este servicio a marca
         // public async Task<string> AddClientDiscountAsync(CustomerDiscount customerDiscount) // agregar descuento clientes
         // {
         //     try
@@ -376,9 +448,16 @@ namespace Repuestos_San_jorge.Services.Admin
 
     public interface IClientService
     {
-        Task<Client> CreateClientAsync(Client client/*, CustomerDiscountDto[] customerDiscounts*/);
+        Task<Client> CreateClientAsync(
+            Client client /*, CustomerDiscountDto[] customerDiscounts*/
+        );
         Task<IEnumerable<Client>> GetClientsAsync();
-        Task<IEnumerable<Client>> GetClientsByDataAsync(string text);
+        Task<SearchClientsDto> GetClientsByDataAsync(
+            string text,
+            int page,
+            int pageSize,
+            string orderByColumn
+        );
         Task<Client> GetClientByDataAsync(string text);
         Task<Client> UpdateClientAsync(int id, UpdateClientDto data);
         Task<string> DeleteClientAsync(int id);

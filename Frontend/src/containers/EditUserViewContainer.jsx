@@ -13,8 +13,8 @@ function EditUserViewContainer(props) {
     const { ...sellerData } = data;
     sellerData.altura = Number(sellerData.altura);
     sellerData.codigoPostal = Number(sellerData.codigoPostal);
-    sellerData.comisionBase = Number(sellerData.comisionBase);
-    sellerData.comisionOferta = Number(sellerData.comisionOferta);
+    sellerData.comisionBase = Number(sellerData.comisionBase)/100;
+    sellerData.comisionOferta = Number(sellerData.comisionOferta)/100;
     sellerData.id = seller.id;
     dispatch(UpdateSellersRequest(sellerData)).then(() => {
       close();

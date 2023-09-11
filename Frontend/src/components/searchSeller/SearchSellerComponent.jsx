@@ -7,7 +7,7 @@ import Spinner from "react-bootstrap/esm/Spinner";
 import RoleTableContainer from "../../containers/RoleTableContainer";
 
 function SearchSellerComponent(props) {
-  const { methods, onSubmit, list } = props;
+  const { methods, onSubmit, result } = props;
   return (
     <FormProvider {...methods}>
       <form
@@ -41,7 +41,7 @@ function SearchSellerComponent(props) {
                   marginLeft: "10px",
                 }}
               >
-                {!list.loading ? (
+                {!result.loading ? (
                   "Buscar"
                 ) : (
                   <Spinner animation="border" variant="light" size="sm" />
@@ -55,14 +55,14 @@ function SearchSellerComponent(props) {
           <div>
             <RoleTableContainer
               colum={[
-                "Nombre",
-                "Apellido",
-                "CUIL",
-                "ID User",
-                "Estado",
-                "Acciones",
+                { title: "Nombre", width: "25%" },
+                { title: "Apellido", width: "25%" },
+                { title: "CUIL", width: "15%" },
+                { title: "ID User", width: "10%" },
+                { title: "Estado", width: "10%" },
+                { title: "Acciones", width: "15%" },
               ]}
-              data={list.data}
+              result={result}
               type="seller"
             />
           </div>

@@ -49,11 +49,23 @@ namespace Repuestos_San_jorge.Controllers.Admin
         }
 
         [HttpGet("data")]
-        public async Task<ActionResult<IEnumerable<Seller>>> GetSellersByData([FromQuery] string text, [FromQuery] string by)
+        public async Task<ActionResult<IEnumerable<Seller>>> GetSellersByData(
+            [FromQuery] string text,
+            [FromQuery] string by,
+            [FromQuery] int page,
+            [FromQuery] int pageSize,
+            [FromQuery] string orderByColumn
+        )
         {
             try
             {
-                var result = await _sellerService.GetSellersBydataAsync(text, by);
+                var result = await _sellerService.GetSellersBydataAsync(
+                    text,
+                    by,
+                    page,
+                    pageSize,
+                    orderByColumn
+                );
                 return Ok(result);
             }
             catch (Exception ex)

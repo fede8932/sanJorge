@@ -28,7 +28,7 @@ const clientSlice = createSlice({
     },
     [clientCreateRequest.fulfilled]: (state, action) => {
       state.loading = false;
-      state.data = action.payload;
+      // state.data = action.payload;
     },
     [getClientRequest.pending]: (state, action) => {
       state.loading = true;

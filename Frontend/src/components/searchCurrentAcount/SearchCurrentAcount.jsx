@@ -54,8 +54,8 @@ function SearchCurrentAcount(props) {
           <span className={styles.subTitle}>Detalle de movimientos</span>
           <div>
             <RoleTableContainer
-              colum={["Fecha", "Titular", "Concepto", "Monto", "Acciones"]}
-              data={list.data}
+              colum={[{title: "Fecha", width: "15%"}, {title: "Titular", width: "30%"}, {title: "Concepto", width: "20%"}, {title: "Monto", width: "15%"}, {title: "Acciones", width: "20%"}]}
+              result={list}
               type="acount"
             />
           </div>

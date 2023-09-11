@@ -97,7 +97,7 @@ function AddProductFormComponent(props) {
                 type="number"
                 min="-100"
                 max="100"
-                step="0.1"
+                step="1"
                 validate={{ required: true }}
               />
               <CustomInput
@@ -108,7 +108,7 @@ function AddProductFormComponent(props) {
                 type="number"
                 min="-100"
                 max="100"
-                step="0.1"
+                step="1"
                 validate={{ required: true }}
               />
             </div>

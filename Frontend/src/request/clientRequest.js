@@ -39,9 +39,20 @@ export const getClients = async () => {
 
 export const getClientsByData = async (dataSearch) => {
   try {
+    const { text, page, pageSize, orderByColumn } = dataSearch;
     const { data } = await axios.get(
-      `${apiUrl}/api/client/data?text=${dataSearch}`
+      `${apiUrl}/api/client/data?text=${text}&page=${page}&pageSize=${pageSize}&orderByColumn=${orderByColumn}`
     );
+    let list = data.clients;
+    while (list.length < 10) {
+      list.push({
+        user: { name: "", lastName: "", id: "", status: "" },
+        cuil: "",
+        currentAcount: { acountNumber: "" },
+      });
+    }
+    data.clients = list;
+    console.log(data);
     return data;
   } catch (error) {
     throw error;

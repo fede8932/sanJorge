@@ -131,7 +131,7 @@ function SellerFormComponent(props) {
                   type="number"
                   min="0"
                   max="15"
-                  step="0.1"
+                  step="1"
                 />
                 <CustomInput
                   name="comisionOferta"
@@ -141,7 +141,7 @@ function SellerFormComponent(props) {
                   type="number"
                   min="0"
                   max="15"
-                  step="0.1"
+                  step="1"
                 />
               </div>
             </div>

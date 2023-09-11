@@ -27,7 +27,7 @@ namespace Repuestos_San_jorge.Controllers.Admin
             {
                 var result = await _clientService.CreateClientAsync(
                     request.Client
-                    // request.CustomerDiscounts
+                // request.CustomerDiscounts
                 );
                 return Ok(result);
             }
@@ -54,11 +54,21 @@ namespace Repuestos_San_jorge.Controllers.Admin
         }
 
         [HttpGet("data")]
-        public async Task<ActionResult<IEnumerable<Client>>> GetClientsByData([FromQuery] string text)
+        public async Task<ActionResult<IEnumerable<Client>>> GetClientsByData(
+            [FromQuery] string text,
+            [FromQuery] int page,
+            [FromQuery] int pageSize,
+            [FromQuery] string orderByColumn
+        )
         {
             try
             {
-                var result = await _clientService.GetClientsByDataAsync(text);
+                var result = await _clientService.GetClientsByDataAsync(
+                    text,
+                    page,
+                    pageSize,
+                    orderByColumn
+                );
                 return Ok(result);
             }
             catch (Exception ex)

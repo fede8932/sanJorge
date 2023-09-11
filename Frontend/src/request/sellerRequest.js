@@ -31,8 +31,8 @@ export const createSellers = async (objData) => {
     dataSeller.userId = data;
     dataSeller.altura = Number(dataSeller.altura);
     dataSeller.codigoPostal = Number(dataSeller.codigoPostal);
-    dataSeller.comisionBase = parseFloat(dataSeller.comisionBase);
-    dataSeller.comisionOferta = parseFloat(dataSeller.comisionOferta);
+    dataSeller.comisionBase = parseFloat(dataSeller.comisionBase) / 100;
+    dataSeller.comisionOferta = parseFloat(dataSeller.comisionOferta) / 100;
     console.log("seller", dataSeller);
     await axios.post(`${apiUrl}/api/seller`, dataSeller);
     return "Registrado";
@@ -43,7 +43,17 @@ export const createSellers = async (objData) => {
 
 export const getSellersByText = async (dataSearch) => {
   try {
-    const { data } = await axios.get(`${apiUrl}/api/seller/data?text=${dataSearch.text}&by=${dataSearch.by}`);
+    const { data } = await axios.get(
+      `${apiUrl}/api/seller/data?text=${dataSearch.text}&by=${dataSearch.by}&page=${dataSearch.page}&pageSize=${dataSearch.pageSize}&orderByColumn=${dataSearch.orderByColumn}`
+    );
+    let list = data.sellers;
+    while (list.length < 10) {
+      list.push({
+        user: { name: "", lastName: "", id: "", status: "" },
+        cuil: "",
+      });
+    }
+    data.sellers = list;
     return data;
   } catch (error) {
     throw error;
@@ -52,8 +62,11 @@ export const getSellersByText = async (dataSearch) => {
 
 export const updateSellerById = async (dataUpdate) => {
   try {
-    const { id, ...infoUpdate } = dataUpdate
-    const { data } = await axios.put(`${apiUrl}/api/seller/update/${id}`, infoUpdate);
+    const { id, ...infoUpdate } = dataUpdate;
+    const { data } = await axios.put(
+      `${apiUrl}/api/seller/update/${id}`,
+      infoUpdate
+    );
     return data;
   } catch (error) {
     throw error;

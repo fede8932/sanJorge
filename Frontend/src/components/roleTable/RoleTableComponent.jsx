@@ -4,89 +4,138 @@ import ActionModalContainer from "../../containers/ActionModalContainer";
 import { Label } from "semantic-ui-react";
 import IconButonUsersTable from "../../commonds/iconButtonUsersTable/IconButonUsersTable";
 import Button from "react-bootstrap/Button";
+import { Table } from "semantic-ui-react";
+import CustomPagination from "../../commonds/pagination/CustomPagination";
 
 function RoleTableComponent(props) {
-  const { data, colum, type, statusToogle, viewAcount } = props;
+  const { colum, type, statusToogle, viewAcount, result } = props;
   return (
     <div className={styles.container}>
-      <table className={`table ${styles.table}`}>
-        <thead>
-          <tr>
-            {colum.map((title, i) => (
-              <th id={styles.title} key={i} scope="col">
-                {title}
-              </th>
+      <Table className={`table ${styles.table}`} color="teal">
+        <Table.Header>
+          <Table.Row>
+            {colum.map((col, i) => (
+              <Table.HeaderCell
+                style={{ width: `${col.width}` }}
+                id={styles.title}
+                key={i}
+                scope="col"
+              >
+                {col.title}
+              </Table.HeaderCell>
             ))}
-          </tr>
-        </thead>
-        <tbody>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
           {type == "seller" ? (
-            data.map((obj, i) => (
-              <tr key={i}>
-                <td>{obj.user.name}</td>
-                <td>{obj.user.lastName}</td>
-                <td>{obj.cuil}</td>
-                <td>{obj.user.id}</td>
-                <td>
-                  {obj.user.status ? (
-                    <Label color="green" horizontal>
-                      Activo
-                    </Label>
-                  ) : (
-                    <Label color="red" horizontal>
-                      Inactivo
-                    </Label>
-                  )}
-                </td>
-                <td>
-                  <div
-                    style={{
-                      display: "flex",
-                      width: "130px",
-                    }}
-                  >
-                    <ActionModalContainer
-                      size="xl"
-                      data={obj}
-                      title="Información de vendedor"
-                      type="updateSeller"
-                      icon="fa-regular fa-pen-to-square"
-                    />
+            result.data.sellers.map((obj, i) => (
+              <Table.Row key={i}>
+                <Table.Cell
+                  style={{ padding: "0px 10px", verticalAlign: "middle" }}
+                >
+                  {obj.user.name}
+                </Table.Cell>
+                <Table.Cell
+                  style={{ padding: "0px 10px", verticalAlign: "middle" }}
+                >
+                  {obj.user.lastName}
+                </Table.Cell>
+                <Table.Cell
+                  style={{ padding: "0px 10px", verticalAlign: "middle" }}
+                >
+                  {obj.cuil}
+                </Table.Cell>
+                <Table.Cell
+                  style={{ padding: "0px 10px", verticalAlign: "middle" }}
+                >
+                  {obj.user.id}
+                </Table.Cell>
+                <Table.Cell
+                  style={{ padding: "0px 10px", verticalAlign: "middle" }}
+                >
+                  {obj.user.id != "" ? (
+                    <>
+                      {obj.user.status ? (
+                        <Label color="green" horizontal>
+                          Activo
+                        </Label>
+                      ) : (
+                        <Label color="red" horizontal>
+                          Inactivo
+                        </Label>
+                      )}
+                    </>
+                  ) : null}
+                </Table.Cell>
+                <Table.Cell
+                  style={{ padding: "6px 10px", verticalAlign: "middle" }}
+                >
+                  {obj.user.id != "" ? (
                     <div
                       style={{
-                        margin: "1px 0px 0px 8px",
                         display: "flex",
-                        alignItems: "center",
+                        width: "130px",
                       }}
                     >
-                      <IconButonUsersTable
-                        fn={() => {
-                          statusToogle(obj.user.id, "seller");
-                        }}
-                        icon={
-                          !obj.user.status
-                            ? "fa-solid fa-check"
-                            : "fa-solid fa-xmark"
-                        }
-                        iconInitialStyle={
-                          !obj.user.status ? "iconStyleGreen" : "iconStyleRed"
-                        }
+                      <ActionModalContainer
+                        size="xl"
+                        data={obj}
+                        title="Información de vendedor"
+                        type="updateSeller"
+                        icon="fa-regular fa-pen-to-square"
                       />
+                      <div
+                        style={{
+                          margin: "1px 0px 0px 8px",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <IconButonUsersTable
+                          fn={() => {
+                            statusToogle(obj.user.id, "seller");
+                          }}
+                          icon={
+                            !obj.user.status
+                              ? "fa-solid fa-check"
+                              : "fa-solid fa-xmark"
+                          }
+                          iconInitialStyle={
+                            !obj.user.status ? "iconStyleGreen" : "iconStyleRed"
+                          }
+                        />
+                      </div>
                     </div>
-                  </div>
-                </td>
-              </tr>
+                  ) : (
+                    <div style={{ height: "21px" }}></div>
+                  )}
+                </Table.Cell>
+              </Table.Row>
             ))
           ) : (
             <></>
           )}
           {type == "client" ? (
-            data.map((obj, i) => (
-              <tr key={i}>
-                <td>{obj.id}</td>
-                <td>{obj.razonSocial}</td>
-                <td>{obj.cuit}</td>
-                <td>
+            result.data.clients.map((obj, i) => (
+              <Table.Row key={i}>
+                <Table.Cell
+                  style={{ padding: "0px 10px", verticalAlign: "middle" }}
+                >
+                  {obj.id}
+                </Table.Cell>
+                <Table.Cell
+                  style={{ padding: "0px 10px", verticalAlign: "middle" }}
+                >
+                  {obj.razonSocial}
+                </Table.Cell>
+                <Table.Cell
+                  style={{ padding: "0px 10px", verticalAlign: "middle" }}
+                >
+                  {obj.cuit}
+                </Table.Cell>
+                <Table.Cell
+                  style={{ padding: "0px 10px", verticalAlign: "middle" }}
+                >
                   <Button
                     variant="link"
                     style={{ padding: "0", textDecoration: "none" }}
@@ -96,68 +145,100 @@ function RoleTableComponent(props) {
                   >
                     {obj.currentAcount.acountNumber}
                   </Button>
-                </td>
-                <td>{`$ ${obj.currentAcount.resume}`}</td>
-                <td>
-                  {obj.user.status ? (
-                    <Label color="green" horizontal>
-                      Activo
-                    </Label>
-                  ) : (
-                    <Label color="red" horizontal>
-                      Inactivo
-                    </Label>
-                  )}
-                </td>
-                <td>
-                  <div
-                    style={{
-                      display: "flex",
-                      width: "130px",
-                    }}
-                  >
-                    <ActionModalContainer
-                      size="xl"
-                      data={obj}
-                      title="Información del cliente"
-                      type="updateClient"
-                      icon="fa-regular fa-pen-to-square"
-                    />
+                </Table.Cell>
+                <Table.Cell
+                  style={{ padding: "0px 10px", verticalAlign: "middle" }}
+                >
+                  {obj.currentAcount.acountNumber != ""
+                    ? `$ ${obj.currentAcount.resume}`
+                    : ""}
+                </Table.Cell>
+                <Table.Cell
+                  style={{ padding: "0px 10px", verticalAlign: "middle" }}
+                >
+                  {obj.currentAcount.acountNumber != "" ? (
+                    <div>
+                      {obj.user.status ? (
+                        <Label color="green" horizontal>
+                          Activo
+                        </Label>
+                      ) : (
+                        <Label color="red" horizontal>
+                          Inactivo
+                        </Label>
+                      )}
+                    </div>
+                  ) : null}
+                </Table.Cell>
+                <Table.Cell
+                  style={{ padding: "6px 10px", verticalAlign: "middle" }}
+                >
+                  {obj.currentAcount.acountNumber != "" ? (
                     <div
                       style={{
-                        margin: "1px 0px 0px 8px",
                         display: "flex",
-                        alignItems: "center",
+                        width: "130px",
                       }}
                     >
-                      <IconButonUsersTable
-                        fn={() => {
-                          statusToogle(obj.user.id, "client");
-                        }}
-                        icon={
-                          !obj.user.status
-                            ? "fa-solid fa-check"
-                            : "fa-solid fa-xmark"
-                        }
-                        iconInitialStyle={
-                          !obj.user.status ? "iconStyleGreen" : "iconStyleRed"
-                        }
+                      <ActionModalContainer
+                        size="xl"
+                        data={obj}
+                        title="Información del cliente"
+                        type="updateClient"
+                        icon="fa-regular fa-pen-to-square"
                       />
+                      <div
+                        style={{
+                          margin: "1px 0px 0px 8px",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <IconButonUsersTable
+                          fn={() => {
+                            statusToogle(obj.user.id, "client");
+                          }}
+                          icon={
+                            !obj.user.status
+                              ? "fa-solid fa-check"
+                              : "fa-solid fa-xmark"
+                          }
+                          iconInitialStyle={
+                            !obj.user.status ? "iconStyleGreen" : "iconStyleRed"
+                          }
+                        />
+                      </div>
                     </div>
-                  </div>
-                </td>
-              </tr>
+                  ) : (
+                    <div style={{ height: "21px" }}></div>
+                  )}
+                </Table.Cell>
+              </Table.Row>
             ))
           ) : (
             <></>
           )}
           {type == "supplier" ? (
-            data.map((obj, i) => (
-              <tr key={i}>
-                <td>{obj.id}</td>
-                <td>{obj.razonSocial}</td>
-                <td>{obj.cuit}</td>
-                <td>
+            result.data.suppliers.map((obj, i) => (
+              <Table.Row key={i}>
+                <Table.Cell
+                  style={{ padding: "6px 10px", verticalAlign: "middle" }}
+                >
+                  {obj.id}
+                </Table.Cell>
+                <Table.Cell
+                  style={{ padding: "6px 10px", verticalAlign: "middle" }}
+                >
+                  {obj.razonSocial}
+                </Table.Cell>
+                <Table.Cell
+                  style={{ padding: "6px 10px", verticalAlign: "middle" }}
+                >
+                  {obj.cuit}
+                </Table.Cell>
+                <Table.Cell
+                  style={{ padding: "6px 10px", verticalAlign: "middle" }}
+                >
                   <Button
                     variant="link"
                     style={{ padding: "0", textDecoration: "none" }}
@@ -167,85 +248,103 @@ function RoleTableComponent(props) {
                   >
                     {obj.currentAcount.acountNumber}
                   </Button>
-                </td>
-                <td>{`$ ${obj.currentAcount.resume}`}</td>
-                <td>
-                  {obj.status ? (
-                    <Label color="green" horizontal>
-                      Activo
-                    </Label>
-                  ) : (
-                    <Label color="red" horizontal>
-                      Inactivo
-                    </Label>
-                  )}
-                </td>
-                <td>
-                  <div
-                    style={{
-                      display: "flex",
-                      width: "130px",
-                    }}
-                  >
-                    <ActionModalContainer
-                      title="Información del proveedor"
-                      size="xl"
-                      data={obj}
-                      type="updateSupplier"
-                      icon="fa-regular fa-pen-to-square"
-                    />
+                </Table.Cell>
+                <Table.Cell
+                  style={{ padding: "6px 10px", verticalAlign: "middle" }}
+                >
+                  {obj.id !== "" ? <>{`$ ${obj.currentAcount.resume}`}</> : ""}
+                </Table.Cell>
+                <Table.Cell
+                  style={{ padding: "6px 10px", verticalAlign: "middle" }}
+                >
+                  {obj.id !== "" ? (
+                    <>
+                      {obj.status ? (
+                        <Label color="green" horizontal>
+                          Activo
+                        </Label>
+                      ) : (
+                        <Label color="red" horizontal>
+                          Inactivo
+                        </Label>
+                      )}
+                    </>
+                  ) : null}
+                </Table.Cell>
+                <Table.Cell
+                  style={{ padding: "6px 10px", verticalAlign: "middle" }}
+                >
+                  {obj.id !== "" ? (
                     <div
                       style={{
-                        margin: "0px 0px 0px 8px",
                         display: "flex",
-                        alignItems: "center",
+                        width: "130px",
                       }}
                     >
                       <ActionModalContainer
-                        size="lg"
+                        title="Información del proveedor"
+                        size="xl"
                         data={obj}
-                        title="Agregar representante"
-                        type="updateRepresSupplier"
-                        icon="fa-regular fa-address-book"
+                        type="updateSupplier"
+                        icon="fa-regular fa-pen-to-square"
                       />
-                    </div>
-                    <div
-                      style={{
-                        margin: "1px 0px 0px 8px",
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                    >
-                      <IconButonUsersTable
-                        fn={() => {
-                          statusToogle(obj.id, "supplier");
+                      <div
+                        style={{
+                          margin: "0px 0px 0px 8px",
+                          display: "flex",
+                          alignItems: "center",
                         }}
-                        icon={
-                          !obj.status
-                            ? "fa-solid fa-check"
-                            : "fa-solid fa-xmark"
-                        }
-                        iconInitialStyle={
-                          !obj.status ? "iconStyleGreen" : "iconStyleRed"
-                        }
-                      />
+                      >
+                        <ActionModalContainer
+                          size="lg"
+                          data={obj}
+                          title="Agregar representante"
+                          type="updateRepresSupplier"
+                          icon="fa-regular fa-address-book"
+                        />
+                      </div>
+                      <div
+                        style={{
+                          margin: "1px 0px 0px 8px",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <IconButonUsersTable
+                          fn={() => {
+                            statusToogle(obj.id, "supplier");
+                          }}
+                          icon={
+                            !obj.status
+                              ? "fa-solid fa-check"
+                              : "fa-solid fa-xmark"
+                          }
+                          iconInitialStyle={
+                            !obj.status ? "iconStyleGreen" : "iconStyleRed"
+                          }
+                        />
+                      </div>
                     </div>
-                  </div>
-                </td>
-              </tr>
+                  ) : (
+                    <div style={{ height: "21px" }}></div>
+                  )}
+                </Table.Cell>
+              </Table.Row>
             ))
           ) : (
             <></>
           )}
           {type == "repSupplier" ? (
-            data.map((obj) =>
+            result.data.suppliers.map((obj) =>
               obj.representative.map((rep, i) => (
-                <tr key={i}>
-                  <td>{`${rep.name} ${rep.apellido}`.slice(0, 20)}</td>
-                  <td>{obj.razonSocial}</td>
-                  <td>{rep.email}</td>
-                  <td>{rep.telefono}</td>
-                  <td>
+                <Table.Row key={i}>
+                  <Table.Cell>
+                    {`${rep.name} ${rep.apellido}`.slice(0, 20)}
+                  </Table.Cell>
+                  <Table.Cell>{obj.razonSocial}</Table.Cell>
+                  <Table.Cell>{rep.email}</Table.Cell>
+                  <Table.Cell>{rep.telefono}</Table.Cell>
+                  <Table.Cell>
                     {rep.status ? (
                       <Label color="green" horizontal>
                         Activo
@@ -255,8 +354,8 @@ function RoleTableComponent(props) {
                         Inactivo
                       </Label>
                     )}
-                  </td>
-                  <td>
+                  </Table.Cell>
+                  <Table.Cell>
                     <div
                       style={{
                         display: "flex",
@@ -301,25 +400,39 @@ function RoleTableComponent(props) {
                         />
                       </div>
                     </div>
-                  </td>
-                </tr>
+                  </Table.Cell>
+                </Table.Row>
               ))
             )
           ) : (
             <></>
           )}
           {type == "acount" ? (
-            data.movements.map((obj, i) => (
-              <tr key={i}>
-                <td>{obj.fecha}</td>
-                <td>
+            result.data.movements.map((obj, i) => (
+              <Table.Row key={i}>
+                <Table.Cell
+                  style={{ padding: "6px 10px", verticalAlign: "middle" }}
+                >
+                  {obj.fecha}
+                </Table.Cell>
+                <Table.Cell
+                  style={{ padding: "6px 10px", verticalAlign: "middle" }}
+                >
                   {data.client
                     ? data.client.razonSOcial
                     : data.supplier.razonSocial}
-                </td>
-                <td>{obj.type}</td>
-                <td>{`$ ${obj.amount}`}</td>
-                <td>
+                </Table.Cell>
+                <Table.Cell
+                  style={{ padding: "6px 10px", verticalAlign: "middle" }}
+                >
+                  {obj.type}
+                </Table.Cell>
+                <Table.Cell
+                  style={{ padding: "6px 10px", verticalAlign: "middle" }}
+                >{`$ ${obj.amount}`}</Table.Cell>
+                <Table.Cell
+                  style={{ padding: "6px 10px", verticalAlign: "middle" }}
+                >
                   <div
                     style={{
                       display: "flex",
@@ -355,14 +468,20 @@ function RoleTableComponent(props) {
                       />
                     </div>
                   </div>
-                </td>
-              </tr>
+                </Table.Cell>
+              </Table.Row>
             ))
           ) : (
             <></>
           )}
-        </tbody>
-      </table>
+        </Table.Body>
+      </Table>
+      <div className={styles.pagContainer}>
+        <span
+          className={styles.resultSpan}
+        >{`Se encontraron ${result.data.totalRows} registros relacionados a la búsqueda.`}</span>
+        <CustomPagination pages={result.data.totalPages} />
+      </div>
     </div>
   );
 }

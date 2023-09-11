@@ -55,11 +55,23 @@ export const getInfoSuppliers = async (razonSocial) => {
   }
 };
 
-export const getSuppliersByData = async (text) => {
+export const getSuppliersByData = async (searchData) => {
   try {
+    const { text, page, pageSize, orderByColumn } = searchData;
     const { data } = await axios.get(
-      `${apiUrl}/api/supplier/data?text=${text}`
+      `${apiUrl}/api/supplier/data?text=${text}&page=${page}&pageSize=${pageSize}&orderByColumn=${orderByColumn}`
     );
+    let list = data.suppliers;
+    while (list.length < 10) {
+      list.push({
+        id: "",
+        cuit: "",
+        razonSocial: "",
+        currentAcount: { acountNumber: "", resume: "" },
+        representative: [],
+      });
+    }
+    data.suppliers = list;
     return data;
   } catch (error) {
     throw error;

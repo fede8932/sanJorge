@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import SearchSupplierComponent from "../components/searchSupplier/SearchSupplierComponent";
@@ -11,22 +11,37 @@ function SearchSupplierContainer(props) {
   const methods = useForm();
   const dispatch = useDispatch();
   const searchSupplier = (text) => {
-    dispatch(getSuppliersByTextRequest(text.campo));
+    const data = {
+      text: text.campo,
+      page: 1,
+      pageSize: 10,
+      orderByColumn: "id",
+    };
+    dispatch(getSuppliersByTextRequest(data));
   };
-  const suppliers = useSelector((state) => state.searchSuppliers);
+  const dataSupplier = useSelector((state) => state.searchSuppliers);
+  useEffect(() => {
+    const data = {
+      text: "null",
+      page: 1,
+      pageSize: 10,
+      orderByColumn: "id",
+    };
+    dispatch(getSuppliersByTextRequest(data));
+  }, []);
   return (
     <>
       {pathname == "/search/supplier" ? (
         <SearchSupplierComponent
           methods={methods}
           onSubmit={searchSupplier}
-          list={suppliers}
+          result={dataSupplier}
         />
       ) : (
         <SearchRepSupplierComponent
           methods={methods}
           onSubmit={searchSupplier}
-          list={suppliers}
+          result={dataSupplier}
         />
       )}
     </>

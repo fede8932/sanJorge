@@ -1,9 +1,10 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import * as sellerRequest from "../request/sellerRequest";
 import * as userRequest from "../request/userRequest";
+
 const sellerState = {
   loading: false,
-  data: [],
+  data: { sellers: [] },
   error: "",
 };
 export const getSellersByTextRequest = createAsyncThunk(
@@ -41,12 +42,18 @@ const sellersSlice = createSlice({
       state.error = action.error.message;
     },
     [UpdateSellersRequest.fulfilled]: (state, action) => {
-      const newStateData = state.data.map((seller) => {
+      const actState = { ...current(state).data };
+      const newSellers = actState.sellers.map((seller) => {
         if (seller.id === action.payload.id) {
-          seller = action.payload;
+          const newSeller = action.payload;
+          return newSeller;
         }
         return seller;
       });
+      const newStateData = actState;
+      newStateData.sellers = newSellers;
+      console.log(newStateData);
+      state.loading = false;
       state.data = newStateData;
     },
     [UpdateStatusSellerRequest.pending]: (state, action) => {
@@ -57,12 +64,14 @@ const sellersSlice = createSlice({
       state.error = action.error.message;
     },
     [UpdateStatusSellerRequest.fulfilled]: (state, action) => {
-      const newStateData = state.data.map((seller) => {
+      const newSellers = state.data.sellers.map((seller) => {
         if (seller.user.id === action.payload.id) {
           seller.user = action.payload;
         }
         return seller;
       });
+      const newStateData = state.data;
+      newStateData.sellers = newSellers;
       state.loading = false;
       state.data = newStateData;
     },

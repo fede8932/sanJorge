@@ -1,8 +1,8 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import * as supplierRequest from "../request/supplierRequest";
 const sellerState = {
   loading: false,
-  data: [],
+  data: {suppliers:[], totalRows: 0, totalPages: 1},
   error: "",
 };
 export const getSuppliersByTextRequest = createAsyncThunk(
@@ -49,14 +49,24 @@ const suppliersSlice = createSlice({
       state.error = action.error.message;
     },
     [UpdateStatusSupplierRequest.fulfilled]: (state, action) => {
-      const newStateData = state.data.map((supplier) => {
+      const newSuppliers = state.data.suppliers.map((supplier) => {
         if (supplier.id === action.payload.id) {
           supplier = action.payload;
         }
         return supplier;
       });
+      const newStateData = state.data;
+      newStateData.suppliers = newSuppliers;
       state.loading = false;
       state.data = newStateData;
+      // const newStateData = state.data.map((supplier) => {
+      //   if (supplier.id === action.payload.id) {
+      //     supplier = action.payload;
+      //   }
+      //   return supplier;
+      // });
+      // state.loading = false;
+      // state.data = newStateData;
     },
     [UpdateSuppliersRequest.pending]: (state, action) => {
       state.loading = false;
@@ -66,12 +76,24 @@ const suppliersSlice = createSlice({
       state.error = action.error.message;
     },
     [UpdateSuppliersRequest.fulfilled]: (state, action) => {
-      const newStateData = state.data.map((supplier) => {
+      // const newStateData = state.data.map((supplier) => {
+      //   if (supplier.id === action.payload.id) {
+      //     supplier = action.payload;
+      //   }
+      //   return supplier;
+      // });
+      // state.loading = false;
+      // state.data = newStateData;
+      const actState = { ...current(state).data };
+      const newSuppliers = actState.suppliers.map((supplier) => {
         if (supplier.id === action.payload.id) {
-          supplier = action.payload;
+          const newSupplier = action.payload;
+          return newSupplier;
         }
         return supplier;
       });
+      const newStateData = actState;
+      newStateData.suppliers = newSuppliers;
       state.loading = false;
       state.data = newStateData;
     },

@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SearchSellerComponent from "../components/searchSeller/SearchSellerComponent";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { getSellersByTextRequest } from "../redux/searchSeller";
+import seller from "../redux/seller";
 
 function SearchSellerContainer(props) {
   const methods = useForm();
@@ -14,14 +15,27 @@ function SearchSellerContainer(props) {
     } else {
       data.by = "cuil";
     }
+    data.page = 1;
+    data.pageSize = 10;
+    data.orderByColumn = "id";
     dispatch(getSellersByTextRequest(data));
   };
-  const sellers = useSelector((state) => state.searchSellers);
+  const result = useSelector((state) => state.searchSellers);
+  useEffect(() => {
+    const data = {
+      text: "null",
+      by: "cuil",
+      page: 1,
+      pageSize: 10,
+      orderByColumn: "id",
+    };
+    dispatch(getSellersByTextRequest(data));
+  }, []);
   return (
     <SearchSellerComponent
       methods={methods}
       onSubmit={searchSeller}
-      list={sellers}
+      result={result}
     />
   );
 }

@@ -10,8 +10,8 @@ export const createProduct = async (productData) => {
       },
       price: {
         price: parseFloat(productData.listPrice),
-        sellPercentage: parseFloat(productData.sellProcent),
-        salePercentage: parseFloat(productData.saleProcent),
+        sellPercentage: parseFloat(productData.sellProcent) / 100,
+        salePercentage: parseFloat(productData.saleProcent) / 100,
       },
     };
     await axios.post(

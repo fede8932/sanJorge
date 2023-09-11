@@ -1,9 +1,9 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import * as clientRequest from "../request/clientRequest"
+import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
+import * as clientRequest from "../request/clientRequest";
 import * as userRequest from "../request/userRequest";
 const clientState = {
   loading: false,
-  data: [],
+  data: { clients: [], totalRows: 1, totalPages: 1 },
   error: "",
 };
 export const getClientssByTextRequest = createAsyncThunk(
@@ -57,12 +57,14 @@ const clientsSlice = createSlice({
       state.error = action.error.message;
     },
     [UpdateStatusClientRequest.fulfilled]: (state, action) => {
-      const newStateData = state.data.map((client) => {
+      const newClients = state.data.clients.map((client) => {
         if (client.user.id === action.payload.id) {
           client.user = action.payload;
         }
         return client;
       });
+      const newStateData = state.data;
+      newStateData.clients = newClients;
       state.loading = false;
       state.data = newStateData;
     },
@@ -73,13 +75,25 @@ const clientsSlice = createSlice({
       state.error = action.error.message;
     },
     [UpdateClientsRequest.fulfilled]: (state, action) => {
-      const newStateData = state.data.map((client) => {
+      const actState = { ...current(state).data };
+      const newClents = actState.clients.map((client) => {
         if (client.id === action.payload.id) {
-          client = action.payload;
+          const newClient = action.payload;
+          return newClient;
         }
         return client;
       });
+      const newStateData = actState;
+      newStateData.clients = newClents;
+      state.loading = false;
       state.data = newStateData;
+      // const newStateData = state.data.map((client) => {
+      //   if (client.id === action.payload.id) {
+      //     client = action.payload;
+      //   }
+      //   return client;
+      // });
+      // state.data = newStateData;
     },
   },
 });
