@@ -180,16 +180,23 @@
 }
 .addProdSubContainer{
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.buttonSearchCotainer{
+  width: 100%;
+  display: flex;
   justify-content: space-between;
 }
 .searchContainer {
-  width: 44%;
+  width: 100%;
   padding: 0px 16px;
   display: flex;
   flex-direction: column;
   border: 1px solid #eaeaea;
   border-radius: 14px;
-  height: 600px;
+  height: 500px;
+  margin-bottom: 20px;
 }
 .listContainer {
   width: 100%;
@@ -208,11 +215,11 @@
   flex-direction: column;
   border: 1px solid #eaeaea;
   border-radius: 14px;
-  height: 115px;
+  height: 105px;
   margin-bottom: 20px;
 }
 .resumenContainer {
-  width: 55%;
+  width: 100%;
 }
 .searchTableContainer {
   width: 100%;
@@ -222,7 +229,7 @@
 }
 .inputSearchContainer {
   display: flex;
-  width: 100%;
+  width: 50%;
   justify-content: center;
 }
 .tableProdContainer {

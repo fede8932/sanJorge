@@ -37,7 +37,6 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
-  margin-bottom: 10px;
 }
 .inputContainer {
   width: 100%;
@@ -46,7 +45,7 @@
   flex-direction: column;
   border: 1px solid #eaeaea;
   border-radius: 14px;
-  height: 570px;
+  height: 600px;
 }
 .tableContainer {
   width: 100%;
@@ -57,6 +56,11 @@
   flex-direction: column;
   border: 1px solid #eaeaea;
   border-radius: 14px;
+}
+.tableProdContainerPrinc {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .subTitle {
   margin-top: -11px;
@@ -182,7 +186,7 @@
   flex-direction: column;
   border: 1px solid #eaeaea;
   border-radius: 14px;
-  height: 330px;
+  height: 600px;
 }
 .listContainer {
   width: 100%;
@@ -191,22 +195,42 @@
   flex-direction: column;
   border: 1px solid #eaeaea;
   border-radius: 14px;
-  height: 290px;
-  margin-top: 35px;
+  height: 650px;
+  margin: 20px 0px;
+}
+.resume {
+  width: 100%;
+  padding: 0px 16px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #eaeaea;
+  border-radius: 14px;
+  height: 102px;
+  margin-bottom: 20px;
+}
+.resumenContainer {
+  width: 100%;
 }
 .searchTableContainer {
   width: 100%;
   height: 90%;
   display: flex;
+  flex-direction: column;
+}
+.buttonSearchCotainer {
+  width: 100%;
+  display: flex;
   justify-content: space-between;
 }
 .inputSearchContainer {
-  width: 31%;
+  display: flex;
+  width: 50%;
+  justify-content: center;
 }
 .tableProdContainer {
-  width: 69%;
-  padding: 0px 15px;
-  height: 290px;
+  width: 100%;
+  padding: 0px 10px;
+  height: 450px;
   overflow-y: auto;
 }
 .tableProdContainer::-webkit-scrollbar {
@@ -224,6 +248,11 @@
 .tableProdContainer::-webkit-scrollbar-thumb:hover {
   background-color: #e7e5ec;
 }
+.pagContainer {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
 .colArtWidth {
   width: 50%;
 }
@@ -234,23 +263,23 @@
   width: 100%;
   padding: 0px 15px;
   height: 250px;
-  overflow-y: auto;
+  /* overflow-y: auto; */
 }
-.prodToOrderContainer::-webkit-scrollbar {
-  width: 4px;
-  border-radius: 2px;
-}
-.prodToOrderContainer::-webkit-scrollbar-track {
-  background-color: #f8f4ff;
-}
-
-.prodToOrderContainer::-webkit-scrollbar-thumb {
-  background-color: #e7e5ec;
-}
-
-.prodToOrderContainer::-webkit-scrollbar-thumb:hover {
-  background-color: #e7e5ec;
-}
+/*.prodToOrderContainer::-webkit-scrollbar {
+    width: 4px;
+    border-radius: 2px;
+  }
+  .prodToOrderContainer::-webkit-scrollbar-track {
+    background-color: #f8f4ff;
+  }
+  
+  .prodToOrderContainer::-webkit-scrollbar-thumb {
+    background-color: #e7e5ec;
+  }
+  
+  .prodToOrderContainer::-webkit-scrollbar-thumb:hover {
+    background-color: #e7e5ec;
+  } */
 .colArtWidthDos {
   width: 45%;
 }
@@ -286,4 +315,30 @@
 
 .finToOrderContainer::-webkit-scrollbar-thumb:hover {
   background-color: #e7e5ec;
+}
+.infoProvContainer {
+  display: flex;
+  justify-content: space-between;
+}
+.labelInfoProv {
+  font-size: 14px;
+  font-weight: 800;
+}
+.textInfoProv {
+  font-size: 14px;
+  margin-left: 5px;
+  font-weight: 500;
+}
+.infoCostoCont {
+  margin-top: 25px;
+  display: flex;
+}
+.precioLabel {
+  font-size: 15px;
+  font-weight: 800;
+}
+.precioText {
+  margin-left: 5px;
+  font-size: 14px;
+  font-weight: 500;
 }

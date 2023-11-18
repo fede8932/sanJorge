@@ -3,7 +3,16 @@ import styles from "./customSelect.module.css";
 import { useFormContext, Controller } from "react-hook-form";
 
 function CustomSelect(props) {
-  const { text, arrayOptions, width, name, validate, active, fnSelect } = props;
+  const {
+    text,
+    arrayOptions,
+    width,
+    name,
+    validate,
+    active,
+    fnSelect,
+    extraFn,
+  } = props;
   const {
     control,
     formState: { errors },
@@ -24,8 +33,15 @@ function CustomSelect(props) {
             field.onChange(e); // Asegurarse de que el controlador reciba el evento
             const selectedValue = e.target.value;
             // console.log(selectedValue);
-            if(fnSelect){
-              fnSelect(e.target.value)
+            if (fnSelect) {
+              fnSelect(e.target.value);
+            }
+            if (extraFn) {
+              if (e.target.value !== "P") {
+                extraFn(true);
+              } else {
+                extraFn(false);
+              }
             }
           }}
         >

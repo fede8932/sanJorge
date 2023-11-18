@@ -286,3 +286,6 @@
 .finToOrderContainer::-webkit-scrollbar-thumb:hover {
   background-color: #e7e5ec;
 }
+.stepContainer{
+  margin-top: 25px;
+}

@@ -14,10 +14,20 @@ export const createProduct = async (productData) => {
         salePercentage: parseFloat(productData.saleProcent) / 100,
       },
     };
+    // console.log(productData)
     await axios.post(
       `${apiUrl}/api/productos?brandId=${productData.brandId}&stock=${productData.cantidad}&stockMin=2`,
       productDate
     );
+    return "Registrado";
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const addProductsFile = async (productData) => {
+  try {
+    console.log(productData);
     return "Registrado";
   } catch (error) {
     throw error;

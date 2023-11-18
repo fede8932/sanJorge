@@ -9,6 +9,10 @@ export const productCreateRequest = createAsyncThunk(
   "PRODUCT_CREATE",
   productRequest.createProduct
 );
+export const productsFileCreateRequest = createAsyncThunk(
+  "PRODUCTS_FILE_CREATE",
+  productRequest.addProductsFile
+);
 
 export const searchProductRequest = createAsyncThunk(
   "SEARCH_PRODUCT",
@@ -32,6 +36,16 @@ const productSlice = createSlice({
       state.error = action.error.message;
     },
     [productCreateRequest.fulfilled]: (state, action) => {
+      state.loading = false;
+    },
+    [productsFileCreateRequest.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [productsFileCreateRequest.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    },
+    [productsFileCreateRequest.fulfilled]: (state, action) => {
       state.loading = false;
     },
     [searchProductRequest.pending]: (state, action) => {

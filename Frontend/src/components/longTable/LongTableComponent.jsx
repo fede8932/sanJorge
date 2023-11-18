@@ -19,7 +19,6 @@ function LongTableComponent(props) {
     reception,
     cancelOrder,
   } = props;
-  console.log(data);
   return (
     <div className={styles.container}>
       <table className={`table ${styles.table}`}>
@@ -121,8 +120,16 @@ function LongTableComponent(props) {
                   <td>{dateConverter(obj.date)}</td>
                   <td>{obj.numero}</td>
                   <td>{obj.supplier.razonSocial}</td>
-                  <td>{`$ ${redondearADosDecimales(obj.subTotal)}`}</td>
-                  <td>{`$ ${redondearADosDecimales(obj.subTotal * 1.21)}`}</td>
+                  <td>{`$ ${
+                    obj.status === "Ajusted"
+                      ? redondearADosDecimales(obj.orderAjust.subTotal)
+                      : redondearADosDecimales(obj.subTotal)
+                  }`}</td>
+                  <td>{`$ ${
+                    obj.status === "Ajusted"
+                      ? redondearADosDecimales(obj.orderAjust.subTotal * 1.21)
+                      : redondearADosDecimales(obj.subTotal * 1.21)
+                  }`}</td>
                   <td style={{ padding: "2px" }}>
                     {obj.status == "Open" ? (
                       <Label
@@ -202,18 +209,15 @@ function LongTableComponent(props) {
                         display: "flex",
                       }}
                     >
-                      <button
-                        className={styles.iconButton}
-                        disabled={obj.status == "Open" ? false : true}
-                        onClick={() => {
-                          console.log("click");
-                        }}
-                        type="button"
-                      >
-                        <i
-                          className={`fa-solid fa-circle-info fa-lg ${styles.blueIcon}`}
-                        ></i>
-                      </button>
+                      <div style={{ marginTop: "2px" }}>
+                        <ActionModalContainer
+                          size="xl"
+                          data={obj}
+                          title="Información de orden"
+                          type="viewOrder"
+                          icon="fa-solid fa-circle-info fa-lg"
+                        />
+                      </div>
                       <button
                         style={{ margin: "1px 0px 0px 7px" }}
                         className={styles.iconButton}

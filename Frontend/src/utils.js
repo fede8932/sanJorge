@@ -27,3 +27,24 @@ export function formatNumberWithLeadingZeros(number, desiredLength) {
   const leadingZeros = "0".repeat(zerosToAdd);
   return leadingZeros + numString;
 }
+export function camelCaseToText(cadenaCamelCase) {
+  // Agregar espacios entre las palabras en CamelCase usando una expresión regular
+  const cadenaConEspacios = cadenaCamelCase.replace(/([a-z])([A-Z])/g, "$1 $2");
+
+  // Convertir la cadena resultante a mayúsculas
+  const cadenaMayusculas = cadenaConEspacios.toUpperCase();
+
+  return cadenaMayusculas;
+}
+
+export function fechaConverter() {
+  const date = new Date();
+  const day = date.getDate();
+  const month = date.getMonth() + 1; // Los meses en JavaScript van de 0 a 11, por lo que se suma 1.
+  const year = date.getFullYear();
+
+  const formattedDate = `${day < 10 ? "0" : ""}${day}-${
+    month < 10 ? "0" : ""
+  }${month}-${year}`;
+  return formattedDate;
+}

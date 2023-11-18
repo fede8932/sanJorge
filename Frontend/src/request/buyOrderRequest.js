@@ -169,7 +169,8 @@ export const cancelOrder = async (sendInfo) => {
   try {
     const { orderId, status } = sendInfo;
     const { data } = await axios.put(
-      `${apiUrl}/api/purchase/order/status/${orderId}?remito=${null}&status=${status}`);
+      `${apiUrl}/api/purchase/order/status/${orderId}?remito=${null}&status=${status}`
+    );
     return data;
   } catch (error) {
     throw error;
@@ -178,8 +179,11 @@ export const cancelOrder = async (sendInfo) => {
 export const updateStatusOrderConfirm = async (sendInfo) => {
   try {
     const { orderId, status, remito, factura } = sendInfo;
+    const { noFact, ...fact } = factura;
+    const montoNoFact = noFact ? noFact : 0;
     const { data } = await axios.put(
-      `${apiUrl}/api/purchase/order/status/${orderId}?numRemito=${remito}&status=${status}`, factura
+      `${apiUrl}/api/purchase/order/status/${orderId}?numRemito=${remito}&status=${status}&noFact=${montoNoFact}`,
+      fact
     );
     return data;
   } catch (error) {

@@ -23,6 +23,7 @@ import SearchCurrentAcount from "./views/searchCurrentAcount/SearchCurrentAcount
 import SearchBuyOrder from "./views/searchOrder/SearchBuyOrder";
 import AddFactView from "./views/addFact/AddFactView";
 import OrderAjust from "./views/orderAjust/OrderAjust";
+import PresupPDF from "./commonds/presupuestoPDF/PresupPDF";
 
 function App() {
   const isOpen = useSelector((state) => state.sidebar.isOpen);
@@ -58,12 +59,13 @@ function App() {
                     <Route path="add/supplier" element={<AddSupplier />} />
                     <Route path="add/client" element={<AddClient />} />
                     <Route path="add/brand" element={<AddBrand />} />
-                    <Route path="add/product" element={<AddProduct />} />
+                    <Route path="add/product" element={<AddProduct view="single"/>} />
+                    <Route path="add/products" element={<AddProduct view="group"/>} />
                     <Route path="search/product" element={<SearchProduct />} />
                     <Route path="search/brand" element={<SearchBrand />} />
-                    <Route path="new/buy" element={<NewBuyOrder initialView="General" />} />
-                    <Route path="edit/buy" element={<NewBuyOrder initialView="Productos" />} />
-                    <Route path="new/sell" element={<NewSellOrder />} />
+                    <Route path="new/buy" element={<NewBuyOrder estado={0} />} />
+                    <Route path="edit/buy" element={<NewBuyOrder estado={1} />} />
+                    <Route path="new/sell" element={<NewSellOrder estado={0}/>} />
                     <Route path="search/seller" element={<SearchSeller />} />
                     <Route path="search/client" element={<SearchClient />} />
                     <Route path="search/supplier" element={<SearchSupplier />} />

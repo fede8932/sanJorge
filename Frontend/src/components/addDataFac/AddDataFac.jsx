@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./addDataFac.module.css";
 import { FormProvider } from "react-hook-form";
 import CustomInput from "../../commonds/input/CustomInput";
@@ -8,7 +8,11 @@ import { Label } from "semantic-ui-react";
 import CustomSelect from "../../commonds/select/CustomSelect";
 
 function AddDataFac(props) {
-  const { methods, addFac, order, stractData, dataChange } = props;
+  const { methods, addFac, order, stractData, dataChange, ajustFn } = props;
+  const ajustButton = order.data.orderAjust
+    ? order.data.orderAjust.status
+    : "Open";
+  const [viewNoFac, setViewNoFac] = useState(false);
   return (
     <div className={styles.editContainer}>
       <div className={styles.dataContainer}>
@@ -22,7 +26,12 @@ function AddDataFac(props) {
           </span>
         </span>
         <span className={styles.inputLabel}>
-          Total:<span className={styles.dataUser}>{`$ ${order.data.total}`}</span>
+          Total:
+          <span className={styles.dataUser}>{`$ ${
+            order.data.orderAjust
+              ? order.data.orderAjust.total
+              : order.data.total
+          }`}</span>
         </span>
         <span>
           Estado:
@@ -38,37 +47,45 @@ function AddDataFac(props) {
         >
           <div className={styles.inputContainer}>
             <div className={styles.leftInputContainer}>
-              <div className={styles.checkInput}>
+              {/* <div className={styles.checkInput}>
                 <input
                   type="checkbox"
                   id="checkboxId"
                   name="checkboxName"
                   className={styles.checkI}
                   value={stractData.afip.value}
-                  onChange={()=>{ stractData.afip.setValue(!stractData.afip.value)}}
+                  onChange={() => {
+                    stractData.afip.setValue(!stractData.afip.value);
+                  }}
                 ></input>
                 <label className={styles.inputLabel} for="checkboxId">
                   Factura oficial
                 </label>
-              </div>
+              </div> */}
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div className={styles.dpContainer}>
                   <span className={styles.inputLabel}>Fecha</span>
-                  <DataPicker className={styles.dpicker} onChange={dataChange} />
+                  <DataPicker
+                    className={styles.dpicker}
+                    onChange={dataChange}
+                  />
                 </div>
                 <div style={{ width: "50%" }}>
                   <span className={styles.inputLabel}>Tipo</span>
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <CustomSelect
-                    width="medium"
-                    name="code"
-                    text="Sel. tipo de fact"
-                    arrayOptions={[
-                      { text: "Tipo A", value: "A" },
-                      { text: "Tipo C", value: "C" },
-                    ]}
-                    validate={{ required: true }}
-                  /></div>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <CustomSelect
+                      width="medium"
+                      name="code"
+                      text="Sel. tipo de fact"
+                      arrayOptions={[
+                        { text: "Tipo A", value: "A" },
+                        { text: "Tipo C", value: "C" },
+                        { text: "Presupuesto", value: "P" },
+                      ]}
+                      validate={{ required: true }}
+                      extraFn={setViewNoFac}
+                    />
+                  </div>
                 </div>
               </div>
               <span className={styles.inputLabel}>Factura</span>
@@ -89,7 +106,7 @@ function AddDataFac(props) {
                 icon="fa-solid fa-id-card"
                 validate={{ required: true }}
               />
-              <span className={styles.inputLabel}>Subtotal</span>
+              <span className={styles.inputLabel}>Subtotal facturado</span>
               <CustomInput
                 name="subtotal"
                 type="text"
@@ -100,14 +117,52 @@ function AddDataFac(props) {
                   required: true,
                   pattern: {
                     value: /^[-+]?\d+(\.\d+)?$/,
-                    message: "Debes ingresar un número entero o decimal con . (punto)",
+                    message:
+                      "Debes ingresar un número entero o decimal con . (punto)",
                   },
                 }}
               />
+              {viewNoFac ? (
+                <>
+                  <span className={styles.inputLabel}>No facturado</span>
+                  <CustomInput
+                    name="noFact"
+                    type="text"
+                    width="large"
+                    placeholder="No facturado"
+                    icon="fa-solid fa-id-card"
+                    validate={{
+                      required: false,
+                      pattern: {
+                        value: /^[-+]?\d+(\.\d+)?$/,
+                        message:
+                          "Debes ingresar un número entero o decimal con . (punto)",
+                      },
+                    }}
+                  />
+                </>
+              ) : null}
             </div>
           </div>
           <div className={styles.buttonContainer}>
             <div className={styles.buttonSubContainer}>
+              {ajustButton == "Open" ? (
+                <Button
+                  onClick={() => {
+                    ajustFn();
+                  }}
+                  style={{
+                    backgroundColor: "#fbfbfb",
+                    color: "#673ab7",
+                    border: "1px solid #673ab7",
+                    height: "35px",
+                    width: "100px",
+                    marginLeft: "10px",
+                  }}
+                >
+                  Ajustar
+                </Button>
+              ) : null}
               <Button
                 type="submit"
                 style={{

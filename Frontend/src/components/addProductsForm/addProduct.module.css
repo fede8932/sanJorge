@@ -25,25 +25,33 @@
 .formTitle {
   font-size: 28px;
   font-weight: 400;
-  margin-bottom: 5px;
+  margin-bottom: 25px;
   color: #367ff6;
-}
-.uploadContainer {
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 15px;
 }
 .formContainer {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 750px;
+  height: 700px;
 }
 .subFormContainer {
+  width: 100%;
+}
+.infoInputContainer {
   display: flex;
   justify-content: space-between;
+}
+.uploadContainer{
+  height: 250px;
+}
+.subUploadContainer {
+  margin-top: 30px;
   width: 100%;
+  padding: 0px 16px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #eaeaea;
+  border-radius: 14px;
 }
 .inputContainer {
   width: 49%;

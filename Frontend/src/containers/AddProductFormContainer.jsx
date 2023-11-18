@@ -4,11 +4,17 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { getSupplierRequest } from "../redux/supplier";
 import { getBrandByRSRequest } from "../redux/brand";
-import { productCreateRequest } from "../redux/product";
+import { productCreateRequest, productsFileCreateRequest } from "../redux/product";
 import Swal from "sweetalert2";
 import LoadingSpinner from "../commonds/loading/LoadingSpinner";
+import AddProductsFormComponent from "../components/addProductsForm/AddProductsFormComponent";
 
 function AddProductFormContainer(props) {
+  const { view } = props;
+  const [uploadFile, setUploadFile] = useState({
+    products: [],
+    loading: false,
+  });
   const [selectStatus, setSelectStatus] = useState(true);
   const dispatch = useDispatch();
   const methods = useForm();
@@ -20,6 +26,54 @@ function AddProductFormContainer(props) {
       data.cantidad = 0;
     }
     dispatch(productCreateRequest(data))
+      .then((res) => {
+        if (res.error) {
+          Swal.fire({
+            title: "Error!",
+            text: "No se pudo guardar tu registro",
+            icon: "error",
+            confirmButtonText: "Cerrar",
+          });
+          return;
+        }
+        Swal.fire({
+          icon: "success",
+          title: "Registrado con éxito",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        methods.reset();
+      })
+      .catch((err) => {
+        console.log(err);
+        Swal.fire({
+          title: "Error!",
+          text: "No se pudo registrar",
+          icon: "error",
+          confirmButtonText: "Cerrar",
+        });
+      });
+  };
+  const addFileProduct = (data) => {
+    const products = uploadFile.products.map((prod) => {
+      const newProduct = {
+        code: prod.CODIGO,
+        name: prod.DESCRIPCION,
+        marca: prod.MARCA,
+        listPrice: prod.PRECIO,
+        cantidad: 0,
+        intCode: "",
+        notas: "",
+        salePorcent: data.salePorcent,
+        sellPorcemt: data.sellPorcent,
+        supplierName: data.supplierName,
+      };
+      return newProduct;
+    });
+    if (data.cantidad === "") {
+      data.cantidad = 0;
+    }
+    dispatch(productsFileCreateRequest(products))
       .then((res) => {
         if (res.error) {
           Swal.fire({
@@ -61,16 +115,33 @@ function AddProductFormContainer(props) {
       {suppliers.loading ? (
         <LoadingSpinner loading={suppliers.loading} />
       ) : (
-        <AddProductFormComponent
-          {...props}
-          methods={methods}
-          suppliers={suppliers.data}
-          brands={brands.data}
-          onSubmit={addProduct}
-          status={productStatus}
-          selectStatus={selectStatus}
-          setSelectStatus={activeSelect}
-        />
+        <>
+          {view !== "group" ? (
+            <AddProductFormComponent
+              {...props}
+              methods={methods}
+              suppliers={suppliers.data}
+              brands={brands.data}
+              onSubmit={addProduct}
+              status={productStatus}
+              selectStatus={selectStatus}
+              setSelectStatus={activeSelect}
+            />
+          ) : (
+            <AddProductsFormComponent
+              {...props}
+              methods={methods}
+              suppliers={suppliers.data}
+              brands={brands.data}
+              onSubmit={addFileProduct}
+              status={productStatus}
+              selectStatus={selectStatus}
+              setSelectStatus={activeSelect}
+              setAddProducts={setUploadFile}
+              addProducts={uploadFile}
+            />
+          )}
+        </>
       )}
     </>
   );

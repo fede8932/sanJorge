@@ -9,7 +9,7 @@ import { newBuyOrderRequest } from "../redux/newOrder";
 import { getOrderItemsRequest } from "../redux/addOrderItems";
 
 function FormSelectProveedorContainer(props) {
-  const { setView } = props;
+  const { /*setView, */nextFn } = props;
   const [selectActive, setSelectActive] = useState(true);
   const dispatch = useDispatch();
   const methods = useForm();
@@ -25,9 +25,10 @@ function FormSelectProveedorContainer(props) {
   };
   const next = (data) => {
     dispatch(newBuyOrderRequest(data)).then(() => {
-      dispatch(getOrderItemsRequest(newOrderState.data.id)).then(()=>{
-        setView("Productos");
-      })
+      dispatch(getOrderItemsRequest(newOrderState.data.id)).then(() => {
+          // setView("Productos");
+          nextFn(1);
+      });
     });
   };
   useEffect(() => {

@@ -6,6 +6,9 @@
   padding: 20px 35px;
   overflow-y: auto;
 }
+.stepContainer{
+  margin-top: 25px;
+}
 .addUserContainer::-webkit-scrollbar {
   width: 4px;
   border-radius: 2px;

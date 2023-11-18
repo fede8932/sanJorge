@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AddProductToOrder from "../components/addProductToOrder/AddProductToOrder";
 import { useForm } from "react-hook-form";
 import { searchProductRequest } from "../redux/product";
@@ -25,6 +25,7 @@ import { getOrderAjust } from "../redux/orderAjust";
 import { updateStatusAjust } from "../request/orderAjustRequest";
 
 function AddProductToBuyOrderContainer(props) {
+  const [showAlert, setShowAlert] = useState(false);
   const { type } = props;
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -48,7 +49,12 @@ function AddProductToBuyOrderContainer(props) {
     };
     if (type !== "ajuste") {
       dispatch(addOrderItemsRequest(objSend)).then(() => {
-        dispatch(getBuyOrderRequest(actualOrder.data.id));
+        dispatch(getBuyOrderRequest(actualOrder.data.id)).then(() => {
+          setShowAlert(true);
+          setTimeout(() => {
+            setShowAlert(false);
+          }, 700);
+        });
       });
     } else {
       (objSend.orderId = orderAjust.data.id),
@@ -157,6 +163,7 @@ function AddProductToBuyOrderContainer(props) {
       fnEnd={confirmOrder}
       path={pathname}
       goPath={useNavigate()}
+      showAlert={showAlert}
     />
   );
 }

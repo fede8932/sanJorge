@@ -7,7 +7,7 @@ import EditClientViewContainer from "../../containers/EditClientViewContainer";
 import EditSupplierViewContainer from "../../containers/EditSupplierViewContainer";
 import CustomCarrousel from "../../commonds/carrousel/CustomCarrousel";
 import AddSupplierToBrandContainer from "../../containers/AddSupplierToBrandContainer";
-import AddDataFacContainer from "../../containers/AddDataFacContainer";
+import OrderViewContainer from "../../containers/OrderViewContainer";
 
 const MyVerticallyCenteredModal = (props) => {
   const { title, type, data, size, repindex } = props;
@@ -57,6 +57,9 @@ const MyVerticallyCenteredModal = (props) => {
             close={props.onHide}
             template="representative"
           />
+        ) : null}
+        {type == "viewOrder" ? (
+          <OrderViewContainer order={data} close={props.onHide} />
         ) : null}
       </Modal.Body>
       {/* {type == "update" ? null : (

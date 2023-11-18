@@ -3,6 +3,7 @@ import styles from "./customTable.module.css";
 import { Table } from "semantic-ui-react";
 import IconButton from "../../commonds/iconButton/IconButon";
 import TableInput from "../tableInput/TableInput";
+import { redondearADosDecimales } from "../../utils";
 
 const CustomTable = (props) => {
   let {
@@ -15,7 +16,7 @@ const CustomTable = (props) => {
     fnUpdate,
     fnPrUpdate,
     type,
-    objective,
+    process,
   } = props;
   return (
     <Table color={color} key={color}>
@@ -38,8 +39,18 @@ const CustomTable = (props) => {
                     style={{ height: "40px", maxHeight: "40px" }}
                   >
                     <Table.Cell>{p.article}</Table.Cell>
+                    <Table.Cell>{p.description}</Table.Cell>
                     <Table.Cell>{bp.brand.name}</Table.Cell>
-                    <Table.Cell>{bp.price.price}</Table.Cell>
+                    <Table.Cell>{`$ ${redondearADosDecimales(
+                      process == "sell"
+                        ? bp.price.price * (1 + bp.price.sellPercentage)
+                        : bp.price.price
+                    )}`}</Table.Cell>
+                    {process == "sell" ? (
+                      <Table.Cell>{`$ ${redondearADosDecimales(
+                        bp.price.price * (1 + bp.price.sellPercentage) * 1.21
+                      )}`}</Table.Cell>
+                    ) : null}
                     <Table.Cell>{bp.stock.stock}</Table.Cell>
                     <Table.Cell>
                       <div className={styles.butContainer}>
@@ -54,6 +65,7 @@ const CustomTable = (props) => {
                           iconInitialStyle="iconStyleBlue"
                           fn={fnAdd}
                           product={{ product: p, brand: bp.brand }}
+                          style={{ marginLeft: "5px" }}
                         />
                       </div>
                     </Table.Cell>
@@ -74,9 +86,12 @@ const CustomTable = (props) => {
                 <Table.Cell>{p.product.article}</Table.Cell>
                 <Table.Cell>{p.brand.name}</Table.Cell>
                 <Table.Cell>
-                  <span style={{display: "flex", alignItems: "center"}}>
-                    $
-                    {precio.price}
+                  <span style={{ display: "flex", alignItems: "center" }}>
+                    {`$ ${
+                      process != "sell"
+                        ? precio.price
+                        : precio.price * (1 + precio.sellPercentage) * 1.21
+                    }`}
                   </span>
                 </Table.Cell>
                 <Table.Cell>
@@ -89,7 +104,12 @@ const CustomTable = (props) => {
                     dataItem={{ id: p.id }}
                   />
                 </Table.Cell>
-                <Table.Cell>{`$ ${p.amount * precio.price}`}</Table.Cell>
+                <Table.Cell>{`$ ${
+                  process != "sell"
+                    ? p.amount * precio.price
+                    : p.amount *
+                      (precio.price * (1 + precio.sellPercentage) * 1.21)
+                }`}</Table.Cell>
                 <Table.Cell>
                   <div className={styles.butContainer}>
                     <IconButton

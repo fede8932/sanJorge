@@ -1,26 +1,32 @@
 import React, { useState } from "react";
 import styles from "./newBuyOrder.module.css";
-import SelectLink from "../../commonds/selectLink/SelectLink";
 import AddProductToBuyOrderContainer from "../../containers/AddProductToBuyOrderContainer";
 import FormSelectProveedorContainer from "../../containers/FormSelectProveedorContainer";
+import CustomStep from "../../components/step/CustomStep";
 // import FindBuyOrderContainer from "../../containers/FindBuyOrderContainer";
 
 function NewBuyOrder(props) {
-  const { initialView } = props;
-  const [viewActive, setViewActive] = useState(initialView);
+  const { estado } = props;
+  const [view, setView] = useState(estado);
+  const steps = [
+    {
+      title: "Proveedor",
+    },
+    {
+      title: "Productos",
+    },
+  ];
+
   return (
     <div className={styles.addUserContainer}>
       <h6 className={styles.formTitle}>Crear orden de compra</h6>
-      <SelectLink view={viewActive} order={["General", "Productos"]} />
-      {viewActive == "General" ? (
-        <FormSelectProveedorContainer setView={setViewActive} />
-      ) : null}
-      {viewActive == "Productos" ? (
-        <AddProductToBuyOrderContainer setView={setViewActive} />
-      ) : null}
-      {/* {viewActive == "Finalizar" ? (
-        <FindBuyOrderContainer setView={setViewActive} />
-      ) : null} */}
+      <div className={styles.stepContainer}>
+        <CustomStep steps={steps} type="client" view={view} />
+      </div>
+      <div style={{ marginTop: "30px" }}>
+        {view == 0 ? <FormSelectProveedorContainer nextFn={setView} /> : null}
+        {view == 1 ? <AddProductToBuyOrderContainer nextFn={setView} /> : null}
+      </div>
     </div>
   );
 }

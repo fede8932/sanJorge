@@ -3,7 +3,7 @@ import styles from "./iconButon.module.css";
 import { useSelector } from "react-redux";
 
 const IconButton = (props) => {
-  const { icon, iconInitialStyle, fn, product, type, objetive } = props;
+  const { icon, iconInitialStyle, fn, product, type, objetive, style } = props;
 
   const listProduct = useSelector((state) => state.listOrderItems);
   const data = {
@@ -19,7 +19,7 @@ const IconButton = (props) => {
       }}
       className={styles.butStyle}
     >
-      <i className={`${icon} ${styles[iconInitialStyle]}`}></i>
+      <i style={style} className={`${icon} ${styles[iconInitialStyle]}`}></i>
     </button>
   );
 };

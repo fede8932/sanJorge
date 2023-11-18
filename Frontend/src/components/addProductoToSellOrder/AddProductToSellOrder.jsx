@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./addProduct.module.css";
 import Button from "react-bootstrap/esm/Button";
 import Spinner from "react-bootstrap/esm/Spinner";
 import CustomInput from "../../commonds/input/CustomInput";
 import CustomTable from "../../commonds/table/CustomTable";
 import { FormProvider } from "react-hook-form";
+import CustomDrawer from "../../commonds/drawer/CustomDrawer";
+import PresupPDF from "../../commonds/presupuestoPDF/PresupPDF";
+import ReactDOM from 'react-dom';
 
 function AddProductToSellOrder(props) {
   const {
-    setView,
+    nextFn,
     methods,
     onSubmit,
     productPages,
@@ -21,57 +24,24 @@ function AddProductToSellOrder(props) {
     order,
     cancel,
   } = props;
+
+  const [ventanaAbierta, setVentanaAbierta] = useState(null);
+
+  const abrirNuevaVentana = () => {
+    const nuevaVentana = window.open('', '', 'width=800,height=950');
+    const container = nuevaVentana.document.createElement('div');
+    nuevaVentana.document.body.appendChild(container);
+    setVentanaAbierta(container);
+
+    ReactDOM.render(<PresupPDF list={listOrder} order={order}/>, container);
+  };
   return (
     <FormProvider {...methods}>
-      <form className={styles.addProductContainer} onSubmit={methods.handleSubmit(onSubmit)}>
+      <form
+        className={styles.addProductContainer}
+        onSubmit={methods.handleSubmit(onSubmit)}
+      >
         <div className={styles.addProdSubContainer}>
-          <div className={styles.searchContainer}>
-            <span className={styles.subTitle}>Buscador de productos</span>
-            <div className={styles.searchTableContainer}>
-              <div className={styles.inputSearchContainer}>
-                <CustomInput
-                  name="dataSearch"
-                  type="text"
-                  width="medium"
-                  placeholder="Artículo"
-                  icon="fa-solid fa-magnifying-glass"
-                  validate={{ required: true }}
-                />
-                <Button
-                  type="submit"
-                  style={{
-                    backgroundColor: "#673ab7",
-                    border: "1px solid #673ab7",
-                    height: "47px",
-                    marginLeft: "20px",
-                    width: "100px",
-                  }}
-                >
-                  {!productPages.loading ? (
-                    "Buscar"
-                  ) : (
-                    <Spinner animation="border" variant="light" size="sm" />
-                  )}
-                </Button>
-              </div>
-              <div className={styles.tableProdContainer}>
-                <CustomTable
-                  type="search"
-                  color="blue"
-                  products={productPages.data}
-                  fnAdd={fnAdd}
-                  fnInfo={fnInfo}
-                  colum={[
-                    { title: "Artículo", width: "40%" },
-                    { title: "Marca", width: "20%" },
-                    { title: "Precio Uni", width: "20%" },
-                    { title: "Stock", width: "10%" },
-                    { title: "Acción", width: "10%" },
-                  ]}
-                />
-              </div>
-            </div>
-          </div>
           <div className={styles.resumenContainer}>
             <div className={styles.resume}>
               <span className={styles.subTitle}>Detalles de presupuesto</span>
@@ -79,17 +49,17 @@ function AddProductToSellOrder(props) {
                 <div className={styles.infoProvContainer}>
                   <span className={styles.labelInfoProv}>
                     IVA:
-                    <span className={styles.textInfoProv}>Final
-                    </span>
+                    <span className={styles.textInfoProv}>Final</span>
                   </span>
                   <span className={styles.labelInfoProv}>
                     Punto de venta:
-                    <span className={styles.textInfoProv}>San jorge
-                    </span>
+                    <span className={styles.textInfoProv}>San jorge</span>
                   </span>
                   <span className={styles.labelInfoProv}>
                     Nº de presupuesto:
-                    <span className={styles.textInfoProv}>0001-0001</span>
+                    <span className={styles.textInfoProv}>
+                      {order.data.numero}
+                    </span>
                   </span>
                 </div>
                 <div className={styles.infoProvContainer}>
@@ -97,42 +67,87 @@ function AddProductToSellOrder(props) {
                     <h6 className={styles.precioLabel}>Subtotal:</h6>
                     <span
                       className={styles.precioText}
-                    >{`$ ${order.data.total}`}</span>
+                    >{`$ ${order.data.subTotal}`}</span>
                   </div>
                   <div className={styles.infoCostoCont}>
                     <h6 className={styles.precioLabel}>IVA:</h6>
                     <span className={styles.precioText}>{`$ ${(
-                      order.data.total * 0.21
+                      order.data.subTotal * 0.21
                     ).toFixed(2)}`}</span>
                   </div>
                   <div className={styles.infoCostoCont}>
                     <h6 className={styles.precioLabel}>Total:</h6>
                     <span className={styles.precioText}>{`$ ${(
-                      order.data.total * 1.21
+                      order.data.subTotal * 1.21
                     ).toFixed(2)}`}</span>
                   </div>
                 </div>
               </div>
             </div>
-            <div className={styles.listContainer}>
-              <span className={styles.subTitle}>Productos en presupuesto</span>
-              <div className={styles.prodToOrderContainer}>
-                <CustomTable
-                  type="list"
-                  fnDelete={fnDelete}
-                  color="teal"
-                  products={listOrder}
-                  fnUpdate={fnUpdate}
-                  fnPrUpdate={fnPrUpdate}
-                  colum={[
-                    { title: "Artículo", width: "25%" },
-                    { title: "Marca", width: "20%" },
-                    { title: "Precio Uni", width: "17%" },
-                    { title: "Cantidad", width: "12%" },
-                    { title: "Subtotal", width: "16%" },
-                    { title: "Acción", width: "10%" },
-                  ]}
-                />
+            <div className={styles.searchContainer}>
+              <span className={styles.subTitle}>Buscador de productos</span>
+              <div className={styles.searchTableContainer}>
+                <div className={styles.buttonSearchCotainer}>
+                  <div className={styles.inputSearchContainer}>
+                    <CustomInput
+                      name="dataSearch"
+                      type="text"
+                      width="medium"
+                      placeholder="Artículo"
+                      icon="fa-solid fa-magnifying-glass"
+                      validate={{ required: true }}
+                    />
+                    <Button
+                      type="submit"
+                      style={{
+                        backgroundColor: "#673ab7",
+                        border: "1px solid #673ab7",
+                        height: "47px",
+                        marginLeft: "20px",
+                        width: "100px",
+                      }}
+                    >
+                      {!productPages.loading ? (
+                        "Buscar"
+                      ) : (
+                        <Spinner animation="border" variant="light" size="sm" />
+                      )}
+                    </Button>
+                  </div>
+                  <div className={styles.buttonInfoContainer}>
+                    <button type="button" className="ui button" onClick={abrirNuevaVentana}>
+                      Imprimir
+                    </button>
+                    <CustomDrawer
+                      type={"type"}
+                      orderType="OS"
+                      fnDelete={fnDelete}
+                      fnUpdate={fnUpdate}
+                      fnPrUpdate={fnPrUpdate}
+                      listOrder={listOrder}
+                      orderAjust={"orderAjust"}
+                    />
+                  </div>
+                </div>
+                <div className={styles.tableProdContainer}>
+                  <CustomTable
+                    type="search"
+                    process="sell"
+                    color="blue"
+                    products={productPages.data}
+                    fnAdd={fnAdd}
+                    fnInfo={fnInfo}
+                    colum={[
+                      { title: "Artículo", width: "8%" },
+                      { title: "Descripción", width: "47%" },
+                      { title: "Marca", width: "8%" },
+                      { title: "Precio", width: "10%" },
+                      { title: "Precio c/IVA", width: "10%" },
+                      { title: "Stock", width: "10%" },
+                      { title: "Acción", width: "7%" },
+                    ]}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -142,7 +157,7 @@ function AddProductToSellOrder(props) {
             className={`${styles.buttonStyle} ${styles.buttonStyleBack}`}
             variant="danger"
             onClick={() => {
-              cancel(order.data.id)
+              cancel(order.data.id);
             }}
           >
             Cancelar
@@ -151,7 +166,7 @@ function AddProductToSellOrder(props) {
             className={`${styles.buttonStyle} ${styles.buttonStyleNext}`}
             variant="primary"
             onClick={() => {
-              setView("Cliente")
+              nextFn(1);
             }}
           >
             Siguiente
