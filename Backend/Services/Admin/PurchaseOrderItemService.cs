@@ -44,6 +44,13 @@ namespace Repuestos_San_jorge.Services.Admin
                         "La orden o marca/producto no puede ser null"
                     );
                 }
+                if (order.type == PurchaseOrderType.Sell && brandProduct.stock.stock <= 0)
+                {
+                    throw new ArgumentNullException(
+                        nameof(order) + " o " + nameof(brandProduct),
+                        "Sin stock"
+                    );
+                }
                 if (
                     order.status == PurchaseOrderStatusType.Open
                 )
@@ -51,13 +58,14 @@ namespace Repuestos_San_jorge.Services.Admin
                     var purchaseOrderItem = new PurchaseOrderItem
                     {
                         amount = cantidad,
-                        buyPrice = brandProduct.price.price,
+                        buyPrice = order.type == PurchaseOrderType.Buy ? brandProduct.price.price : null,
+                        sellPrice = order.type == PurchaseOrderType.Sell ? brandProduct.price.price * (1 + brandProduct.price.sellPercentage) : null,
                         purchaseOrder = order,
                         product = brandProduct.product,
                         brand = brandProduct.brand,
                     };
-                    order.subTotal =
-                        order.subTotal + (purchaseOrderItem.amount * purchaseOrderItem.buyPrice);
+                    float amount = order.type == PurchaseOrderType.Buy ? purchaseOrderItem.amount * (float)(purchaseOrderItem.buyPrice) : purchaseOrderItem.amount * (float)(purchaseOrderItem.sellPrice);
+                    order.subTotal = order.subTotal + amount;
                     order.iva = (float)(order.subTotal * 0.21);
                     order.total = (float)(order.subTotal * 1.21);
                     _dbContext.PurchaseOrderItems.Add(purchaseOrderItem);
@@ -111,8 +119,9 @@ namespace Repuestos_San_jorge.Services.Admin
                         "El item pertenece a una orden que no esta abierta"
                     );
                 }
-                var order = orderItem.purchaseOrder;
-                order.subTotal = order.subTotal - orderItem.buyPrice * orderItem.amount;
+                PurchaseOrder order = orderItem.purchaseOrder;
+                float subsAmount = orderItem.purchaseOrder?.type == PurchaseOrderType.Buy ? (float)(orderItem.buyPrice) * orderItem.amount : (float)(orderItem.sellPrice);
+                order.subTotal = order.subTotal - subsAmount;
                 order.iva = (float)(order.subTotal * 0.21);
                 order.total = (float)(order.subTotal * 1.21);
                 _dbContext.PurchaseOrderItems.Remove(orderItem);
@@ -169,6 +178,9 @@ namespace Repuestos_San_jorge.Services.Admin
                         "No existe el item en los registros"
                     );
                 }
+                var brandProduct = await _dbContext.BrandProducts
+                    .Include(bp => bp.stock)
+                    .FirstOrDefaultAsync(bp => bp.productId == orderItem.product.id && bp.brandId == orderItem.brand.id);
                 if (
                     orderItem.purchaseOrder != null
                     && orderItem.purchaseOrder.status != Dto.Enums.PurchaseOrderStatusType.Open
@@ -181,8 +193,16 @@ namespace Repuestos_San_jorge.Services.Admin
                 }
                 if (orderItem.purchaseOrder?.status == PurchaseOrderStatusType.Open)
                 {
+                    if(orderItem.purchaseOrder?.type == PurchaseOrderType.Sell && cantidad > brandProduct.stock.stock)
+                    {
+                    throw new ArgumentNullException(
+                        nameof(brandProduct),
+                        "El pedido supera el stock"
+                    );
+                    }
                     var order = orderItem.purchaseOrder;
-                    order.subTotal = order.subTotal + orderItem.buyPrice * (cantidad - orderItem.amount);
+                    float newAmount = orderItem.purchaseOrder?.type == PurchaseOrderType.Buy ? (float)(orderItem.buyPrice) * (cantidad - orderItem.amount) : (float)(orderItem.sellPrice) * (cantidad - orderItem.amount);
+                    order.subTotal = order.subTotal + newAmount;
                     order.iva = (float)(order.subTotal * 0.21);
                     order.total = (float)(order.subTotal * 1.21);
                     orderItem.amount = cantidad;
@@ -231,7 +251,7 @@ namespace Repuestos_San_jorge.Services.Admin
                 if (orderItem.purchaseOrder?.status == PurchaseOrderStatusType.Open)
                 {
                     var order = orderItem.purchaseOrder;
-                    order.total = order.total + orderItem.amount * (price - orderItem.buyPrice);
+                    order.total = order.total + orderItem.amount * (price - (float)(orderItem.buyPrice));
                     orderItem.buyPrice = price;
                     _dbContext.PurchaseOrderItems.Update(orderItem);
                     _dbContext.PurchaseOrders.Update(order);

@@ -11,7 +11,9 @@ namespace Repuestos_San_jorge.Models
         [Required]
         public int amount { get; set; }
 
-        public float buyPrice { get; set; }
+        public float? buyPrice { get; set; }
+
+        public float? sellPrice { get; set; }
 
         public int purchaseOrderId { get; set; }
 

@@ -8,5 +8,6 @@ namespace Repuestos_San_jorge.Dto.Enums
         D,
         E,
         NC,
+        P,
     }
 }

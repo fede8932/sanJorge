@@ -54,7 +54,7 @@ namespace Repuestos_San_jorge.Services.Admin
                 await _dbContext.SaveChangesAsync();
 
                 // Generar el número de compra después de guardar
-                purchaseOrder.numero = $"OC-{purchaseOrder.id:D6}";
+                purchaseOrder.numero = supplierName == "nosupplier" ? $"OS-{purchaseOrder.id:D6}" : $"OC-{purchaseOrder.id:D6}";
 
                 _dbContext.SaveChanges();
                 return purchaseOrder;
@@ -89,9 +89,11 @@ namespace Repuestos_San_jorge.Services.Admin
                     .ThenInclude(po => po.controlOrder)
                     .Include(s => s.purchaseOrders)
                     .ThenInclude(po => po.Voucher)
+                    .Include(s => s.purchaseOrders)
+                    .ThenInclude(po => po.orderAjust)
                     .Where(s => s.cuit.Contains(text) || s.razonSocial.Contains(text))
                     .SingleOrDefaultAsync();
-                var sortedOrders = supplier.purchaseOrders.OrderByDescending(po => po.id); // Ordenar las órdenes por Id
+                var sortedOrders = supplier.purchaseOrders.OrderByDescending(po => po.date); // Ordenar las órdenes por Id
                 return sortedOrders;
             }
             else
@@ -101,9 +103,11 @@ namespace Repuestos_San_jorge.Services.Admin
                     .ThenInclude(po => po.controlOrder)
                     .Include(s => s.purchaseOrders)
                     .ThenInclude(po => po.Voucher)
+                    .Include(s => s.purchaseOrders)
+                    .ThenInclude(po => po.orderAjust)
                     .Where(c => c.cuit.Contains(text) || c.razonSocial.Contains(text))
                     .SingleOrDefaultAsync();
-                var sortedOrders = client.purchaseOrders.OrderBy(po => po.id); // Ordenar las órdenes por Id
+                var sortedOrders = client.purchaseOrders.OrderBy(po => po.date); // Ordenar las órdenes por Id
                 return sortedOrders;
             }
         }
@@ -116,6 +120,9 @@ namespace Repuestos_San_jorge.Services.Admin
             var purchaseOrders = await _dbContext.PurchaseOrders
                 .Include(po => po.supplier)
                 .Include(po => po.client)
+                .Include(po => po.controlOrder)
+                .Include(po => po.Voucher)
+                .Include(po => po.orderAjust)
                 .Where(po => po.type == type && po.numero.Contains(num))
                 .OrderBy(po => po.id)
                 .ToListAsync();
@@ -126,6 +133,18 @@ namespace Repuestos_San_jorge.Services.Admin
         {
             var order = await _dbContext.PurchaseOrders
                 .Include(o => o.supplier)
+                .Include(o => o.purchaseOrderItems)
+                .ThenInclude(poi => poi.brand)
+                .Include(o => o.purchaseOrderItems)
+                .ThenInclude(poi => poi.product)
+                .Include(o => o.controlOrder)
+                .Include(o => o.Voucher)
+                .Include(o => o.orderAjust)
+                .ThenInclude(oa => oa.ajustOrderItems)
+                .ThenInclude(aoi => aoi.brand)
+                .Include(o => o.orderAjust)
+                .ThenInclude(oa => oa.ajustOrderItems)
+                .ThenInclude(aoi => aoi.product)
                 .SingleOrDefaultAsync(order => order.id == purchaseOrderId);
             if (order == null)
             {
@@ -173,7 +192,8 @@ namespace Repuestos_San_jorge.Services.Admin
             int purchaseOrderId,
             PurchaseOrderStatusType status,
             string? numRemito,
-            Voucher? voucher
+            Voucher? voucher,
+            float? noFact
         ) // cambiar estado
         {
             try
@@ -182,8 +202,19 @@ namespace Repuestos_San_jorge.Services.Admin
                     .Include(po => po.controlOrder)
                     .Include(po => po.Voucher)
                     .Include(po => po.supplier)
+                    .Include(po => po.orderAjust)
+                    .ThenInclude(oa => oa.ajustOrderItems)
+                    .ThenInclude(aoi => aoi.brand)
+                    .Include(po => po.orderAjust)
+                    .ThenInclude(oa => oa.ajustOrderItems)
+                    .ThenInclude(aoi => aoi.product)
+                    .Include(po => po.purchaseOrderItems)
+                    .ThenInclude(poi => poi.brand)
+                    .Include(po => po.purchaseOrderItems)
+                    .ThenInclude(poi => poi.product)
                     .Where(po => po.id == purchaseOrderId)
                     .SingleOrDefaultAsync();
+
                 if (order == null)
                 {
                     throw new ArgumentNullException(
@@ -202,7 +233,7 @@ namespace Repuestos_San_jorge.Services.Admin
                     );
                 }
                 // else if (
-                //     order.status == PurchaseOrderStatusType.Confirm && 
+                //     order.status == PurchaseOrderStatusType.Confirm &&
                 //     status != PurchaseOrderStatusType.Recived
                 // )
                 // {
@@ -215,7 +246,8 @@ namespace Repuestos_San_jorge.Services.Admin
                 // _dbContext.PurchaseOrders.Update(order);
                 if (numRemito != null && voucher != null)
                 {
-                    decimal diferencia = (decimal)(order.total - voucher.total);
+                    decimal diferencia = order.orderAjust != null ? (decimal)(order.orderAjust.total - voucher.total - noFact) : (decimal)(order.total - voucher.total - noFact);
+                    Console.WriteLine(diferencia);
                     if (Math.Abs((diferencia)) > 0.05m)
                     {
                         throw new Exception(
@@ -226,10 +258,29 @@ namespace Repuestos_San_jorge.Services.Admin
                     voucher.numRemito = numRemito;
                     controlOrder.purchaseOrder = order;
                     voucher.purchaseOrder = order;
-                    voucher.iva = (float)(voucher.subtotal * 0.21);
-                    voucher.total = (float?)(voucher.subtotal * 1.21);
+                    voucher.iva = voucher.code == ComprobanteCode.A ? (float)(voucher.subtotal * 0.21) : 0;
+                    voucher.total = (float?)(voucher.subtotal + voucher.iva);
                     _dbContext.ControlOrders.Add(controlOrder);
                     _dbContext.Vouchers.Add(voucher);
+
+                    if (noFact != 0)
+                    {
+                        Voucher extraVoucher = new Voucher
+                        {
+                            numRemito = numRemito,
+                            numComprobante = "PRE",
+                            afip = false,
+                            fecha = DateTime.Now.ToUniversalTime(),
+                            type = ComprobanteType.Factura,
+                            code = ComprobanteCode.P,
+                            purchaseOrder = order, // Asigna purchaseOrder a extraVoucher
+                            subtotal = (float)(noFact),
+                            iva = 0,
+                            total = noFact
+                        };
+
+                        _dbContext.Vouchers.Add(extraVoucher); // Usa extraVoucher en lugar de voucher
+                    }
                 }
                 order.status = status;
                 _dbContext.PurchaseOrders.Update(order);
@@ -315,7 +366,8 @@ namespace Repuestos_San_jorge.Services.Admin
             int purchaseOrderId,
             PurchaseOrderStatusType status,
             string? numRemito,
-            Voucher? voucher
+            Voucher? voucher,
+            float? noFact
         );
         Task<string> UpdateClientStatusOrdersAsync(
             int clientId,

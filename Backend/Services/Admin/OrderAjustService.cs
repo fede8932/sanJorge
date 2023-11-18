@@ -44,7 +44,7 @@ namespace Repuestos_San_jorge.Services.Admin
                     AjustOrderItem ajustItem = new AjustOrderItem
                     {
                         amount = orderItem.amount,
-                        buyPrice = orderItem.buyPrice,
+                        buyPrice = (float)(orderItem.buyPrice),
                         orderAjustId = ajuste.id,
                         brandId = orderItem.brandId,
                         productId = orderItem.productId

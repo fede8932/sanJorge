@@ -210,7 +210,8 @@ namespace Repuestos_San_jorge.Controllers.Admin
             int purchaseOrderId,
             [FromQuery] string? numRemito,
             [FromQuery] PurchaseOrderStatusType status,
-            [FromBody] Voucher? voucher
+            [FromBody] Voucher? voucher,
+            [FromQuery] float noFact
         )
         {
             try
@@ -219,7 +220,8 @@ namespace Repuestos_San_jorge.Controllers.Admin
                     purchaseOrderId,
                     status,
                     numRemito,
-                    voucher
+                    voucher,
+                    noFact
                 );
                 return Ok(result);
             }
